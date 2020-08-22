@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Widget Playground</title>
+		<style>
+			body {
+				margin: 0;
+			}
+			#container {
+				padding: 150px;
+			}
+			.widget {
+				display: flex;
+				flex-direction: column;
+				width: 250px;
+				position: absolute;
+				top: 50px;
+				right: 50px;
+				border-radius: 4px;
+				background-color: #383838;
+				/* opacity: 0.5; */
+			}
+
+			.widget:hover {
+				opacity: 1;
+			}
+
+			.widget-header {
+				height: 32px;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 0 4px;
+				/* border-bottom: 1px solid #d3d3d3; */
+			}
+
+			.widget-header-buttons {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+
+			.widget-btn {
+				width: 15px;
+				color: #d3d3d3;
+				cursor: pointer;
+				margin-left: 3px;
+				font-size: 15px;
+				line-height: 1;
+			}
+
+			.widget-btn:hover {
+				color: #ededed;
+			}
+
+			.widget-minimize {
+				padding-bottom: 3px;
+			}
+
+			.widget-title {
+				color: #d3d3d3;
+				display: flex;
+				align-items: center;
+				padding-left: 6px;
+				font-family: Arial, Helvetica, sans-serif;
+				font-size: 14px;
+				font-weight: bold;
+			}
+
+			.widget-body-container {
+				flex-grow: 1;
+				height: 400px;
+			}
+
+			.widget-body-container.minimized {
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="container">
+			<div id="target"></div>
+			<div id="widget-title"></div>
+		</div>
+	</body>
+	<script src="../../draggable/draggable.js"></script>
+	<script src="../../resizable/resizable.js"></script>
+	<script src="../widget.js"></script>
+	<script>
+		// const targetElm = document.getElementById('target');
+		const wgt = widget({
+			close: true,
+			minimize: true,
+			title: 'My Widget',
+		});
+		wgt.mount();
+	</script>
+</html>

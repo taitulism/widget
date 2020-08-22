@@ -1,13 +1,13 @@
 {
-	"name": "TPL",
+	"name": "widget",
 	"description": "Doing stuff.",
     "version": "0.0.0",
     "license": "MIT",
     "private": true,
     "main": "./index.js",
 	"author": "Taitu Lizenbaum <taitu.dev@gmail.com>",
-	"homepage": "https://github.com/taitulism/TPL#readme",
-    "repository": "github:taitulism/TPL",
+	"homepage": "https://github.com/taitulism/widget#readme",
+    "repository": "github:taitulism/widget",
     "scripts": {
 		"dev": "mocha ./tests --watch",
         "test": "mocha ./tests --bail",
@@ -20,7 +20,6 @@
     "devDependencies": {
         "eslint": "*",
         "mocha": "*",
-        "chai": "*",
-        "chai-as-promised": "*"
+        "chai": "*"
     }
 }

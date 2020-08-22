@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Widget Tests</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="https://unpkg.com/mocha/mocha.css" />
+		<script src="../../draggable/draggable.js"></script>
+		<script src="../../resizable/resizable.js"></script>
+		<script src="../widget.js"></script>
+		<style>
+			body {
+				margin: 0;
+			}
+			#container {
+				padding: 150px;
+			}
+			#target {
+				background-color: pink;
+				height: 200px;
+				width: 200px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="mocha"></div>
+		<div id="test-dom-container"></div>
+
+		<script src="http://unpkg.com/chai/chai.js"></script>
+		<script src="http://unpkg.com/mocha/mocha.js"></script>
+
+		<script class="mocha-init">
+			mocha.setup({
+				ui: 'bdd',
+				timeout: 2000
+			});
+			mocha.checkLeaks();
+		</script>
+		<script src="index.spec.js"></script>
+		<script class="mocha-exec">
+			const {expect} = chai;
+
+			mocha.run();
+		</script>
+	</body>
+</html>
