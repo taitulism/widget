@@ -174,41 +174,94 @@ describe('widget', () => {
 		});
 	});
 
+	describe('Elements & ClassNames', () => {
+		describe('Main Element', () => {
+			it('is stored in `elm` property', () => {
+				const wgt = widget();
+				expect(wgt.elm).to.be.instanceOf(HTMLElement);
+			});
+
+			it('has classnames', () => {
+				const wgt = widget();
+
+				expect(wgt.elm.classList.contains('widget')).to.be.true;
+				expect(wgt.elm.classList.contains('draggable')).to.be.false;
+				wgt.mount();
+				expect(wgt.elm.classList.contains('draggable')).to.be.true;
+			});
+		});
+
+		describe('Widget Header', () => {
+			it('is stored in `header` property', () => {
+				const wgt = widget({title: 'My Widget'});
+				expect(wgt.header).to.be.instanceOf(HTMLElement);
+			});
+
+			it('has a classname', () => {
+				const wgt = widget({title: 'My Widget'});
+				expect(wgt.header.classList.contains('widget-header')).to.be.true;
+			});
+
+			describe('Widget Title', () => {
+				it('is stored in `title` property', () => {
+					const wgt = widget({title: 'My Widget'});
+					expect(wgt.title).to.be.instanceOf(HTMLElement);
+				});
+
+				it('has a classname', () => {
+					const wgt = widget({title: 'My Widget'});
+					expect(wgt.title.classList.contains('widget-title')).to.be.true;
+				});
+			});
+
+			describe('Widget Minimize Button', () => {
+				it('is stored in `minimize` property', () => {
+					const wgt = widget({minimize: true});
+					expect(wgt.minimize).to.be.instanceOf(HTMLElement);
+				});
+
+				it('has a classname', () => {
+					const wgt = widget({minimize: true});
+					expect(wgt.minimize.classList.contains('widget-minimize')).to.be.true;
+				});
+			});
+
+			describe('Widget Close Button', () => {
+				it('is stored in `close` property', () => {
+					const wgt = widget({close: true});
+					expect(wgt.close).to.be.instanceOf(HTMLElement);
+				});
+
+				it('has a classname', () => {
+					const wgt = widget({close: true});
+					expect(wgt.close.classList.contains('widget-close')).to.be.true;
+				});
+			});
+		});
+
+		describe.skip('Widget Body', () => {
+			it('is stored in `body` property', () => {
+				const wgt = widget({close: true});
+				expect(wgt.close).to.be.instanceOf(HTMLElement);
+			});
+
+			it('has a classname', () => {
+				const wgt = widget({body: true});
+				expect(wgt.body.classList.contains('widget-body')).to.be.true;
+			});
+		});
+	});
+
 	describe('Options', () => {
 		describe('title', () => {
 			it('sets the widget title', () => {
 				const wgt = widget({title: 'My Widget'});
-
-				expect(document.getElementsByClassName('widget-title')).to.have.lengthOf(0);
-				wgt.mount();
-				expect(document.getElementsByClassName('widget-title')).to.have.lengthOf(1);
-				expect(document.getElementsByClassName('widget-title')[0].innerText).to.equal('My Widget');
-			});
-
-			it('keeps a reference to the `title` element', () => {
-				const wgt = widget({title: 'My Widget'}).mount();
-				expect(wgt.title).to.be.ok;
-				expect(document.getElementsByClassName('widget-title')[0]).to.deep.equal(wgt.title);
+				expect(wgt.title.innerText).to.equal('My Widget');
 			});
 		});
 
 		describe('close', () => {
-			it('adds a `close` button to the widget header', () => {
-				const wgt = widget({close: true});
-
-				expect(document.getElementsByClassName('widget-close')).to.have.lengthOf(0);
-				wgt.mount();
-				expect(document.getElementsByClassName('widget-close')).to.have.lengthOf(1);
-			});
-
-			it('keeps a reference to the `close` element', () => {
-				const wgt = widget({close: true}).mount();
-
-				expect(wgt.close).to.be.ok;
-				expect(document.getElementsByClassName('widget-close')[0]).to.deep.equal(wgt.close);
-			});
-
-			it('clicking `close` button hides the widget', () => {
+			it('clicking the `close` button hides the widget', () => {
 				const wgt = widget({close: true});
 				wgt.mount();
 
@@ -219,21 +272,7 @@ describe('widget', () => {
 		});
 
 		describe('minimize', () => {
-			it('adds a `minimize` button to the widget header', () => {
-				const wgt = widget({minimize: true});
-
-				expect(document.getElementsByClassName('widget-minimize')).to.have.lengthOf(0);
-				wgt.mount();
-				expect(document.getElementsByClassName('widget-minimize')).to.have.lengthOf(1);
-			});
-
-			it('keeps a reference to the `minimize` element', () => {
-				const wgt = widget({minimize: true}).mount();
-				expect(wgt.minimize).to.be.ok;
-				expect(document.getElementsByClassName('widget-minimize')[0]).to.deep.equal(wgt.minimize);
-			});
-
-			it('clicking `minimize` button minimize the widget', () => {
+			it('clicking the `minimize` button minimizes the widget', () => {
 				const wgt = widget({minimize: true}).mount();
 
 				expect(wgt.elm.classList.contains('minimized')).to.be.false;
@@ -244,7 +283,7 @@ describe('widget', () => {
 	});
 
 	describe('Behavior', () => {
-		it('toggle header visible on hover', () => {
+		it('toggles header visiblity on hover', () => {
 			const wgt = widget({close: true}).mount();
 
 			expect(wgt.headerButtons.style.display).to.equal('none');
