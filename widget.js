@@ -36,6 +36,11 @@ Widget.prototype.mount = function () {
 	return this;
 };
 
+Widget.prototype.unmount = function () {
+	document.body.removeChild(this.elm);
+	return this;
+};
+
 Widget.prototype.createHeaderButtons = function () {
 	const headerButtons = document.createElement('div');
 	headerButtons.classList.add('widget-header-buttons');
@@ -77,11 +82,11 @@ Widget.prototype.createMinimze = function () {
 
 		if (this.isMinimized) {
 			minimize.innerHTML = MAXIMIZE_SYMBOL;
-			this.body.classList.add('minimized');
+			this.elm.classList.add('minimized');
 		}
 		else {
 			minimize.innerHTML = MINIMIZE_SYMBOL;
-			this.body.classList.remove('minimized');
+			this.elm.classList.remove('minimized');
 		}
 	});
 
@@ -120,5 +125,10 @@ Widget.prototype.hide = function () {
 
 Widget.prototype.show = function () {
 	this.elm.style.display = 'block';
+	return this;
+};
+
+Widget.prototype.destroy = function () {
+	this.unmount();
 	return this;
 };

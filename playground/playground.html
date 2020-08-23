@@ -10,13 +10,14 @@
 			#container {
 				padding: 150px;
 			}
+
 			.widget {
 				display: flex;
 				flex-direction: column;
 				width: 250px;
 				position: absolute;
-				top: 50px;
-				right: 50px;
+				top: 150px;
+				right: 250px;
 				border-radius: 4px;
 				background-color: #383838;
 				/* opacity: 0.5; */
@@ -32,7 +33,12 @@
 				justify-content: space-between;
 				align-items: center;
 				padding: 0 4px;
+				user-select: none;
 				/* border-bottom: 1px solid #d3d3d3; */
+			}
+
+			.draggable .widget-header {
+				cursor: grab;
 			}
 
 			.widget-header-buttons {
@@ -73,7 +79,7 @@
 				height: 400px;
 			}
 
-			.widget-body-container.minimized {
+			.minimized .widget-body-container {
 				display: none;
 			}
 		</style>
