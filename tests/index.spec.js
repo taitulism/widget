@@ -174,6 +174,15 @@ describe('widget', () => {
 		});
 	});
 
+	describe('.setTitle()', () => {
+		it('changes the widget title', () => {
+			const wgt = widget({title: 'My Widget'});
+			expect(wgt.title.innerText).to.equal('My Widget');
+			wgt.setTitle('New Title');
+			expect(wgt.title.innerText).to.equal('New Title');
+		});
+	});
+
 	describe('Elements & ClassNames', () => {
 		describe('Main Element', () => {
 			it('is stored in `elm` property', () => {
