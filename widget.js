@@ -3,6 +3,9 @@ function widget (opts = {}) {
 }
 
 function Widget (opts) {
+	this.showButtons = this.showButtons.bind(this);
+	this.hideButtons = this.hideButtons.bind(this);
+
 	const elm = document.createElement('div');
 	elm.classList.add('widget');
 	this.elm = elm;
@@ -22,7 +25,6 @@ function Widget (opts) {
 		this.header = this.createHeader();
 		this.title && this.header.appendChild(this.title);
 		(this.close || this.minimize) && this.header.appendChild(this.headerButtons);
-		// this.minimize && this.header.appendChild(this.minimize);
 		elm.appendChild(this.header);
 	}
 
@@ -46,15 +48,18 @@ Widget.prototype.createHeaderButtons = function () {
 	headerButtons.classList.add('widget-header-buttons');
 	headerButtons.style.display = 'none';
 
-	this.elm.addEventListener('mouseenter', (ev) => {
-		headerButtons.style.display = 'flex';
-	});
-
-	this.elm.addEventListener('mouseleave', (ev) => {
-		headerButtons.style.display = 'none';
-	});
+	this.elm.addEventListener('mouseenter', this.showButtons);
+	this.elm.addEventListener('mouseleave', this.hideButtons);
 
 	this.headerButtons = headerButtons;
+};
+
+Widget.prototype.showButtons = function (ev) {
+	this.headerButtons.style.display = 'flex';
+};
+
+Widget.prototype.hideButtons = function (ev) {
+	this.headerButtons.style.display = 'none';
 };
 
 Widget.prototype.createClose = function () {
@@ -130,5 +135,9 @@ Widget.prototype.show = function () {
 
 Widget.prototype.destroy = function () {
 	this.unmount();
+
+	this.elm.removeEventListener('mouseenter', this.showButtons);
+	this.elm.removeEventListener('mouseleave', this.hideButtons);
+	this.hideButtons();
 	return this;
 };

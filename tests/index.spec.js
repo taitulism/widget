@@ -297,7 +297,7 @@ describe('widget', () => {
 
 			expect(wgt.headerButtons.style.display).to.equal('none');
 			simulateMouseEnter(wgt.elm);
-			expect(wgt.headerButtons.style.display).to.not.equal('none');
+			expect(wgt.headerButtons.style.display).to.equal('flex');
 			simulateMouseLeave(wgt.elm);
 			expect(wgt.headerButtons.style.display).to.equal('none');
 		});
@@ -314,11 +314,27 @@ describe('widget', () => {
 			expect(document.getElementsByClassName('widget')).to.have.lengthOf(0);
 		});
 
-		it.skip('removes close click listener', () => {
+		it.only('removes hover toggle `close/header-btns` listener', () => {
+			const wgt = widget({close : true}).mount();
 
+			expect(wgt.headerButtons.style.display).to.equal('none');
+			simulateMouseEnter(wgt.elm);
+			expect(wgt.headerButtons.style.display).to.equal('flex'); // flex
+			simulateMouseLeave(wgt.elm);
+			expect(wgt.headerButtons.style.display).to.equal('none');
+			simulateMouseEnter(wgt.elm);
+			expect(wgt.headerButtons.style.display).to.equal('flex'); // flex
+
+			wgt.destroy();
+
+			expect(wgt.headerButtons.style.display).to.equal('none');
+			simulateMouseEnter(wgt.elm);
+			expect(wgt.headerButtons.style.display).to.equal('none');
+			simulateMouseLeave(wgt.elm);
+			expect(wgt.headerButtons.style.display).to.equal('none');
 		});
 
-		it.skip('removes hover toggle `close/header-btns` listener', () => {
+		it.skip('removes close click listener', () => {
 
 		});
 
