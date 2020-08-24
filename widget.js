@@ -7,6 +7,59 @@ function widget (opts = {}) {
 }
 
 function Widget (opts) {
+	this.initMethods();
+	this.createDOM(opts);
+
+	this.draggable = null;
+	this.isMinimized = false;
+}
+
+Widget.prototype.createDOM = function (opts) {
+	this.elm = create('div', ['widget']);
+	this.body = create('section', ['widget-body']);
+
+	this.title = opts.title
+		? create('div', ['widget-title'], opts.title)
+		: null;
+
+	this.closeBtn = opts.close
+		? create('button', ['widget-btn', 'widget-close'], CLOSE_SYMBOL)
+		: null;
+
+	this.minimizeBtn = opts.minimize
+		? create('button', ['widget-btn', 'widget-minimize'], MINIMIZE_SYMBOL)
+		: null;
+
+	const hasActions = Boolean(opts.close || opts.minimize);
+	const hasHeader = Boolean(opts.title || hasActions);
+
+	if (hasHeader) {
+		this.header = create('header', ['widget-header']);
+
+		this.title && this.header.appendChild(this.title);
+
+		if (hasActions) {
+			this.actions = create('div', ['widget-action-buttons']);
+
+			this.minimizeBtn && this.actions.appendChild(this.minimizeBtn);
+			this.closeBtn && this.actions.appendChild(this.closeBtn);
+
+			this.header.appendChild(this.actions);
+		}
+		else {
+			this.actions = null;
+		}
+
+		this.elm.appendChild(this.header);
+	}
+	else {
+		this.header = null;
+	}
+
+	this.elm.appendChild(this.body);
+};
+
+Widget.prototype.initMethods = function (opts) {
 	this.show = this.show.bind(this);
 	this.hide = this.hide.bind(this);
 	this.showActions = this.showActions.bind(this);
@@ -14,68 +67,6 @@ function Widget (opts) {
 	this.restore = this.restore.bind(this);
 	this.minimize = this.minimize.bind(this);
 	this.toggleMinimize = this.toggleMinimize.bind(this);
-
-	this.createMainElm();
-	// this.elm = this.createMainElm();
-	this.header = null;
-	this.title = null;
-	this.actions = null;
-	this.closeBtn = null;
-	this.minimizeBtn = null;
-
-	this.draggable = null;
-
-	this.isMinimized = false;
-
-	if (opts.title) this.createTitle(opts.title);
-	if (opts.close) this.createClose();
-	if (opts.minimize) this.createToggleMinimize();
-
-	if (opts.close || opts.minimize) {
-		this.createActionsContainer();
-		this.minimizeBtn && this.actions.appendChild(this.minimizeBtn);
-		this.closeBtn && this.actions.appendChild(this.closeBtn);
-	}
-
-	if (opts.title || opts.close || opts.minimize) {
-		this.createHeader();
-		this.title && this.header.appendChild(this.title);
-		(this.closeBtn || this.minimizeBtn) && this.header.appendChild(this.actions);
-		this.elm.appendChild(this.header);
-	}
-
-	this.createBody();
-	this.elm.appendChild(this.body);
-}
-
-
-
-Widget.prototype.createMainElm = function () {
-	this.elm = create('div', ['widget']);
-};
-
-Widget.prototype.createHeader = function () {
-	this.header = create('header', ['widget-header']);
-};
-
-Widget.prototype.createActionsContainer = function () {
-	this.actions = create('div', ['widget-header-buttons']);
-};
-
-Widget.prototype.createClose = function () {
-	this.closeBtn = create('button', ['widget-btn', 'widget-close'], CLOSE_SYMBOL);
-};
-
-Widget.prototype.createToggleMinimize = function () {
-	this.minimizeBtn = create('button', ['widget-btn', 'widget-minimize'], MINIMIZE_SYMBOL);
-};
-
-Widget.prototype.createTitle = function (titleText) {
-	this.title = create('div', ['widget-title'], titleText);
-};
-
-Widget.prototype.createBody = function () {
-	this.body = create('section', ['widget-body-container']);
 };
 
 Widget.prototype.mount = function () {
@@ -159,7 +150,6 @@ Widget.prototype.destroy = function () {
 	this.unmount();
 	this.draggable.destroy();
 };
-
 
 
 function create (node, classnames, content) {

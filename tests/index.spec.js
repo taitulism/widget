@@ -266,6 +266,18 @@ describe('widget', () => {
 				});
 			});
 
+			describe('Widget Action Buttons', () => {
+				it('is stored in `actions` property', () => {
+					const wgt = widget({minimize: true});
+					expect(wgt.actions).to.be.instanceOf(HTMLElement);
+				});
+
+				it('has a classname', () => {
+					const wgt = widget({minimize: true});
+					expect(wgt.actions.classList.contains('widget-action-buttons')).to.be.true;
+				});
+			});
+
 			describe('Widget Minimize Button', () => {
 				it('is stored in `minimizeBtn` property', () => {
 					const wgt = widget({minimize: true});
@@ -336,8 +348,11 @@ describe('widget', () => {
 	});
 
 	describe('Behavior', () => {
-		it('toggles header visiblity on hover', () => {
+		it('toggles actions visiblity on hover', () => {
 			const wgt = widget({close: true}).mount();
+
+			// TODO: use document selector instead of wgt[elm]
+			// console.log(document.getElementsByClassName('widget-action-buttons').length);
 
 			expect(wgt.actions.style.display).to.equal('none');
 			simulateMouseEnter(wgt.elm);
