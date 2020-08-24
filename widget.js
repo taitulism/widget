@@ -149,6 +149,15 @@ Widget.prototype.setTitle = function (titleText) {
 Widget.prototype.destroy = function () {
 	this.unmount();
 	this.draggable.destroy();
+	this.draggable = null;
+
+	this.elm = null;
+	this.header = null;
+	this.body = null;
+	this.title = null;
+	this.closeBtn = null;
+	this.minimizeBtn = null;
+	this.actions = null;
 };
 
 
