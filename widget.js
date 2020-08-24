@@ -7,7 +7,7 @@ function widget (opts = {}) {
 }
 
 function Widget (opts) {
-	this.initMethods();
+	this.initMethods(opts);
 	this.createDOM(opts);
 
 	this.draggable = null;
@@ -62,11 +62,14 @@ Widget.prototype.createDOM = function (opts) {
 Widget.prototype.initMethods = function (opts) {
 	this.show = this.show.bind(this);
 	this.hide = this.hide.bind(this);
-	this.showActions = this.showActions.bind(this);
-	this.hideActions = this.hideActions.bind(this);
-	this.restore = this.restore.bind(this);
-	this.minimize = this.minimize.bind(this);
-	this.toggleMinimize = this.toggleMinimize.bind(this);
+
+	if (opts.close || opts.minimize) {
+		this.showActions = this.showActions.bind(this);
+		this.hideActions = this.hideActions.bind(this);
+		this.minimize = this.minimize.bind(this);
+		this.restore = this.restore.bind(this);
+		this.toggleMinimize = this.toggleMinimize.bind(this);
+	}
 };
 
 Widget.prototype.mount = function () {
