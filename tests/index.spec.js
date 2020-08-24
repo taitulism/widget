@@ -174,6 +174,34 @@ describe('widget', () => {
 		});
 	});
 
+	describe('.showActions() / .hideActions()', () => {
+		it('toggles the action buttons visibility', () => {
+			const wgt = widget({close: true});
+
+			expect(wgt.actions.style.display).to.equal('none');
+			wgt.showActions();
+			expect(wgt.actions.style.display).to.equal('flex');
+			wgt.hideActions();
+			expect(wgt.actions.style.display).to.equal('none');
+		});
+
+		it('returns the widget instance', () => {
+			const wgt = widget({close: true}).mount();
+			expect(wgt.showActions()).to.eql(wgt);
+			expect(wgt.hideActions()).to.eql(wgt);
+		});
+	});
+
+	describe('.minimize()', () => {
+		it('minimizes the widget', () => {
+			const wgt = widget({minimize: true}).mount();
+
+			expect(wgt.elm.classList.contains('minimized')).to.be.false;
+			wgt.minimize();
+			expect(wgt.elm.classList.contains('minimized')).to.be.true;
+		});
+	});
+
 	describe('.setTitle()', () => {
 		it('changes the widget title', () => {
 			const wgt = widget({title: 'My Widget'});
@@ -224,26 +252,26 @@ describe('widget', () => {
 			});
 
 			describe('Widget Minimize Button', () => {
-				it('is stored in `minimize` property', () => {
+				it('is stored in `minimizeBtn` property', () => {
 					const wgt = widget({minimize: true});
-					expect(wgt.minimize).to.be.instanceOf(HTMLElement);
+					expect(wgt.minimizeBtn).to.be.instanceOf(HTMLElement);
 				});
 
 				it('has a classname', () => {
 					const wgt = widget({minimize: true});
-					expect(wgt.minimize.classList.contains('widget-minimize')).to.be.true;
+					expect(wgt.minimizeBtn.classList.contains('widget-minimize')).to.be.true;
 				});
 			});
 
 			describe('Widget Close Button', () => {
-				it('is stored in `close` property', () => {
+				it('is stored in `closeBtn` property', () => {
 					const wgt = widget({close: true});
-					expect(wgt.close).to.be.instanceOf(HTMLElement);
+					expect(wgt.closeBtn).to.be.instanceOf(HTMLElement);
 				});
 
 				it('has a classname', () => {
 					const wgt = widget({close: true});
-					expect(wgt.close.classList.contains('widget-close')).to.be.true;
+					expect(wgt.closeBtn.classList.contains('widget-close')).to.be.true;
 				});
 			});
 		});
@@ -251,7 +279,7 @@ describe('widget', () => {
 		describe.skip('Widget Body', () => {
 			it('is stored in `body` property', () => {
 				const wgt = widget({close: true});
-				expect(wgt.close).to.be.instanceOf(HTMLElement);
+				expect(wgt.body).to.be.instanceOf(HTMLElement);
 			});
 
 			it('has a classname', () => {
@@ -271,11 +299,10 @@ describe('widget', () => {
 
 		describe('close', () => {
 			it('clicking the `close` button hides the widget', () => {
-				const wgt = widget({close: true});
-				wgt.mount();
+				const wgt = widget({close: true}).mount();
 
 				expect(wgt.elm.style.display).to.not.equal('none');
-				wgt.close.click();
+				wgt.closeBtn.click();
 				expect(wgt.elm.style.display).to.equal('none');
 			});
 		});
@@ -285,7 +312,7 @@ describe('widget', () => {
 				const wgt = widget({minimize: true}).mount();
 
 				expect(wgt.elm.classList.contains('minimized')).to.be.false;
-				wgt.minimize.click();
+				wgt.minimizeBtn.click();
 				expect(wgt.elm.classList.contains('minimized')).to.be.true;
 			});
 		});
@@ -295,11 +322,11 @@ describe('widget', () => {
 		it('toggles header visiblity on hover', () => {
 			const wgt = widget({close: true}).mount();
 
-			expect(wgt.headerButtons.style.display).to.equal('none');
+			expect(wgt.actions.style.display).to.equal('none');
 			simulateMouseEnter(wgt.elm);
-			expect(wgt.headerButtons.style.display).to.equal('flex');
+			expect(wgt.actions.style.display).to.equal('flex');
 			simulateMouseLeave(wgt.elm);
-			expect(wgt.headerButtons.style.display).to.equal('none');
+			expect(wgt.actions.style.display).to.equal('none');
 		});
 	});
 
@@ -314,24 +341,24 @@ describe('widget', () => {
 			expect(document.getElementsByClassName('widget')).to.have.lengthOf(0);
 		});
 
-		it.only('removes hover toggle `close/header-btns` listener', () => {
+		it('removes hover toggle `close/header-btns` listener', () => {
 			const wgt = widget({close : true}).mount();
 
-			expect(wgt.headerButtons.style.display).to.equal('none');
+			expect(wgt.actions.style.display).to.equal('none');
 			simulateMouseEnter(wgt.elm);
-			expect(wgt.headerButtons.style.display).to.equal('flex'); // flex
+			expect(wgt.actions.style.display).to.equal('flex'); // flex
 			simulateMouseLeave(wgt.elm);
-			expect(wgt.headerButtons.style.display).to.equal('none');
+			expect(wgt.actions.style.display).to.equal('none');
 			simulateMouseEnter(wgt.elm);
-			expect(wgt.headerButtons.style.display).to.equal('flex'); // flex
+			expect(wgt.actions.style.display).to.equal('flex'); // flex
 
 			wgt.destroy();
 
-			expect(wgt.headerButtons.style.display).to.equal('none');
+			expect(wgt.actions.style.display).to.equal('none');
 			simulateMouseEnter(wgt.elm);
-			expect(wgt.headerButtons.style.display).to.equal('none');
+			expect(wgt.actions.style.display).to.equal('none');
 			simulateMouseLeave(wgt.elm);
-			expect(wgt.headerButtons.style.display).to.equal('none');
+			expect(wgt.actions.style.display).to.equal('none');
 		});
 
 		it.skip('removes close click listener', () => {

@@ -1,14 +1,24 @@
+const MINIMIZE_SYMBOL = '&#128469;';
+const MAXIMIZE_SYMBOL = '&#128470;';
+
 function widget (opts = {}) {
 	return new Widget(opts);
 }
 
 function Widget (opts) {
-	this.showButtons = this.showButtons.bind(this);
-	this.hideButtons = this.hideButtons.bind(this);
+	this.showActions = this.showActions.bind(this);
+	this.hideActions = this.hideActions.bind(this);
+	this.minimize = this.minimize.bind(this);
 
 	const elm = document.createElement('div');
 	elm.classList.add('widget');
 	this.elm = elm;
+	this.header = null;
+	this.title = null;
+	this.actions = null;
+	this.closeBtn = null;
+	this.minimizeBtn = null;
+
 	this.isMinimized = false;
 
 	if (opts.title) this.createTitle(opts.title);
@@ -16,21 +26,74 @@ function Widget (opts) {
 	if (opts.minimize) this.createMinimze();
 
 	if (opts.close || opts.minimize) {
-		this.createHeaderButtons();
-		this.minimize && this.headerButtons.appendChild(this.minimize);
-		this.close && this.headerButtons.appendChild(this.close);
+		this.createActionsContainer();
+		this.minimizeBtn && this.actions.appendChild(this.minimizeBtn);
+		this.closeBtn && this.actions.appendChild(this.closeBtn);
 	}
 
 	if (opts.title || opts.close || opts.minimize) {
-		this.header = this.createHeader();
+		this.createHeader();
 		this.title && this.header.appendChild(this.title);
-		(this.close || this.minimize) && this.header.appendChild(this.headerButtons);
+		(this.closeBtn || this.minimizeBtn) && this.header.appendChild(this.actions);
 		elm.appendChild(this.header);
 	}
 
 	this.createBody();
 	elm.appendChild(this.body);
 }
+
+Widget.prototype.createHeader = function () {
+	const header = document.createElement('header');
+	header.classList.add('widget-header');
+	this.header = header;
+};
+
+Widget.prototype.createActionsContainer = function () {
+	const actions = document.createElement('div');
+	actions.classList.add('widget-header-buttons');
+	actions.style.display = 'none';
+
+	this.elm.addEventListener('mouseenter', this.showActions);
+	this.elm.addEventListener('mouseleave', this.hideActions);
+
+	this.actions = actions;
+};
+
+Widget.prototype.createClose = function () {
+	const close = document.createElement('div');
+	close.classList.add('widget-btn', 'widget-close');
+	close.innerHTML = '&#10006;';
+
+	close.addEventListener('click', (ev) => {
+		this.elm.style.display = 'none';
+	});
+
+	this.closeBtn = close;
+};
+
+Widget.prototype.createMinimze = function () {
+	const minimize = document.createElement('div');
+	minimize.classList.add('widget-btn', 'widget-minimize');
+	minimize.innerHTML = MINIMIZE_SYMBOL;
+
+	minimize.addEventListener('click', this.minimize);
+
+	this.minimizeBtn = minimize;
+};
+
+Widget.prototype.createTitle = function (titleText) {
+	const title = document.createElement('div');
+	title.classList.add('widget-title');
+	this.title = title;
+	this.setTitle(titleText);
+};
+
+Widget.prototype.createBody = function () {
+	const body = document.createElement('section');
+	body.classList.add('widget-body-container');
+	this.body = body;
+	return this
+};
 
 Widget.prototype.mount = function () {
 	document.body.appendChild(this.elm);
@@ -43,84 +106,19 @@ Widget.prototype.unmount = function () {
 	return this;
 };
 
-Widget.prototype.createHeaderButtons = function () {
-	const headerButtons = document.createElement('div');
-	headerButtons.classList.add('widget-header-buttons');
-	headerButtons.style.display = 'none';
-
-	this.elm.addEventListener('mouseenter', this.showButtons);
-	this.elm.addEventListener('mouseleave', this.hideButtons);
-
-	this.headerButtons = headerButtons;
+Widget.prototype.showActions = function (ev) {
+	this.actions.style.display = 'flex';
+	return this;
 };
 
-Widget.prototype.showButtons = function (ev) {
-	this.headerButtons.style.display = 'flex';
-};
-
-Widget.prototype.hideButtons = function (ev) {
-	this.headerButtons.style.display = 'none';
-};
-
-Widget.prototype.createClose = function () {
-	const close = document.createElement('div');
-	close.classList.add('widget-btn', 'widget-close');
-	close.innerHTML = '&#10006;';
-
-	close.addEventListener('click', (ev) => {
-		this.elm.style.display = 'none';
-	});
-
-	this.close = close;
-};
-
-const MINIMIZE_SYMBOL = '&#128469;';
-const MAXIMIZE_SYMBOL = '&#128470;';
-
-Widget.prototype.createMinimze = function () {
-	const minimize = document.createElement('div');
-	minimize.classList.add('widget-btn', 'widget-minimize');
-	minimize.innerHTML = MINIMIZE_SYMBOL;
-
-	minimize.addEventListener('click', (ev) => {
-		this.isMinimized = !this.isMinimized;
-
-		if (this.isMinimized) {
-			minimize.innerHTML = MAXIMIZE_SYMBOL;
-			this.elm.classList.add('minimized');
-		}
-		else {
-			minimize.innerHTML = MINIMIZE_SYMBOL;
-			this.elm.classList.remove('minimized');
-		}
-	});
-
-	this.minimize = minimize;
-};
-
-Widget.prototype.createTitle = function (titleText) {
-	const title = document.createElement('div');
-	title.classList.add('widget-title');
-	this.title = title;
-	this.setTitle(titleText);
+Widget.prototype.hideActions = function (ev) {
+	this.actions.style.display = 'none';
+	return this;
 };
 
 Widget.prototype.setTitle = function (titleText) {
 	this.title.innerText = titleText;
 	return this;
-};
-
-Widget.prototype.createHeader = function () {
-	const header = document.createElement('header');
-	header.classList.add('widget-header');
-	return header;
-};
-
-Widget.prototype.createBody = function () {
-	const body = document.createElement('section');
-	body.classList.add('widget-body-container');
-	this.body = body;
-	return this
 };
 
 Widget.prototype.hide = function () {
@@ -133,11 +131,27 @@ Widget.prototype.show = function () {
 	return this;
 };
 
+Widget.prototype.minimize = function () {
+	this.isMinimized = !this.isMinimized;
+
+	if (this.isMinimized) {
+		this.minimizeBtn.innerHTML = MAXIMIZE_SYMBOL;
+		this.elm.classList.add('minimized');
+	}
+	else {
+		this.minimizeBtn.innerHTML = MINIMIZE_SYMBOL;
+		this.elm.classList.remove('minimized');
+	}
+};
+
 Widget.prototype.destroy = function () {
 	this.unmount();
 
-	this.elm.removeEventListener('mouseenter', this.showButtons);
-	this.elm.removeEventListener('mouseleave', this.hideButtons);
-	this.hideButtons();
+	if (this.actions) {
+		this.elm.removeEventListener('mouseenter', this.showActions);
+		this.elm.removeEventListener('mouseleave', this.hideActions);
+		this.hideActions();
+	}
+
 	return this;
 };
