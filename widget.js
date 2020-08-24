@@ -15,9 +15,8 @@ function Widget (opts) {
 	this.minimize = this.minimize.bind(this);
 	this.toggleMinimize = this.toggleMinimize.bind(this);
 
-	const elm = document.createElement('div');
-	elm.classList.add('widget');
-	this.elm = elm;
+	this.createMainElm();
+	// this.elm = this.createMainElm();
 	this.header = null;
 	this.title = null;
 	this.actions = null;
@@ -42,51 +41,41 @@ function Widget (opts) {
 		this.createHeader();
 		this.title && this.header.appendChild(this.title);
 		(this.closeBtn || this.minimizeBtn) && this.header.appendChild(this.actions);
-		elm.appendChild(this.header);
+		this.elm.appendChild(this.header);
 	}
 
 	this.createBody();
-	elm.appendChild(this.body);
+	this.elm.appendChild(this.body);
 }
 
+
+
+Widget.prototype.createMainElm = function () {
+	this.elm = create('div', ['widget']);
+};
+
 Widget.prototype.createHeader = function () {
-	const header = document.createElement('header');
-	header.classList.add('widget-header');
-	this.header = header;
+	this.header = create('header', ['widget-header']);
 };
 
 Widget.prototype.createActionsContainer = function () {
-	const actions = document.createElement('div');
-	actions.classList.add('widget-header-buttons');
-	this.actions = actions;
+	this.actions = create('div', ['widget-header-buttons']);
 };
 
 Widget.prototype.createClose = function () {
-	const btn = document.createElement('button');
-	btn.classList.add('widget-btn', 'widget-close');
-	btn.innerHTML = CLOSE_SYMBOL;
-	this.closeBtn = btn;
+	this.closeBtn = create('button', ['widget-btn', 'widget-close'], CLOSE_SYMBOL);
 };
 
 Widget.prototype.createToggleMinimize = function () {
-	const btn = document.createElement('button');
-	btn.classList.add('widget-btn', 'widget-minimize');
-	btn.innerHTML = MINIMIZE_SYMBOL;
-	this.minimizeBtn = btn;
+	this.minimizeBtn = create('button', ['widget-btn', 'widget-minimize'], MINIMIZE_SYMBOL);
 };
 
 Widget.prototype.createTitle = function (titleText) {
-	const title = document.createElement('div');
-	title.classList.add('widget-title');
-	this.title = title;
-	this.setTitle(titleText);
+	this.title = create('div', ['widget-title'], titleText);
 };
 
 Widget.prototype.createBody = function () {
-	const body = document.createElement('section');
-	body.classList.add('widget-body-container');
-	this.body = body;
-	return this
+	this.body = create('section', ['widget-body-container']);
 };
 
 Widget.prototype.mount = function () {
@@ -170,3 +159,16 @@ Widget.prototype.destroy = function () {
 	this.unmount();
 	this.draggable.destroy();
 };
+
+
+
+function create (node, classnames, content) {
+	const elm = document.createElement(node);
+	elm.classList.add(...classnames);
+
+	if (content) {
+		elm.innerHTML = content;
+	}
+
+	return elm;
+}
