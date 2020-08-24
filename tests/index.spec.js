@@ -176,7 +176,7 @@ describe('widget', () => {
 
 	describe('.showActions() / .hideActions()', () => {
 		it('toggles the action buttons visibility', () => {
-			const wgt = widget({close: true});
+			const wgt = widget({close: true}).mount();
 
 			expect(wgt.actions.style.display).to.equal('none');
 			wgt.showActions();
@@ -197,8 +197,23 @@ describe('widget', () => {
 			const wgt = widget({minimize: true}).mount();
 
 			expect(wgt.elm.classList.contains('minimized')).to.be.false;
+			expect(wgt.body.style.display).to.not.equal('none');
 			wgt.minimize();
 			expect(wgt.elm.classList.contains('minimized')).to.be.true;
+			expect(wgt.body.style.display).to.equal('none');
+		});
+	});
+
+	describe('.restore()', () => {
+		it('restores the widget size (unMinimize)', () => {
+			const wgt = widget({minimize: true}).mount();
+
+			wgt.minimize();
+			expect(wgt.elm.classList.contains('minimized')).to.be.true;
+			expect(wgt.body.style.display).to.equal('none');
+			wgt.restore();
+			expect(wgt.elm.classList.contains('minimized')).to.be.false;
+			expect(wgt.body.style.display).to.not.equal('none');
 		});
 	});
 
@@ -308,12 +323,14 @@ describe('widget', () => {
 		});
 
 		describe('minimize', () => {
-			it('clicking the `minimize` button minimizes the widget', () => {
+			it('toggles the widget body visibility', () => {
 				const wgt = widget({minimize: true}).mount();
 
 				expect(wgt.elm.classList.contains('minimized')).to.be.false;
 				wgt.minimizeBtn.click();
 				expect(wgt.elm.classList.contains('minimized')).to.be.true;
+				wgt.minimizeBtn.click();
+				expect(wgt.elm.classList.contains('minimized')).to.be.false;
 			});
 		});
 	});
