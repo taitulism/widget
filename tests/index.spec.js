@@ -144,6 +144,12 @@ describe('widget', () => {
 	});
 
 	describe('.unmount()', () => {
+		it('doesn\'t fail when called before `.mount()`', () => {
+			const wgt = widget();
+			const safeCall = () => wgt.unmount();
+			expect(safeCall).not.to.throw();
+		});
+
 		it('removes the widget element from the <body>', () => {
 			const wgt = widget();
 
@@ -264,7 +270,7 @@ describe('widget', () => {
 			expect(wgt.title.innerText).to.equal('New Title');
 		});
 
-		it('only work if initiated with the `title` option', () => {
+		it('only works if initiated with the `title` option', () => {
 			const wgt = widget();
 			wgt.setTitle('New Title');
 			expect(wgt.title).to.be.null;

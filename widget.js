@@ -12,6 +12,7 @@ function Widget (opts) {
 
 	this.draggable = null;
 	this.isMinimized = false;
+	this.isMounted = false;
 }
 
 Widget.prototype.createDOM = function (opts) {
@@ -73,6 +74,8 @@ Widget.prototype.initMethods = function (opts) {
 };
 
 Widget.prototype.mount = function () {
+	if (this.isMounted) return;
+
 	if (this.actions) {
 		this.closeBtn && this.closeBtn.addEventListener('click', this.hide);
 		this.minimizeBtn && this.minimizeBtn.addEventListener('click', this.toggleMinimize);
@@ -85,11 +88,14 @@ Widget.prototype.mount = function () {
 
 	document.body.appendChild(this.elm);
 	this.draggable = draggable(this.elm);
+	this.isMounted = true;
 
 	return this;
 };
 
 Widget.prototype.unmount = function () {
+	if (!this.isMounted) return;
+
 	document.body.removeChild(this.elm);
 
 	if (this.actions) {
@@ -99,6 +105,8 @@ Widget.prototype.unmount = function () {
 		this.elm.removeEventListener('mouseleave', this.hideActions);
 		this.hideActions();
 	}
+
+	this.isMounted = false;
 
 	return this;
 };
