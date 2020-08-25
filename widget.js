@@ -94,7 +94,7 @@ Widget.prototype.mount = function () {
 };
 
 Widget.prototype.unmount = function () {
-	if (!this.isMounted) return;
+	if (!this.isMounted) return this;
 
 	document.body.removeChild(this.elm);
 
@@ -153,12 +153,14 @@ Widget.prototype.toggleMinimize = function () {
 };
 
 Widget.prototype.setTitle = function (titleText) {
-	if (!this.title) return;
+	if (!this.title) return this;
 	this.title.innerText = titleText;
 	return this;
 };
 
 Widget.prototype.destroy = function () {
+	if (!this.isMounted) return;
+
 	this.unmount();
 	this.draggable.destroy();
 	this.draggable = null;

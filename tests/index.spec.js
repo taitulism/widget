@@ -415,13 +415,23 @@ describe('widget', () => {
 
 	describe('.destroy()', () => {
 		it('calls .unmount()', () => {
-			const wgt = widget();
+			const wgt = widget().mount();
 
-			expect(document.getElementsByClassName('widget')).to.have.lengthOf(0);
-			wgt.mount();
-			expect(document.getElementsByClassName('widget')).to.have.lengthOf(1);
+			let called = false;
+			const origUnmount = wgt.unmount;
+			wgt.unmount = () => {
+				called = true;
+				origUnmount.call(wgt);
+			};
+
 			wgt.destroy();
-			expect(document.getElementsByClassName('widget')).to.have.lengthOf(0);
+			expect(called).to.be.true;
+		});
+
+		it('doesn\'t fail when called before `.mount()`', () => {
+			const wgt = widget();
+			const safeCall = () => wgt.destroy();
+			expect(safeCall).not.to.throw();
 		});
 
 		it('destroys Draggable', () => {
