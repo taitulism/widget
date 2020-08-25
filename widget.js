@@ -16,7 +16,11 @@ function Widget (opts) {
 }
 
 Widget.prototype.createDOM = function (opts) {
-	this.elm = create('div', ['widget']);
+	const widgetClassnames = resolveClassnames(opts.classname);
+
+	this.elm = create('div', widgetClassnames);
+	if (opts.id) this.elm.id = opts.id;
+
 	this.body = create('section', ['widget-body']);
 
 	this.title = opts.title
@@ -184,4 +188,19 @@ function create (node, classnames, content) {
 	}
 
 	return elm;
+}
+
+function resolveClassnames (optsClassnames) {
+	if (!optsClassnames) return ['widget'];
+
+	if (typeof optsClassnames == 'string') {
+		optsClassnames = optsClassnames.split(/\s+/);
+	}
+
+	if (Array.isArray(optsClassnames)) {
+		optsClassnames.push('widget');
+		return optsClassnames;
+	}
+
+	return ['widget'];
 }

@@ -431,6 +431,37 @@ describe('widget', () => {
 	});
 
 	describe('Options', () => {
+		describe('id', () => {
+			it('sets an `id` attribute on the widget element', () => {
+				wgt = widget({id: 'the-widget'});
+				expect(wgt.elm.id).to.equal('the-widget');
+			});
+		});
+
+		describe('classname', () => {
+			it('sets a `classname` attribute on the widget element', () => {
+				wgt = widget({classname: 'a-widget'});
+				expect(wgt.elm.classList.contains('widget')).to.be.true;
+				expect(wgt.elm.classList.contains('a-widget')).to.be.true;
+			});
+
+			it('handles multiple classnames string', () => {
+				wgt = widget({classname: 'a-widget theme-bg with-border'});
+				expect(wgt.elm.classList.contains('widget')).to.be.true;
+				expect(wgt.elm.classList.contains('a-widget')).to.be.true;
+				expect(wgt.elm.classList.contains('theme-bg')).to.be.true;
+				expect(wgt.elm.classList.contains('with-border')).to.be.true;
+			});
+
+			it('handles an array of classnames', () => {
+				wgt = widget({classname: ['a-widget', 'theme-bg', 'with-border']});
+				expect(wgt.elm.classList.contains('widget')).to.be.true;
+				expect(wgt.elm.classList.contains('a-widget')).to.be.true;
+				expect(wgt.elm.classList.contains('theme-bg')).to.be.true;
+				expect(wgt.elm.classList.contains('with-border')).to.be.true;
+			});
+		});
+
 		describe('title', () => {
 			it('sets the widget title', () => {
 				wgt = widget({title: 'My Widget'});
