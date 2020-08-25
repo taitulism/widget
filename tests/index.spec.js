@@ -309,6 +309,25 @@ describe('widget', () => {
 				expect(wgt.header.classList.contains('widget-header')).to.be.true;
 			});
 
+			it('is added to the DOM on mount (with options: title/close/minimize)', () => {
+				const titleWgt = widget({title: 'My Widget'});
+				const closeWgt = widget({close: true});
+				const minimizeWgt = widget({minimize: true});
+				const noHeaderWgt = widget();
+
+				expect(document.getElementsByClassName('widget-header')).to.have.lengthOf(0);
+				titleWgt.mount();
+				closeWgt.mount();
+				minimizeWgt.mount();
+				noHeaderWgt.mount();
+				expect(document.getElementsByClassName('widget-header')).to.have.lengthOf(3);
+
+				titleWgt.destroy();
+				closeWgt.destroy();
+				minimizeWgt.destroy();
+				noHeaderWgt.destroy();
+			});
+
 			describe('Title', () => {
 				it('is stored in `title` property', () => {
 					wgt = widget({title: 'My Widget'});
@@ -318,6 +337,14 @@ describe('widget', () => {
 				it('has a classname', () => {
 					wgt = widget({title: 'My Widget'});
 					expect(wgt.title.classList.contains('widget-title')).to.be.true;
+				});
+
+				it('is added to the DOM on mount', () => {
+					wgt = widget({title: 'My Widget'});
+
+					expect(document.getElementsByClassName('widget-title')).to.have.lengthOf(0);
+					wgt.mount();
+					expect(document.getElementsByClassName('widget-title')).to.have.lengthOf(1);
 				});
 			});
 
@@ -331,6 +358,22 @@ describe('widget', () => {
 					wgt = widget({minimize: true});
 					expect(wgt.actions.classList.contains('widget-action-buttons')).to.be.true;
 				});
+
+				it('is added to the DOM on mount (with options: close/minimize)', () => {
+					const closeWgt = widget({close: true});
+					const minimizeWgt = widget({minimize: true});
+					const noOptsWgt = widget();
+
+					expect(document.getElementsByClassName('widget-action-buttons')).to.have.lengthOf(0);
+					closeWgt.mount();
+					minimizeWgt.mount();
+					noOptsWgt.mount();
+					expect(document.getElementsByClassName('widget-action-buttons')).to.have.lengthOf(2);
+
+					closeWgt.destroy();
+					minimizeWgt.destroy();
+					noOptsWgt.destroy();
+				});
 			});
 
 			describe('Minimize Button', () => {
@@ -343,6 +386,14 @@ describe('widget', () => {
 					wgt = widget({minimize: true});
 					expect(wgt.minimizeBtn.classList.contains('widget-minimize')).to.be.true;
 				});
+
+				it('is added to the DOM on mount', () => {
+					wgt = widget({minimize: true});
+
+					expect(document.getElementsByClassName('widget-minimize')).to.have.lengthOf(0);
+					wgt.mount();
+					expect(document.getElementsByClassName('widget-minimize')).to.have.lengthOf(1);
+				});
 			});
 
 			describe('Close Button', () => {
@@ -354,6 +405,14 @@ describe('widget', () => {
 				it('has a classname', () => {
 					wgt = widget({close: true});
 					expect(wgt.closeBtn.classList.contains('widget-close')).to.be.true;
+				});
+
+				it('is added to the DOM on mount', () => {
+					wgt = widget({close: true});
+
+					expect(document.getElementsByClassName('widget-close')).to.have.lengthOf(0);
+					wgt.mount();
+					expect(document.getElementsByClassName('widget-close')).to.have.lengthOf(1);
 				});
 			});
 		});
