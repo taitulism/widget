@@ -18,8 +18,8 @@
 				position: absolute;
 				top: 150px;
 				right: 250px;
-				border-radius: 4px;
-				background-color: #383838;
+				border-radius: 5px;
+				/* background-color: #383838; */
 				/* opacity: 0.5; */
 			}
 
@@ -33,6 +33,9 @@
 				align-items: center;
 				padding: 0 4px;
 				user-select: none;
+				background-color: #383838;
+				border-radius: 5px 5px 0 0;
+
 				/* border-bottom: 1px solid #d3d3d3; */
 			}
 
@@ -81,15 +84,17 @@
 				flex-grow: 1;
 				height: 400px;
 			}
-
-			/* .minimized .widget-body-container {
-				display: none;
-			} */
 		</style>
 	</head>
 	<body>
 		<div id="container">
-			<div id="target"></div>
+			<div id="target">
+				<ul>
+					<li>AAA</li>
+					<li>BBB</li>
+					<li>CCC</li>
+				</ul>
+			</div>
 			<div id="widget-title"></div>
 		</div>
 	</body>
@@ -97,8 +102,10 @@
 	<script src="../../resizable/resizable.js"></script>
 	<script src="../widget.js"></script>
 	<script>
-		// const targetElm = document.getElementById('target');
+		const targetElm = document.getElementById('target');
+
 		const wgt = widget({
+			body: targetElm,
 			close: true,
 			minimize: true,
 			title: 'My Widget',
