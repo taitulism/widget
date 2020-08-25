@@ -145,6 +145,7 @@ Widget.prototype.toggleMinimize = function () {
 };
 
 Widget.prototype.setTitle = function (titleText) {
+	if (!this.title) return;
 	this.title.innerText = titleText;
 	return this;
 };

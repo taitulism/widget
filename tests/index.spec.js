@@ -263,6 +263,12 @@ describe('widget', () => {
 			wgt.setTitle('New Title');
 			expect(wgt.title.innerText).to.equal('New Title');
 		});
+
+		it('only work if initiated with the `title` option', () => {
+			const wgt = widget();
+			wgt.setTitle('New Title');
+			expect(wgt.title).to.be.null;
+		});
 	});
 
 	describe('Elements & ClassNames', () => {
