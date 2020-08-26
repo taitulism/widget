@@ -379,6 +379,14 @@ describe('widget', () => {
 			expect(wgt.elm.classList.contains('minimized')).to.be.true;
 			expect(wgt.bodyContainer.style.display).to.equal('none');
 		});
+
+		it('toggles the `.isMinimized` property', () => {
+			wgt = widget('', target, {minimize: true}).mount();
+
+			expect(wgt.isMinimized).to.be.false;
+			wgt.minimize();
+			expect(wgt.isMinimized).to.be.true;
+		});
 	});
 
 	describe('.restore()', () => {
@@ -391,6 +399,15 @@ describe('widget', () => {
 			wgt.restore();
 			expect(wgt.elm.classList.contains('minimized')).to.be.false;
 			expect(wgt.bodyContainer.style.display).to.not.equal('none');
+		});
+
+		it('toggles the `.isMinimized` property', () => {
+			wgt = widget('', target, {minimize: true}).mount();
+
+			wgt.minimize();
+			expect(wgt.isMinimized).to.be.true;
+			wgt.restore();
+			expect(wgt.isMinimized).to.be.false;
 		});
 	});
 

@@ -145,6 +145,7 @@ Widget.prototype.restore = function () {
 	this.minimizeBtn.innerHTML = MINIMIZE_SYMBOL;
 	this.bodyContainer.style.display = 'block';
 	this.elm.classList.remove('minimized');
+	this.isMinimized = false;
 	return this;
 };
 
@@ -152,14 +153,13 @@ Widget.prototype.minimize = function () {
 	this.minimizeBtn.innerHTML = MAXIMIZE_SYMBOL;
 	this.bodyContainer.style.display = 'none';
 	this.elm.classList.add('minimized');
+	this.isMinimized = true;
 	return this;
 };
 
 Widget.prototype.toggleMinimize = function () {
-	this.isMinimized = !this.isMinimized;
-
-	if (this.isMinimized) this.minimize();
-	else this.restore();
+	if (this.isMinimized) this.restore();
+	else this.minimize();
 };
 
 Widget.prototype.setTitle = function (titleText) {
