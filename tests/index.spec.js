@@ -218,6 +218,54 @@ describe('widget', () => {
 			expect(document.getElementsByClassName('widget')).to.have.lengthOf(1);
 		});
 
+		it('binds listener: hover on widget', () => {
+			wgt = widget('', target, {close : true});
+
+			expect(wgt.actions.style.display).to.equal('');
+			simulateMouseEnter(wgt.elm);
+			expect(wgt.actions.style.display).to.equal('');
+			simulateMouseLeave(wgt.elm);
+			expect(wgt.actions.style.display).to.equal('');
+
+			wgt.mount();
+
+			expect(wgt.actions.style.display).to.equal('none');
+			simulateMouseEnter(wgt.elm);
+			expect(wgt.actions.style.display).to.equal('flex'); // flex
+			simulateMouseLeave(wgt.elm);
+			expect(wgt.actions.style.display).to.equal('none');
+			simulateMouseEnter(wgt.elm);
+			expect(wgt.actions.style.display).to.equal('flex'); // flex
+		});
+
+		it('binds listener: click on `close`', () => {
+			wgt = widget('', target, {close: true});
+
+			expect(wgt.elm.style.display).to.not.equal('none');
+			wgt.closeBtn.click();
+			expect(wgt.elm.style.display).to.not.equal('none');
+
+			wgt.mount();
+
+			expect(wgt.elm.style.display).to.not.equal('none');
+			wgt.closeBtn.click();
+			expect(wgt.elm.style.display).to.equal('none');
+		});
+
+		it('binds listener: click on `minify`', () => {
+			wgt = widget('', target, {minimize: true});
+
+			expect(wgt.elm.classList.contains('minimized')).to.be.false;
+			wgt.minimizeBtn.click();
+			expect(wgt.elm.classList.contains('minimized')).to.be.false;
+
+			wgt.mount();
+
+			expect(wgt.elm.classList.contains('minimized')).to.be.false;
+			wgt.minimizeBtn.click();
+			expect(wgt.elm.classList.contains('minimized')).to.be.true;
+		});
+
 		it('makes the widget element draggable', () => {
 			wgt = widget();
 
@@ -244,7 +292,7 @@ describe('widget', () => {
 			expect(document.getElementsByClassName('widget')).to.have.lengthOf(0);
 		});
 
-		it('removes hover toggle `close/header-btns` listener', () => {
+		it('unbinds listener: hover on widget', () => {
 			wgt = widget('', target, {close : true}).mount();
 
 			expect(wgt.actions.style.display).to.equal('none');
@@ -264,7 +312,7 @@ describe('widget', () => {
 			expect(wgt.actions.style.display).to.equal('none');
 		});
 
-		it('removes close click listener', () => {
+		it('unbinds listener: click on `close`', () => {
 			wgt = widget('', target, {close: true}).mount();
 			wgt.unmount();
 
@@ -273,7 +321,7 @@ describe('widget', () => {
 			expect(wgt.elm.style.display).to.not.equal('none');
 		});
 
-		it('removes toggle minify listener', () => {
+		it('unbinds listener: click on `minify`', () => {
 			wgt = widget('', target, {minimize: true}).mount();
 
 			wgt.minimizeBtn.click();
