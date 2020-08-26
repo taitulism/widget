@@ -2,7 +2,70 @@ const MINIMIZE_SYMBOL = '&#128469;';
 const MAXIMIZE_SYMBOL = '&#128470;';
 const CLOSE_SYMBOL = '&#10006;';
 
-function widget (title, body, opts = {}) {
+function resolveArgs (maybeTitle, maybeBody, maybeOpts) {
+	let title = null;
+	let body = null;
+	let opts = null;
+
+	if (!maybeTitle && !maybeBody && !maybeOpts) {
+		return [title, body, opts];
+	}
+
+	if (maybeOpts && typeof maybeOpts == 'object') {
+		opts = maybeOpts;
+
+		if (maybeBody instanceof HTMLElement) {
+			body = maybeBody;
+		}
+
+		if (maybeTitle && typeof maybeTitle == 'string') {
+			title = maybeTitle;
+		}
+	}
+	else if (maybeBody && maybeBody instanceof HTMLElement) {
+		body = maybeBody;
+
+		if (maybeTitle && typeof maybeTitle == 'string') {
+			title = maybeTitle;
+		}
+	}
+	else if (maybeTitle) {
+		if (typeof maybeTitle == 'string') {
+			title = maybeTitle;
+		}
+		else if (maybeTitle instanceof HTMLElement) {
+			body = maybeTitle;
+		}
+	}
+
+	return [title, body, opts];
+}
+
+function resolveOptions (rawOpts) {
+	if (!rawOpts) {
+		return {
+			id: null,
+			classname: null,
+			showHeader: true,
+			showActions: true,
+			showClose: true,
+			showMinimize: true,
+		};
+	}
+
+	return {
+		id: rawOpts.id && typeof rawOpts.id == 'string' ? rawOpts.id : null,
+		classname: typeof rawOpts.classname == 'string' || Array.isArray(rawOpts.classname) ? rawOpts.classname : null,
+		showHeader: typeof rawOpts.showHeader == 'boolean' ? rawOpts.showHeader : true,
+		showActions: typeof rawOpts.showActions == 'boolean' ? rawOpts.showActions : true,
+		showClose: typeof rawOpts.showClose == 'boolean' ? rawOpts.showClose : true,
+		showMinimize: typeof rawOpts.showMinimize == 'boolean' ? rawOpts.showMinimize : true,
+	};
+}
+
+function widget (...args) {
+	const [title, body, rawOpts] = resolveArgs(...args);
+	const opts = resolveOptions(rawOpts);
 	return new Widget(title, body, opts);
 }
 
@@ -16,37 +79,40 @@ function Widget (title, body, opts) {
 }
 
 Widget.prototype.createDOM = function (title, body, opts) {
+	this.header = null;
+	this.body = null;
+	this.title = null;
+	this.actions = null;
+	this.closeBtn = null;
+	this.minimizeBtn = null;
+
 	const widgetClassnames = resolveClassnames(opts.classname);
 
 	this.elm = create('div', widgetClassnames);
 	if (opts.id) this.elm.id = opts.id;
 
-	this.header = create('header', ['widget-header']);
-	this.title = create('div', ['widget-title'], title);
 	this.bodyContainer = create('section', ['widget-body-container']);
 
-	this.header.appendChild(this.title);
+	if (opts.showHeader) {
+		this.header = create('header', ['widget-header']);
+		this.title = create('div', ['widget-title'], title);
 
-	this.closeBtn = opts.close
-		? create('button', ['widget-btn', 'widget-close'], CLOSE_SYMBOL)
-		: null;
+		if (opts.showActions) {
+			this.actions = create('div', ['widget-action-buttons']);
 
-	this.minimizeBtn = opts.minimize
-		? create('button', ['widget-btn', 'widget-minimize'], MINIMIZE_SYMBOL)
-		: null;
+			if (opts.showMinimize) {
+				this.minimizeBtn = create('button', ['widget-button', 'widget-minimize'], MINIMIZE_SYMBOL);
+				this.actions.appendChild(this.minimizeBtn);
+			}
 
-	const hasActions = Boolean(opts.close || opts.minimize);
+			if (opts.showClose) {
+				this.closeBtn = create('button', ['widget-button', 'widget-close'], CLOSE_SYMBOL);
+				this.actions.appendChild(this.closeBtn);
+			}
 
-	if (hasActions) {
-		this.actions = create('div', ['widget-action-buttons']);
-
-		this.minimizeBtn && this.actions.appendChild(this.minimizeBtn);
-		this.closeBtn && this.actions.appendChild(this.closeBtn);
-
-		this.header.appendChild(this.actions);
-	}
-	else {
-		this.actions = null;
+			this.header.appendChild(this.title);
+			this.header.appendChild(this.actions);
+		}
 	}
 
 	if (body) {
@@ -63,27 +129,33 @@ Widget.prototype.initMethods = function (opts) {
 	this.show = this.show.bind(this);
 	this.hide = this.hide.bind(this);
 
-	if (opts.close || opts.minimize) {
+	if (!opts.noHeader && (!opts.noClose || !opts.noMinimize)) {
 		this.showActions = this.showActions.bind(this);
 		this.hideActions = this.hideActions.bind(this);
-		this.minimize = this.minimize.bind(this);
-		this.restore = this.restore.bind(this);
-		this.toggleMinimize = this.toggleMinimize.bind(this);
+
+		if (!opts.noClose) {
+			this.restore = this.restore.bind(this);
+			this.minimize = this.minimize.bind(this);
+		}
+
+		if (!opts.noMinimize) {
+			this.toggleMinimize = this.toggleMinimize.bind(this);
+		}
 	}
 };
 
 Widget.prototype.mount = function () {
 	if (this.isMounted) return;
 
-	if (this.actions) {
+	// if (this.actions) {
 		this.closeBtn && this.closeBtn.addEventListener('click', this.hide);
 		this.minimizeBtn && this.minimizeBtn.addEventListener('click', this.toggleMinimize);
 
-		this.elm.addEventListener('mouseenter', this.showActions);
-		this.elm.addEventListener('mouseleave', this.hideActions);
+		// this.elm.addEventListener('mouseenter', this.showActions);
+		// this.elm.addEventListener('mouseleave', this.hideActions);
 
-		this.hideActions();
-	}
+		// this.hideActions();
+	// }
 
 	document.body.appendChild(this.elm);
 	this.draggable = draggable(this.elm);
@@ -97,13 +169,13 @@ Widget.prototype.unmount = function () {
 
 	document.body.removeChild(this.elm);
 
-	if (this.actions) {
+	// if (this.actions) {
 		this.closeBtn && this.closeBtn.removeEventListener('click', this.hide);
 		this.minimizeBtn && this.minimizeBtn.removeEventListener('click', this.toggleMinimize);
-		this.elm.removeEventListener('mouseenter', this.showActions);
-		this.elm.removeEventListener('mouseleave', this.hideActions);
-		this.hideActions();
-	}
+		// this.elm.removeEventListener('mouseenter', this.showActions);
+		// this.elm.removeEventListener('mouseleave', this.hideActions);
+	// 	this.hideActions();
+	// }
 
 	this.isMounted = false;
 
