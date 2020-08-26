@@ -2,29 +2,29 @@ const MINIMIZE_SYMBOL = '&#128469;';
 const MAXIMIZE_SYMBOL = '&#128470;';
 const CLOSE_SYMBOL = '&#10006;';
 
-function widget (opts = {}) {
-	return new Widget(opts);
+function widget (title, body, opts = {}) {
+	return new Widget(title, body, opts);
 }
 
-function Widget (opts) {
+function Widget (title, body, opts) {
 	this.initMethods(opts);
-	this.createDOM(opts);
+	this.createDOM(title, body, opts);
 
 	this.draggable = null;
 	this.isMinimized = false;
 	this.isMounted = false;
 }
 
-Widget.prototype.createDOM = function (opts) {
+Widget.prototype.createDOM = function (title, body, opts) {
 	const widgetClassnames = resolveClassnames(opts.classname);
 
 	this.elm = create('div', widgetClassnames);
 	if (opts.id) this.elm.id = opts.id;
 
-	this.body = create('section', ['widget-body']);
+	this.bodyContainer = create('section', ['widget-body-container']);
 
-	this.title = opts.title
-		? create('div', ['widget-title'], opts.title)
+	this.title = title
+		? create('div', ['widget-title'], title)
 		: null;
 
 	this.closeBtn = opts.close
@@ -36,7 +36,7 @@ Widget.prototype.createDOM = function (opts) {
 		: null;
 
 	const hasActions = Boolean(opts.close || opts.minimize);
-	const hasHeader = Boolean(opts.title || hasActions);
+	const hasHeader = Boolean(title || hasActions);
 
 	if (hasHeader) {
 		this.header = create('header', ['widget-header']);
@@ -61,7 +61,13 @@ Widget.prototype.createDOM = function (opts) {
 		this.header = null;
 	}
 
-	this.elm.appendChild(this.body);
+	if (body) {
+		body.classList.add('widget-body');
+		this.body = body;
+		this.bodyContainer.appendChild(body);
+	}
+
+	this.elm.appendChild(this.bodyContainer);
 };
 
 Widget.prototype.initMethods = function (opts) {
@@ -137,14 +143,14 @@ Widget.prototype.hideActions = function (ev) {
 
 Widget.prototype.restore = function () {
 	this.minimizeBtn.innerHTML = MINIMIZE_SYMBOL;
-	this.body.style.display = 'block';
+	this.bodyContainer.style.display = 'block';
 	this.elm.classList.remove('minimized');
 	return this;
 };
 
 Widget.prototype.minimize = function () {
 	this.minimizeBtn.innerHTML = MAXIMIZE_SYMBOL;
-	this.body.style.display = 'none';
+	this.bodyContainer.style.display = 'none';
 	this.elm.classList.add('minimized');
 	return this;
 };
@@ -171,6 +177,7 @@ Widget.prototype.destroy = function () {
 
 	this.elm = null;
 	this.header = null;
+	this.bodyContainer = null;
 	this.body = null;
 	this.title = null;
 	this.closeBtn = null;

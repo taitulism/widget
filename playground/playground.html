@@ -18,8 +18,6 @@
 				position: absolute;
 				top: 150px;
 				right: 250px;
-				border-radius: 5px;
-				/* background-color: #383838; */
 				/* opacity: 0.5; */
 			}
 
@@ -80,9 +78,16 @@
 				padding-bottom: 3px;
 			}
 
-			.widget-body {
+			.widget-body-container {
+				height: 100%;
+				width: 100%;
+				border: 2px solid #383838;
+				border-top: 0 none;
+				box-sizing: border-box;
+				border-radius: 0 0 5px 5px;
+				font-family: arial;
+				font-size: 14px;
 				flex-grow: 1;
-				height: 400px;
 			}
 		</style>
 	</head>
@@ -104,11 +109,9 @@
 	<script>
 		const targetElm = document.getElementById('target');
 
-		const wgt = widget({
-			body: targetElm,
+		const wgt = widget('My Widget', targetElm, {
 			close: true,
 			minimize: true,
-			title: 'My Widget',
 		});
 		wgt.mount();
 	</script>

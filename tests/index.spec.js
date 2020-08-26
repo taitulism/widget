@@ -86,6 +86,13 @@ describe('widget', () => {
 
 		target = document.createElement('div');
 		target.id = 'target';
+		target.innerHTML = `
+			<ul>
+				<li>AAA</li>
+				<li>BBB</li>
+				<li>CCC</li>
+			</ul>
+		`;
 
 		container.appendChild(target);
 		testDOMContainer.appendChild(container);
@@ -98,6 +105,7 @@ describe('widget', () => {
 	});
 
 	afterEach(() => {
+		target.innerHTML = '';
 		target.parentNode.removeChild(target);
 		target = null;
 
@@ -122,11 +130,83 @@ describe('widget', () => {
 
 	it('is a function', () => expect(widget).to.be.a('function'));
 
-	it('returns a widget instance', () => {
+	it('returns a `Widget` instance', () => {
 		const widgetInstance = widget(target);
 		const ctor = Object.getPrototypeOf(widgetInstance).constructor;
 
 		expect(ctor.name).to.equal('Widget');
+	});
+
+	describe('Arguments', () => {
+		describe('[0] - title', () => {
+			it('sets the widget title', () => {
+				wgt = widget('My Widget');
+				expect(wgt.title.innerText).to.equal('My Widget');
+			});
+		});
+
+		describe('[1] - body', () => {
+			it('sets the widget body', () => {
+				wgt = widget('My Widget', target);
+				expect(wgt.bodyContainer.innerText).to.include('BBB');
+			});
+		});
+
+		describe('[2] - options', () => {
+			describe('id', () => {
+				it('sets an `id` attribute on the widget element', () => {
+					wgt = widget('', target, {id: 'the-widget'});
+					expect(wgt.elm.id).to.equal('the-widget');
+				});
+			});
+
+			describe('classname', () => {
+				it('sets a `classname` attribute on the widget element', () => {
+					wgt = widget('', target, {classname: 'a-widget'});
+					expect(wgt.elm.classList.contains('widget')).to.be.true;
+					expect(wgt.elm.classList.contains('a-widget')).to.be.true;
+				});
+
+				it('handles multiple classnames string', () => {
+					wgt = widget('', target, {classname: 'a-widget theme-bg with-border'});
+					expect(wgt.elm.classList.contains('widget')).to.be.true;
+					expect(wgt.elm.classList.contains('a-widget')).to.be.true;
+					expect(wgt.elm.classList.contains('theme-bg')).to.be.true;
+					expect(wgt.elm.classList.contains('with-border')).to.be.true;
+				});
+
+				it('handles an array of classnames', () => {
+					wgt = widget('', target, {classname: ['a-widget', 'theme-bg', 'with-border']});
+					expect(wgt.elm.classList.contains('widget')).to.be.true;
+					expect(wgt.elm.classList.contains('a-widget')).to.be.true;
+					expect(wgt.elm.classList.contains('theme-bg')).to.be.true;
+					expect(wgt.elm.classList.contains('with-border')).to.be.true;
+				});
+			});
+
+			describe('close', () => {
+				it('clicking the `close` button hides the widget', () => {
+					wgt = widget('', target, {close: true}).mount();
+
+					expect(wgt.elm.style.display).to.not.equal('none');
+					wgt.closeBtn.click();
+					expect(wgt.elm.style.display).to.equal('none');
+				});
+			});
+
+			describe('minimize', () => {
+				it('toggles the widget body visibility', () => {
+					wgt = widget('', target, {minimize: true}).mount();
+
+					expect(wgt.elm.classList.contains('minimized')).to.be.false;
+					wgt.minimizeBtn.click();
+					expect(wgt.elm.classList.contains('minimized')).to.be.true;
+					wgt.minimizeBtn.click();
+					expect(wgt.elm.classList.contains('minimized')).to.be.false;
+				});
+			});
+		});
+
 	});
 
 	describe('.mount()', () => {
@@ -165,7 +245,7 @@ describe('widget', () => {
 		});
 
 		it('removes hover toggle `close/header-btns` listener', () => {
-			wgt = widget({close : true}).mount();
+			wgt = widget('', target, {close : true}).mount();
 
 			expect(wgt.actions.style.display).to.equal('none');
 			simulateMouseEnter(wgt.elm);
@@ -185,7 +265,7 @@ describe('widget', () => {
 		});
 
 		it('removes close click listener', () => {
-			wgt = widget({close: true}).mount();
+			wgt = widget('', target, {close: true}).mount();
 			wgt.unmount();
 
 			expect(wgt.elm.style.display).to.not.equal('none');
@@ -194,7 +274,7 @@ describe('widget', () => {
 		});
 
 		it('removes toggle minify listener', () => {
-			wgt = widget({minimize: true}).mount();
+			wgt = widget('', target, {minimize: true}).mount();
 
 			wgt.minimizeBtn.click();
 			expect(wgt.elm.classList.contains('minimized')).to.be.true;
@@ -225,7 +305,7 @@ describe('widget', () => {
 
 	describe('.showActions() / .hideActions()', () => {
 		it('toggles the action buttons visibility', () => {
-			wgt = widget({close: true}).mount();
+			wgt = widget('', target, {close: true}).mount();
 
 			expect(wgt.actions.style.display).to.equal('none');
 			wgt.showActions();
@@ -235,7 +315,7 @@ describe('widget', () => {
 		});
 
 		it('returns the widget instance', () => {
-			wgt = widget({close: true}).mount();
+			wgt = widget('', target, {close: true}).mount();
 			expect(wgt.showActions()).to.eql(wgt);
 			expect(wgt.hideActions()).to.eql(wgt);
 		});
@@ -243,39 +323,39 @@ describe('widget', () => {
 
 	describe('.minimize()', () => {
 		it('minimizes the widget', () => {
-			wgt = widget({minimize: true}).mount();
+			wgt = widget('', target, {minimize: true}).mount();
 
 			expect(wgt.elm.classList.contains('minimized')).to.be.false;
-			expect(wgt.body.style.display).to.not.equal('none');
+			expect(wgt.bodyContainer.style.display).to.not.equal('none');
 			wgt.minimize();
 			expect(wgt.elm.classList.contains('minimized')).to.be.true;
-			expect(wgt.body.style.display).to.equal('none');
+			expect(wgt.bodyContainer.style.display).to.equal('none');
 		});
 	});
 
 	describe('.restore()', () => {
 		it('restores the widget size (unMinimize)', () => {
-			wgt = widget({minimize: true}).mount();
+			wgt = widget('', target, {minimize: true}).mount();
 
 			wgt.minimize();
 			expect(wgt.elm.classList.contains('minimized')).to.be.true;
-			expect(wgt.body.style.display).to.equal('none');
+			expect(wgt.bodyContainer.style.display).to.equal('none');
 			wgt.restore();
 			expect(wgt.elm.classList.contains('minimized')).to.be.false;
-			expect(wgt.body.style.display).to.not.equal('none');
+			expect(wgt.bodyContainer.style.display).to.not.equal('none');
 		});
 	});
 
 	describe('.setTitle()', () => {
 		it('changes the widget title', () => {
-			wgt = widget({title: 'My Widget'});
+			wgt = widget('My Widget', target);
 			expect(wgt.title.innerText).to.equal('My Widget');
 			wgt.setTitle('New Title');
 			expect(wgt.title.innerText).to.equal('New Title');
 		});
 
 		it('only works if initiated with the `title` option', () => {
-			wgt = widget();
+			wgt = widget('', target);
 			wgt.setTitle('New Title');
 			expect(wgt.title).to.be.null;
 		});
@@ -284,12 +364,12 @@ describe('widget', () => {
 	describe('Elements & ClassNames', () => {
 		describe('Main Element', () => {
 			it('is stored in `elm` property', () => {
-				wgt = widget();
+				wgt = widget('', target);
 				expect(wgt.elm).to.be.instanceOf(HTMLElement);
 			});
 
 			it('has classnames', () => {
-				wgt = widget();
+				wgt = widget('', target);
 
 				expect(wgt.elm.classList.contains('widget')).to.be.true;
 				expect(wgt.elm.classList.contains('draggable')).to.be.false;
@@ -300,18 +380,18 @@ describe('widget', () => {
 
 		describe('Header', () => {
 			it('is stored in `header` property', () => {
-				wgt = widget({title: 'My Widget'});
+				wgt = widget('My Widget', target);
 				expect(wgt.header).to.be.instanceOf(HTMLElement);
 			});
 
 			it('has a classname', () => {
-				wgt = widget({title: 'My Widget'});
+				wgt = widget('My Widget', target);
 				expect(wgt.header.classList.contains('widget-header')).to.be.true;
 			});
 
 			it('is added to the DOM on mount (with options: title/close/minimize)', () => {
-				const titleWgt = widget({title: 'My Widget'});
-				const closeWgt = widget({close: true});
+				const titleWgt = widget('My Widget', target);
+				const closeWgt = widget('', target, {close: true});
 				const minimizeWgt = widget({minimize: true});
 				const noHeaderWgt = widget();
 
@@ -330,17 +410,17 @@ describe('widget', () => {
 
 			describe('Title', () => {
 				it('is stored in `title` property', () => {
-					wgt = widget({title: 'My Widget'});
+					wgt = widget('My Widget', target);
 					expect(wgt.title).to.be.instanceOf(HTMLElement);
 				});
 
 				it('has a classname', () => {
-					wgt = widget({title: 'My Widget'});
+					wgt = widget('My Widget', target);
 					expect(wgt.title.classList.contains('widget-title')).to.be.true;
 				});
 
 				it('is added to the DOM on mount', () => {
-					wgt = widget({title: 'My Widget'});
+					wgt = widget('My Widget', target);
 
 					expect(document.getElementsByClassName('widget-title')).to.have.lengthOf(0);
 					wgt.mount();
@@ -350,18 +430,18 @@ describe('widget', () => {
 
 			describe('Action Buttons', () => {
 				it('is stored in `actions` property', () => {
-					wgt = widget({minimize: true});
+					wgt = widget('', target, {minimize: true});
 					expect(wgt.actions).to.be.instanceOf(HTMLElement);
 				});
 
 				it('has a classname', () => {
-					wgt = widget({minimize: true});
+					wgt = widget('', target, {minimize: true});
 					expect(wgt.actions.classList.contains('widget-action-buttons')).to.be.true;
 				});
 
 				it('is added to the DOM on mount (with options: close/minimize)', () => {
-					const closeWgt = widget({close: true});
-					const minimizeWgt = widget({minimize: true});
+					const closeWgt = widget('', target, {close: true});
+					const minimizeWgt = widget('', target, {minimize: true});
 					const noOptsWgt = widget();
 
 					expect(document.getElementsByClassName('widget-action-buttons')).to.have.lengthOf(0);
@@ -378,17 +458,17 @@ describe('widget', () => {
 
 			describe('Minimize Button', () => {
 				it('is stored in `minimizeBtn` property', () => {
-					wgt = widget({minimize: true});
+					wgt = widget('', target, {minimize: true});
 					expect(wgt.minimizeBtn).to.be.instanceOf(HTMLElement);
 				});
 
 				it('has a classname', () => {
-					wgt = widget({minimize: true});
+					wgt = widget('', target, {minimize: true});
 					expect(wgt.minimizeBtn.classList.contains('widget-minimize')).to.be.true;
 				});
 
 				it('is added to the DOM on mount', () => {
-					wgt = widget({minimize: true});
+					wgt = widget('', target, {minimize: true});
 
 					expect(document.getElementsByClassName('widget-minimize')).to.have.lengthOf(0);
 					wgt.mount();
@@ -398,17 +478,17 @@ describe('widget', () => {
 
 			describe('Close Button', () => {
 				it('is stored in `closeBtn` property', () => {
-					wgt = widget({close: true});
+					wgt = widget('', target, {close: true});
 					expect(wgt.closeBtn).to.be.instanceOf(HTMLElement);
 				});
 
 				it('has a classname', () => {
-					wgt = widget({close: true});
+					wgt = widget('', target, {close: true});
 					expect(wgt.closeBtn.classList.contains('widget-close')).to.be.true;
 				});
 
 				it('is added to the DOM on mount', () => {
-					wgt = widget({close: true});
+					wgt = widget('', target, {close: true});
 
 					expect(document.getElementsByClassName('widget-close')).to.have.lengthOf(0);
 					wgt.mount();
@@ -417,84 +497,28 @@ describe('widget', () => {
 			});
 		});
 
-		describe.skip('Body', () => {
+		describe('Body', () => {
 			it('is stored in `body` property', () => {
-				wgt = widget({close: true});
-				expect(wgt.body).to.be.instanceOf(HTMLElement);
+				wgt = widget('', target);
+				expect(wgt.body).to.deep.equal(target);
 			});
 
 			it('has a classname', () => {
-				wgt = widget({body: true});
+				wgt = widget('', target);
 				expect(wgt.body.classList.contains('widget-body')).to.be.true;
 			});
-		});
-	});
 
-	describe('Options', () => {
-		describe('id', () => {
-			it('sets an `id` attribute on the widget element', () => {
-				wgt = widget({id: 'the-widget'});
-				expect(wgt.elm.id).to.equal('the-widget');
-			});
-		});
-
-		describe('classname', () => {
-			it('sets a `classname` attribute on the widget element', () => {
-				wgt = widget({classname: 'a-widget'});
-				expect(wgt.elm.classList.contains('widget')).to.be.true;
-				expect(wgt.elm.classList.contains('a-widget')).to.be.true;
-			});
-
-			it('handles multiple classnames string', () => {
-				wgt = widget({classname: 'a-widget theme-bg with-border'});
-				expect(wgt.elm.classList.contains('widget')).to.be.true;
-				expect(wgt.elm.classList.contains('a-widget')).to.be.true;
-				expect(wgt.elm.classList.contains('theme-bg')).to.be.true;
-				expect(wgt.elm.classList.contains('with-border')).to.be.true;
-			});
-
-			it('handles an array of classnames', () => {
-				wgt = widget({classname: ['a-widget', 'theme-bg', 'with-border']});
-				expect(wgt.elm.classList.contains('widget')).to.be.true;
-				expect(wgt.elm.classList.contains('a-widget')).to.be.true;
-				expect(wgt.elm.classList.contains('theme-bg')).to.be.true;
-				expect(wgt.elm.classList.contains('with-border')).to.be.true;
-			});
-		});
-
-		describe('title', () => {
-			it('sets the widget title', () => {
-				wgt = widget({title: 'My Widget'});
-				expect(wgt.title.innerText).to.equal('My Widget');
-			});
-		});
-
-		describe('close', () => {
-			it('clicking the `close` button hides the widget', () => {
-				wgt = widget({close: true}).mount();
-
-				expect(wgt.elm.style.display).to.not.equal('none');
-				wgt.closeBtn.click();
-				expect(wgt.elm.style.display).to.equal('none');
-			});
-		});
-
-		describe('minimize', () => {
-			it('toggles the widget body visibility', () => {
-				wgt = widget({minimize: true}).mount();
-
-				expect(wgt.elm.classList.contains('minimized')).to.be.false;
-				wgt.minimizeBtn.click();
-				expect(wgt.elm.classList.contains('minimized')).to.be.true;
-				wgt.minimizeBtn.click();
-				expect(wgt.elm.classList.contains('minimized')).to.be.false;
+			it('inside a body-container', () => {
+				wgt = widget('', target);
+				expect(wgt.bodyContainer.classList.contains('widget-body-container')).to.be.true;
+				expect(target.parentNode).to.deep.equal(wgt.bodyContainer);
 			});
 		});
 	});
 
 	describe('Behavior', () => {
 		it('toggles actions visiblity on hover', () => {
-			wgt = widget({close: true}).mount();
+			wgt = widget('', target, {close: true}).mount();
 
 			// TODO: use document selector instead of wgt[elm]
 			// console.log(document.getElementsByClassName('widget-action-buttons').length);
@@ -537,16 +561,15 @@ describe('widget', () => {
 		});
 
 		it('releases all element references', () => {
-			wgt = widget({
+			wgt = widget('My Widget', target, {
 				close: true,
 				minimize: true,
-				title: 'My Widget',
 			}).mount();
 
 			wgt.destroy();
 			expect(wgt.elm).to.be.null;
 			expect(wgt.header).to.be.null;
-			expect(wgt.body).to.be.null;
+			expect(wgt.bodyContainer).to.be.null;
 			expect(wgt.closeBtn).to.be.null;
 			expect(wgt.minimizeBtn).to.be.null;
 			expect(wgt.title).to.be.null;
