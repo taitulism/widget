@@ -266,20 +266,20 @@ describe('widget', () => {
 		describe('With an `options` Argument', () => {
 			describe('id', () => {
 				it('sets an `id` attribute on the widget element', () => {
-					wgt = widget(TITLE, target, {id: 'the-widget'});
+					wgt = widget({id: 'the-widget'});
 					expect(wgt.elm.id).to.equal('the-widget');
 				});
 			});
 
 			describe('classname', () => {
 				it('sets a `classname` attribute on the widget element', () => {
-					wgt = widget(TITLE, target, {classname: 'a-widget'});
+					wgt = widget({classname: 'a-widget'});
 					expect(wgt.elm.classList.contains('widget')).to.be.true;
 					expect(wgt.elm.classList.contains('a-widget')).to.be.true;
 				});
 
 				it('handles multiple classnames string', () => {
-					wgt = widget(TITLE, target, {classname: 'a-widget theme-bg with-border'});
+					wgt = widget({classname: 'a-widget theme-bg with-border'});
 					expect(wgt.elm.classList.contains('widget')).to.be.true;
 					expect(wgt.elm.classList.contains('a-widget')).to.be.true;
 					expect(wgt.elm.classList.contains('theme-bg')).to.be.true;
@@ -287,7 +287,7 @@ describe('widget', () => {
 				});
 
 				it('handles an array of classnames', () => {
-					wgt = widget(TITLE, target, {classname: ['a-widget', 'theme-bg', 'with-border']});
+					wgt = widget({classname: ['a-widget', 'theme-bg', 'with-border']});
 					expect(wgt.elm.classList.contains('widget')).to.be.true;
 					expect(wgt.elm.classList.contains('a-widget')).to.be.true;
 					expect(wgt.elm.classList.contains('theme-bg')).to.be.true;
@@ -295,9 +295,24 @@ describe('widget', () => {
 				});
 			});
 
-			describe('close', () => {
+			describe('showClose', () => {
+				it('creates the `close` button when `true` (default)', () => {
+					wgt = widget({showClose: true}).mount();
+
+					expect(wgt.closeBtn).not.to.be.null;
+					expect($byClassname('widget-close')).to.have.lengthOf(1);
+				});
+
+				it('doesn\'t create the `close` button when `false`', () => {
+					wgt = widget({showClose: false}).mount();
+
+					expect(wgt.closeBtn).to.be.null;
+					expect($byClassname('widget-close')).to.have.lengthOf(0);
+				});
+
+				// TODO: move this to another describe
 				it('clicking the `close` button hides the widget', () => {
-					wgt = widget(TITLE, target, {close: true}).mount();
+					wgt = widget({showClose: true}).mount();
 
 					expect(wgt.elm.style.display).to.not.equal('none');
 					wgt.closeBtn.click();
@@ -305,9 +320,24 @@ describe('widget', () => {
 				});
 			});
 
-			describe('minimize', () => {
+			describe('showMinimize', () => {
+				it('creates the `minimize` button when `true` (default)', () => {
+					wgt = widget({showMinimize: true}).mount();
+
+					expect(wgt.minimizeBtn).not.to.be.null;
+					expect($byClassname('widget-minimize')).to.have.lengthOf(1);
+				});
+
+				it('doesn\'t create the `close` button when `false`', () => {
+					wgt = widget({showMinimize: false}).mount();
+
+					expect(wgt.minimizeBtn).to.be.null;
+					expect($byClassname('widget-minimize')).to.have.lengthOf(0);
+				});
+
+				// TODO: move this to another describe
 				it('toggles the widget body visibility', () => {
-					wgt = widget(TITLE, target, {minimize: true}).mount();
+					wgt = widget({showMinimize: true}).mount();
 
 					expect(wgt.elm.classList.contains('minimized')).to.be.false;
 					wgt.minimizeBtn.click();

@@ -36,6 +36,9 @@ function resolveArgs (maybeTitle, maybeBody, maybeOpts) {
 		else if (maybeTitle instanceof HTMLElement) {
 			body = maybeTitle;
 		}
+		else if (maybeTitle && typeof maybeTitle == 'object') {
+			opts = maybeTitle;
+		}
 	}
 
 	return [title, body, opts];
