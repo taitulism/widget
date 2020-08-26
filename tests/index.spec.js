@@ -206,7 +206,6 @@ describe('widget', () => {
 				});
 			});
 		});
-
 	});
 
 	describe('.mount()', () => {
@@ -418,12 +417,6 @@ describe('widget', () => {
 			wgt.setTitle('New Title');
 			expect(wgt.title.innerText).to.equal('New Title');
 		});
-
-		it('only works if initiated with the `title` option', () => {
-			wgt = widget('', target);
-			wgt.setTitle('New Title');
-			expect(wgt.title).to.be.null;
-		});
 	});
 
 	describe('Elements & ClassNames', () => {
@@ -454,23 +447,12 @@ describe('widget', () => {
 				expect(wgt.header.classList.contains('widget-header')).to.be.true;
 			});
 
-			it('is added to the DOM on mount (with options: title/close/minimize)', () => {
-				const titleWgt = widget('My Widget', target);
-				const closeWgt = widget('', target, {close: true});
-				const minimizeWgt = widget({minimize: true});
-				const noHeaderWgt = widget();
+			it('is added to the DOM on mount', () => {
+				wgt = widget();
 
 				expect(document.getElementsByClassName('widget-header')).to.have.lengthOf(0);
-				titleWgt.mount();
-				closeWgt.mount();
-				minimizeWgt.mount();
-				noHeaderWgt.mount();
-				expect(document.getElementsByClassName('widget-header')).to.have.lengthOf(3);
-
-				titleWgt.destroy();
-				closeWgt.destroy();
-				minimizeWgt.destroy();
-				noHeaderWgt.destroy();
+				wgt.mount();
+				expect(document.getElementsByClassName('widget-header')).to.have.lengthOf(1);
 			});
 
 			describe('Title', () => {
