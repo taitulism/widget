@@ -22,11 +22,23 @@ function resolveArgs (maybeTitle, maybeBody, maybeOpts) {
 			title = maybeTitle;
 		}
 	}
-	else if (maybeBody && maybeBody instanceof HTMLElement) {
-		body = maybeBody;
+	else if (maybeBody) {
+		if (maybeBody instanceof HTMLElement) {
+			body = maybeBody;
 
-		if (maybeTitle && typeof maybeTitle == 'string') {
-			title = maybeTitle;
+			if (maybeTitle && typeof maybeTitle == 'string') {
+				title = maybeTitle;
+			}
+		}
+		else if (typeof maybeBody == 'object') {
+			opts = maybeBody;
+
+			if (typeof maybeTitle == 'string') {
+				title = maybeTitle;
+			}
+			else if (maybeTitle instanceof HTMLElement) {
+				body = maybeTitle;
+			}
 		}
 	}
 	else if (maybeTitle) {
@@ -102,6 +114,7 @@ Widget.prototype.createDOM = function (title, body, opts) {
 
 		if (opts.showActions) {
 			this.actions = create('div', ['widget-action-buttons']);
+			this.actions.style.display = 'flex';
 
 			if (opts.showMinimize) {
 				this.minimizeBtn = create('button', ['widget-button', 'widget-minimize'], MINIMIZE_SYMBOL);
