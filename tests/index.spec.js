@@ -614,14 +614,34 @@ describe('widget', () => {
 				expect(wgt.actions.style.display).not.to.equal('none');
 			});
 
-			it('binds listener: hover on widget', () => {
-				wgt = widget(TITLE, target, {close : true});
+			it('binds listener: toggle header on hover', () => {
+				wgt = widget({toggleHeader: true});
 
-				expect(wgt.actions.style.display).to.equal('');
+				expect(wgt.header.style.visibility).to.equal('hidden');
 				simulateMouseEnter(wgt.elm);
-				expect(wgt.actions.style.display).to.equal('');
+				expect(wgt.header.style.visibility).to.equal('hidden');
 				simulateMouseLeave(wgt.elm);
-				expect(wgt.actions.style.display).to.equal('');
+				expect(wgt.header.style.visibility).to.equal('hidden');
+
+				wgt.mount();
+
+				expect(wgt.header.style.visibility).to.equal('hidden');
+				simulateMouseEnter(wgt.elm);
+				expect(wgt.header.style.visibility).not.to.equal('hidden');
+				simulateMouseLeave(wgt.elm);
+				expect(wgt.header.style.visibility).to.equal('hidden');
+				simulateMouseEnter(wgt.elm);
+				expect(wgt.header.style.visibility).not.to.equal('hidden');
+			});
+
+			it('binds listener: toggle actions on hover', () => {
+				wgt = widget({toggleActions: true});
+
+				expect(wgt.actions.style.display).to.equal('none');
+				simulateMouseEnter(wgt.elm);
+				expect(wgt.actions.style.display).to.equal('none');
+				simulateMouseLeave(wgt.elm);
+				expect(wgt.actions.style.display).to.equal('none');
 
 				wgt.mount();
 
@@ -641,15 +661,17 @@ describe('widget', () => {
 			it('binds listener: click on `close`', () => {
 				wgt = widget(TITLE, target);
 
-				expect(wgt.elm.style.display).to.not.equal('none');
-				wgt.closeBtn.click();
-				expect(wgt.elm.style.display).to.not.equal('none');
+				let called = false;
+				const origDestroy = wgt.destroy;
+				wgt.destroy = () => {
+					called = true;
+					origDestroy.call(wgt);
+				};
 
+				expect(called).to.be.false;
 				wgt.mount();
-
-				expect(wgt.elm.style.display).to.not.equal('none');
 				wgt.closeBtn.click();
-				expect(wgt.elm.style.display).to.equal('none');
+				expect(called).to.be.true;
 			});
 
 			it('binds listener: click on `minify`', () => {
@@ -692,8 +714,28 @@ describe('widget', () => {
 				expect(document.getElementsByClassName('widget')).to.have.lengthOf(0);
 			});
 
-			it('unbinds listener: hover on widget', () => {
-				wgt = widget(TITLE, target, {close : true}).mount();
+			it('unbinds listener: toggle header on hover', () => {
+				wgt = widget({toggleHeader: true}).mount();
+
+				expect(wgt.header.style.visibility).to.equal('hidden');
+				simulateMouseEnter(wgt.elm);
+				expect(wgt.header.style.visibility).not.to.equal('hidden');
+				simulateMouseLeave(wgt.elm);
+				expect(wgt.header.style.visibility).to.equal('hidden');
+				simulateMouseEnter(wgt.elm);
+				expect(wgt.header.style.visibility).not.to.equal('hidden');
+
+				wgt.unmount();
+
+				expect(wgt.header.style.visibility).not.to.equal('hidden');
+				simulateMouseEnter(wgt.elm);
+				expect(wgt.header.style.visibility).not.to.equal('hidden');
+				simulateMouseLeave(wgt.elm);
+				expect(wgt.header.style.visibility).not.to.equal('hidden');
+			});
+
+			it('unbinds listener: toggle actions on hover', () => {
+				wgt = widget({toggleActions: true}).mount();
 
 				expect(wgt.actions.style.display).to.equal('none');
 				simulateMouseEnter(wgt.elm);
@@ -705,11 +747,11 @@ describe('widget', () => {
 
 				wgt.unmount();
 
-				expect(wgt.actions.style.display).to.equal('none');
+				expect(wgt.actions.style.display).not.to.equal('none');
 				simulateMouseEnter(wgt.elm);
-				expect(wgt.actions.style.display).to.equal('none');
+				expect(wgt.actions.style.display).not.to.equal('none');
 				simulateMouseLeave(wgt.elm);
-				expect(wgt.actions.style.display).to.equal('none');
+				expect(wgt.actions.style.display).not.to.equal('none');
 			});
 
 			it('unbinds listener: click on `close`', () => {

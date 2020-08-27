@@ -199,24 +199,18 @@ Widget.prototype.unmount = function () {
 
 	document.body.removeChild(this.elm);
 
-	// if (this.actions) {
-		this.closeBtn && this.closeBtn.removeEventListener('click', this.destroy);
-		this.minimizeBtn && this.minimizeBtn.removeEventListener('click', this.toggleMinimize);
-		// this.elm.removeEventListener('mouseenter', this.showActions);
-		// this.elm.removeEventListener('mouseleave', this.hideActions);
-	// 	this.hideActions();
-	// }
+	this.closeBtn && this.closeBtn.removeEventListener('click', this.destroy);
+	this.minimizeBtn && this.minimizeBtn.removeEventListener('click', this.toggleMinimize);
 
 	if (this.toggleHeader) {
 		this.elm.removeEventListener('mouseenter', this.showHeader);
 		this.elm.removeEventListener('mouseleave', this.hideHeader);
 	}
 
-	// if (this.toggleActions) {
-	// 	this.elm.removeEventListener('mouseenter', this.showActions);
-	// 	this.elm.removeEventListener('mouseleave', this.hideActions);
-	//  this.hideActions();
-	// }
+	if (this.toggleActions) {
+		this.elm.removeEventListener('mouseenter', this.showActions);
+		this.elm.removeEventListener('mouseleave', this.hideActions);
+	}
 
 	this.isMounted = false;
 
