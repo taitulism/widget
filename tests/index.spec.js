@@ -509,8 +509,19 @@ describe('widget', () => {
 				expect($byClassname('widget-minimize')).to.have.lengthOf(0);
 			});
 		});
-	});
 
+		describe('showHeader', () => {
+			it('shows the header when `true` (default)', () => {
+				wgt = widget({showHeader: true}).mount();
+				expect(wgt.header.style.display).not.to.equal('none');
+			});
+
+			it('hides the header when `false`', () => {
+				wgt = widget({showHeader: false}).mount();
+				expect(wgt.header.style.display).to.equal('none');
+			});
+		});
+	});
 
 	describe('API Methods', () => {
 		describe('.mount()', () => {
@@ -547,11 +558,11 @@ describe('widget', () => {
 
 				expect(wgt.actions.style.display).to.equal('none');
 				simulateMouseEnter(wgt.elm);
-				expect(wgt.actions.style.display).to.equal('flex'); // flex
+				expect(wgt.actions.style.display).not.to.equal('none');
 				simulateMouseLeave(wgt.elm);
 				expect(wgt.actions.style.display).to.equal('none');
 				simulateMouseEnter(wgt.elm);
-				expect(wgt.actions.style.display).to.equal('flex'); // flex
+				expect(wgt.actions.style.display).not.to.equal('none');
 			});
 
 			it.skip('hover doesn\'t toggle actions visibility', () => {
@@ -559,7 +570,7 @@ describe('widget', () => {
 			});
 
 			it('binds listener: click on `close`', () => {
-				wgt = widget(TITLE, target, {close: true});
+				wgt = widget(TITLE, target);
 
 				expect(wgt.elm.style.display).to.not.equal('none');
 				wgt.closeBtn.click();
@@ -617,11 +628,11 @@ describe('widget', () => {
 
 				expect(wgt.actions.style.display).to.equal('none');
 				simulateMouseEnter(wgt.elm);
-				expect(wgt.actions.style.display).to.equal('flex'); // flex
+				expect(wgt.actions.style.display).not.to.equal('none');
 				simulateMouseLeave(wgt.elm);
 				expect(wgt.actions.style.display).to.equal('none');
 				simulateMouseEnter(wgt.elm);
-				expect(wgt.actions.style.display).to.equal('flex'); // flex
+				expect(wgt.actions.style.display).not.to.equal('none');
 
 				wgt.unmount();
 
@@ -633,7 +644,7 @@ describe('widget', () => {
 			});
 
 			it('unbinds listener: click on `close`', () => {
-				wgt = widget(TITLE, target, {close: true}).mount();
+				wgt = widget(TITLE, target).mount();
 				wgt.unmount();
 
 				expect(wgt.elm.style.display).to.not.equal('none');
@@ -673,19 +684,37 @@ describe('widget', () => {
 
 		describe('.showActions() / .hideActions()', () => {
 			it('toggles the action buttons visibility', () => {
-				wgt = widget(TITLE, target, {close: true}).mount();
+				wgt = widget(TITLE, target).mount();
 
-				expect(wgt.actions.style.display).to.equal('flex');
+				expect(wgt.actions.style.display).not.to.equal('none');
 				wgt.hideActions();
 				expect(wgt.actions.style.display).to.equal('none');
 				wgt.showActions();
-				expect(wgt.actions.style.display).to.equal('flex');
+				expect(wgt.actions.style.display).not.to.equal('none');
 			});
 
 			it('returns the widget instance', () => {
-				wgt = widget(TITLE, target, {close: true}).mount();
+				wgt = widget(TITLE, target).mount();
 				expect(wgt.showActions()).to.eql(wgt);
 				expect(wgt.hideActions()).to.eql(wgt);
+			});
+		});
+
+		describe('.showHeader() / .hideHeader()', () => {
+			it('toggles the header buttons visibility', () => {
+				wgt = widget(TITLE, target).mount();
+
+				expect(wgt.header.style.display).not.to.equal('none');
+				wgt.hideHeader();
+				expect(wgt.header.style.display).to.equal('none');
+				wgt.showHeader();
+				expect(wgt.header.style.display).not.to.equal('none');
+			});
+
+			it('returns the widget instance', () => {
+				wgt = widget(TITLE, target).mount();
+				expect(wgt.showHeader()).to.eql(wgt);
+				expect(wgt.hideHeader()).to.eql(wgt);
 			});
 		});
 
@@ -738,19 +767,23 @@ describe('widget', () => {
 				wgt.setTitle('New Title');
 				expect(wgt.title.innerText).to.equal('New Title');
 			});
+
+			it('doesn\'t fail with', () => {
+
+			});
 		});
 	});
 
 	describe('Behavior', () => {
 		it('toggles actions visiblity on hover', () => {
-			wgt = widget(TITLE, target, {close: true}).mount();
+			wgt = widget(TITLE, target).mount();
 
 			// TODO: use document selector instead of wgt[elm]
 			// console.log(document.getElementsByClassName('widget-action-buttons').length);
 
 			expect(wgt.actions.style.display).to.equal('none');
 			simulateMouseEnter(wgt.elm);
-			expect(wgt.actions.style.display).to.equal('flex');
+			expect(wgt.actions.style.display).not.to.equal('none');
 			simulateMouseLeave(wgt.elm);
 			expect(wgt.actions.style.display).to.equal('none');
 		});

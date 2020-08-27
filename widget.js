@@ -108,28 +108,32 @@ Widget.prototype.createDOM = function (title, body, opts) {
 
 	this.bodyContainer = create('section', ['widget-body-container']);
 
-	if (opts.showHeader) {
-		this.header = create('header', ['widget-header']);
-		this.title = create('div', ['widget-title'], title);
-
-		if (opts.showActions) {
-			this.actions = create('div', ['widget-action-buttons']);
-			this.actions.style.display = 'flex';
-
-			if (opts.showMinimize) {
-				this.minimizeBtn = create('button', ['widget-button', 'widget-minimize'], MINIMIZE_SYMBOL);
-				this.actions.appendChild(this.minimizeBtn);
-			}
-
-			if (opts.showClose) {
-				this.closeBtn = create('button', ['widget-button', 'widget-close'], CLOSE_SYMBOL);
-				this.actions.appendChild(this.closeBtn);
-			}
-
-			this.header.appendChild(this.title);
-			this.header.appendChild(this.actions);
-		}
+	this.header = create('header', ['widget-header']);
+	if (!opts.showHeader) {
+		this.hideHeader();
 	}
+
+	this.title = create('div', ['widget-title'], title);
+
+	if (opts.showActions) {
+		this.actions = create('div', ['widget-action-buttons']);
+		this.actions.style.display = '';
+
+		if (opts.showMinimize) {
+			this.minimizeBtn = create('button', ['widget-button', 'widget-minimize'], MINIMIZE_SYMBOL);
+			this.actions.appendChild(this.minimizeBtn);
+		}
+
+		if (opts.showClose) {
+			this.closeBtn = create('button', ['widget-button', 'widget-close'], CLOSE_SYMBOL);
+			this.actions.appendChild(this.closeBtn);
+		}
+
+		this.header.appendChild(this.title);
+		this.header.appendChild(this.actions);
+	}
+
+	this.elm.appendChild(this.header);
 
 	if (body) {
 		body.classList.add('widget-body');
@@ -137,7 +141,6 @@ Widget.prototype.createDOM = function (title, body, opts) {
 		this.bodyContainer.appendChild(body);
 	}
 
-	this.elm.appendChild(this.header);
 	this.elm.appendChild(this.bodyContainer);
 };
 
@@ -199,7 +202,7 @@ Widget.prototype.unmount = function () {
 };
 
 Widget.prototype.show = function () {
-	this.elm.style.display = 'block';
+	this.elm.style.display = '';
 	return this;
 };
 
@@ -208,8 +211,18 @@ Widget.prototype.hide = function () {
 	return this;
 };
 
+Widget.prototype.showHeader = function () {
+	this.header.style.display = '';
+	return this;
+};
+
+Widget.prototype.hideHeader = function () {
+	this.header.style.display = 'none';
+	return this;
+};
+
 Widget.prototype.showActions = function (ev) {
-	this.actions.style.display = 'flex';
+	this.actions.style.display = '';
 	return this;
 };
 
