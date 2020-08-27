@@ -479,14 +479,14 @@ describe('widget', () => {
 		});
 
 		describe('showClose', () => {
-			it('creates the `close` button when `true` (default)', () => {
+			it('when `true` (default) - creates the `close` button', () => {
 				wgt = widget({showClose: true}).mount();
 
 				expect(wgt.closeBtn).not.to.be.null;
 				expect($byClassname('widget-close')).to.have.lengthOf(1);
 			});
 
-			it('doesn\'t create the `close` button when `false`', () => {
+			it('when `false` - doesn\'t create the `close` button', () => {
 				wgt = widget({showClose: false}).mount();
 
 				expect(wgt.closeBtn).to.be.null;
@@ -495,14 +495,14 @@ describe('widget', () => {
 		});
 
 		describe('showMinimize', () => {
-			it('creates the `minimize` button when `true` (default)', () => {
+			it('when `true` (default) - creates the `minimize` button', () => {
 				wgt = widget({showMinimize: true}).mount();
 
 				expect(wgt.minimizeBtn).not.to.be.null;
 				expect($byClassname('widget-minimize')).to.have.lengthOf(1);
 			});
 
-			it('doesn\'t create the `close` button when `false`', () => {
+			it('when `false` - doesn\'t create the `close` button', () => {
 				wgt = widget({showMinimize: false}).mount();
 
 				expect(wgt.minimizeBtn).to.be.null;
@@ -511,14 +511,83 @@ describe('widget', () => {
 		});
 
 		describe('showHeader', () => {
-			it('shows the header when `true` (default)', () => {
+			it('when `true` (default) - shows the header', () => {
 				wgt = widget({showHeader: true}).mount();
-				expect(wgt.header.style.display).not.to.equal('none');
+				expect(wgt.header.style.visibility).not.to.equal('hidden');
 			});
 
-			it('hides the header when `false`', () => {
+			it('when `false` - hides the header', () => {
 				wgt = widget({showHeader: false}).mount();
-				expect(wgt.header.style.display).to.equal('none');
+				expect(wgt.header.style.visibility).to.equal('hidden');
+			});
+		});
+
+		describe('toggleHeader', () => {
+			it('when `false` (default) - doesn\'t toggle the header visibility on hover', () => {
+				wgt = widget({toggleHeader: false}).mount();
+
+				const header = $byClassname('widget-header')[0];
+
+				expect(header.style.visibility).not.to.equal('hidden');
+				simulateMouseEnter(wgt.elm);
+				expect(header.style.visibility).not.to.equal('hidden');
+				simulateMouseLeave(wgt.elm);
+				expect(header.style.visibility).not.to.equal('hidden');
+			});
+
+			it('when `true` - toggles the header visibility on hover', () => {
+				wgt = widget({toggleHeader: true}).mount();
+
+				expect(wgt.header.style.visibility).to.equal('hidden');
+				simulateMouseEnter(wgt.elm);
+				expect(wgt.header.style.visibility).not.to.equal('hidden');
+				simulateMouseLeave(wgt.elm);
+				expect(wgt.header.style.visibility).to.equal('hidden');
+			});
+
+			it('toggles a classname on the body container', () => {
+				wgt = widget({toggleHeader: true}).mount();
+
+				expect(wgt.bodyContainer.classList.contains('no-header')).to.be.true;
+				simulateMouseEnter(wgt.elm);
+				expect(wgt.bodyContainer.classList.contains('no-header')).to.be.false;
+				simulateMouseLeave(wgt.elm);
+				expect(wgt.bodyContainer.classList.contains('no-header')).to.be.true;
+			});
+		});
+
+		describe('toggleActions', () => {
+			it('when `false` (default)` - doesn\'t toggle the actions element visibility on hover', () => {
+				wgt = widget({toggleActions: false}).mount();
+
+				const actions = $byClassname('widget-action-buttons')[0];
+
+				expect(actions.style.display).not.to.equal('none');
+				simulateMouseEnter(wgt.elm);
+				expect(actions.style.display).not.to.equal('none');
+				simulateMouseLeave(wgt.elm);
+				expect(actions.style.display).not.to.equal('none');
+			});
+
+			it('when `true` - toggles the actions element visibility on hover', () => {
+				wgt = widget({toggleActions: true}).mount();
+
+				expect(wgt.actions.style.display).to.equal('none');
+				simulateMouseEnter(wgt.elm);
+				expect(wgt.actions.style.display).not.to.equal('none');
+				simulateMouseLeave(wgt.elm);
+				expect(wgt.actions.style.display).to.equal('none');
+			});
+
+			// ? :/
+			it.skip('toggles a classname on the title element', () => {
+				wgt = widget({toggleActions: true}).mount();
+
+				expect(wgt.title.classList.contains('no-actions')).to.be.true;
+				simulateMouseEnter(wgt.elm);
+				expect(wgt.title.classList.contains('no-actions')).to.be.false;
+				simulateMouseLeave(wgt.elm);
+				expect(wgt.title.classList.contains('no-actions')).to.be.true;
 			});
 		});
 	});
@@ -704,11 +773,11 @@ describe('widget', () => {
 			it('toggles the header buttons visibility', () => {
 				wgt = widget(TITLE, target).mount();
 
-				expect(wgt.header.style.display).not.to.equal('none');
+				expect(wgt.header.style.visibility).not.to.equal('hidden');
 				wgt.hideHeader();
-				expect(wgt.header.style.display).to.equal('none');
+				expect(wgt.header.style.visibility).to.equal('hidden');
 				wgt.showHeader();
-				expect(wgt.header.style.display).not.to.equal('none');
+				expect(wgt.header.style.visibility).not.to.equal('hidden');
 			});
 
 			it('returns the widget instance', () => {
@@ -771,37 +840,6 @@ describe('widget', () => {
 			it('doesn\'t fail with', () => {
 
 			});
-		});
-	});
-
-	describe('Behavior', () => {
-		it('toggles actions visiblity on hover', () => {
-			wgt = widget(TITLE, target).mount();
-
-			// TODO: use document selector instead of wgt[elm]
-			// console.log(document.getElementsByClassName('widget-action-buttons').length);
-
-			expect(wgt.actions.style.display).to.equal('none');
-			simulateMouseEnter(wgt.elm);
-			expect(wgt.actions.style.display).not.to.equal('none');
-			simulateMouseLeave(wgt.elm);
-			expect(wgt.actions.style.display).to.equal('none');
-		});
-
-		it('header and its children are shown by default', () => {
-			wgt = widget();
-
-			expect(wgt.header.style.display).not.to.equal('none');
-			expect(wgt.title.style.display).not.to.equal('none');
-			expect(wgt.actions.style.display).not.to.equal('none');
-			wgt.mount();
-			expect(wgt.header.style.display).not.to.equal('none');
-			expect(wgt.title.style.display).not.to.equal('none');
-			expect(wgt.actions.style.display).not.to.equal('none');
-		});
-
-		it.skip('hover doesn\'t toggle actions visibility', () => {
-
 		});
 	});
 

@@ -18,6 +18,8 @@
 				position: absolute;
 				top: 150px;
 				right: 250px;
+				box-sizing: border-box;
+
 				/* opacity: 0.5; */
 			}
 
@@ -90,6 +92,15 @@
 				font-size: 14px;
 				flex-grow: 1;
 			}
+
+			.widget-body-container.no-header {
+				/* border-top: 2px solid #383838; */
+				border: 1px solid #383838;
+				margin-top: -1px; /* 1 because of border */
+				padding-left: 1px; /* 1 because of border */
+				border-radius: 3px;
+				box-sizing: border-box;
+			}
 		</style>
 	</head>
 	<body>
@@ -110,11 +121,10 @@
 	<script>
 		const targetElm = document.getElementById('target');
 
-		const wgt = widget('qwe', targetElm);
-		// const wgt = widget('My Widget', targetElm, {
-		// 	close: true,
-		// 	minimize: true,
-		// });
+		// const wgt = widget('qwe', targetElm);
+		const wgt = widget('My Widget', targetElm, {
+			toggleActions: true,
+		});
 		wgt.mount();
 	</script>
 </html>

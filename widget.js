@@ -75,6 +75,8 @@ function resolveOptions (rawOpts) {
 		showActions: typeof rawOpts.showActions == 'boolean' ? rawOpts.showActions : true,
 		showClose: typeof rawOpts.showClose == 'boolean' ? rawOpts.showClose : true,
 		showMinimize: typeof rawOpts.showMinimize == 'boolean' ? rawOpts.showMinimize : true,
+		toggleHeader: typeof rawOpts.toggleHeader == 'boolean' ? rawOpts.toggleHeader : false,
+		toggleActions: typeof rawOpts.toggleActions == 'boolean' ? rawOpts.toggleActions : false,
 	};
 }
 
@@ -88,6 +90,8 @@ function Widget (title, body, opts) {
 	this.initMethods(opts);
 	this.createDOM(title, body, opts);
 
+	this.toggleHeader = opts.toggleHeader;
+	this.toggleActions = opts.toggleActions;
 	this.draggable = null;
 	this.isMinimized = false;
 	this.isMounted = false;
@@ -109,7 +113,7 @@ Widget.prototype.createDOM = function (title, body, opts) {
 	this.bodyContainer = create('section', ['widget-body-container']);
 
 	this.header = create('header', ['widget-header']);
-	if (!opts.showHeader) {
+	if (opts.toggleHeader || opts.showHeader == false) {
 		this.hideHeader();
 	}
 
@@ -117,7 +121,9 @@ Widget.prototype.createDOM = function (title, body, opts) {
 
 	if (opts.showActions) {
 		this.actions = create('div', ['widget-action-buttons']);
-		this.actions.style.display = '';
+		if (opts.toggleActions) {
+			this.hideActions();
+		}
 
 		if (opts.showMinimize) {
 			this.minimizeBtn = create('button', ['widget-button', 'widget-minimize'], MINIMIZE_SYMBOL);
@@ -145,36 +151,41 @@ Widget.prototype.createDOM = function (title, body, opts) {
 };
 
 Widget.prototype.initMethods = function (opts) {
-	if (opts.showClose) {
-		this.destroy = this.destroy.bind(this);
+	if (opts.toggleHeader) {
+		this.showHeader = this.showHeader.bind(this);
+		this.hideHeader = this.hideHeader.bind(this);
 	}
 
-	// this.hide = this.hide.bind(this);
-
-	if (opts.showHeader && (opts.showClose || opts.showMinimize)) {
+	if (opts.toggleActions) {
 		this.showActions = this.showActions.bind(this);
 		this.hideActions = this.hideActions.bind(this);
+	}
 
-		if (opts.showMinimize) {
-			this.restore = this.restore.bind(this);
-			this.minimize = this.minimize.bind(this);
-			this.toggleMinimize = this.toggleMinimize.bind(this);
-		}
+	if (opts.showMinimize) {
+		this.toggleMinimize = this.toggleMinimize.bind(this);
+	}
+
+	if (opts.showClose) {
+		this.destroy = this.destroy.bind(this);
 	}
 };
 
 Widget.prototype.mount = function () {
 	if (this.isMounted) return;
 
-	// if (this.actions) {
-		this.closeBtn && this.closeBtn.addEventListener('click', this.destroy);
-		this.minimizeBtn && this.minimizeBtn.addEventListener('click', this.toggleMinimize);
+	this.closeBtn && this.closeBtn.addEventListener('click', this.destroy);
+	this.minimizeBtn && this.minimizeBtn.addEventListener('click', this.toggleMinimize);
 
-		// this.elm.addEventListener('mouseenter', this.showActions);
-		// this.elm.addEventListener('mouseleave', this.hideActions);
+	if (this.toggleHeader) {
+		this.elm.addEventListener('mouseenter', this.showHeader);
+		this.elm.addEventListener('mouseleave', this.hideHeader);
+	}
 
-		// this.hideActions();
-	// }
+	if (this.toggleActions) {
+		this.elm.addEventListener('mouseenter', this.showActions);
+		this.elm.addEventListener('mouseleave', this.hideActions);
+		this.hideActions();
+	}
 
 	document.body.appendChild(this.elm);
 	this.draggable = draggable(this.elm);
@@ -189,11 +200,22 @@ Widget.prototype.unmount = function () {
 	document.body.removeChild(this.elm);
 
 	// if (this.actions) {
-		this.closeBtn && this.closeBtn.removeEventListener('click', this.hide);
+		this.closeBtn && this.closeBtn.removeEventListener('click', this.destroy);
 		this.minimizeBtn && this.minimizeBtn.removeEventListener('click', this.toggleMinimize);
 		// this.elm.removeEventListener('mouseenter', this.showActions);
 		// this.elm.removeEventListener('mouseleave', this.hideActions);
 	// 	this.hideActions();
+	// }
+
+	if (this.toggleHeader) {
+		this.elm.removeEventListener('mouseenter', this.showHeader);
+		this.elm.removeEventListener('mouseleave', this.hideHeader);
+	}
+
+	// if (this.toggleActions) {
+	// 	this.elm.removeEventListener('mouseenter', this.showActions);
+	// 	this.elm.removeEventListener('mouseleave', this.hideActions);
+	//  this.hideActions();
 	// }
 
 	this.isMounted = false;
@@ -212,12 +234,14 @@ Widget.prototype.hide = function () {
 };
 
 Widget.prototype.showHeader = function () {
-	this.header.style.display = '';
+	this.header.style.visibility = '';
+	this.bodyContainer.classList.remove('no-header');
 	return this;
 };
 
 Widget.prototype.hideHeader = function () {
-	this.header.style.display = 'none';
+	this.header.style.visibility = 'hidden';
+	this.bodyContainer.classList.add('no-header');
 	return this;
 };
 
