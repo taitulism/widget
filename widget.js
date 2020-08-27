@@ -142,19 +142,19 @@ Widget.prototype.createDOM = function (title, body, opts) {
 };
 
 Widget.prototype.initMethods = function (opts) {
-	this.show = this.show.bind(this);
-	this.hide = this.hide.bind(this);
+	if (opts.showClose) {
+		this.destroy = this.destroy.bind(this);
+	}
 
-	if (!opts.noHeader && (!opts.noClose || !opts.noMinimize)) {
+	// this.hide = this.hide.bind(this);
+
+	if (opts.showHeader && (opts.showClose || opts.showMinimize)) {
 		this.showActions = this.showActions.bind(this);
 		this.hideActions = this.hideActions.bind(this);
 
-		if (!opts.noClose) {
+		if (opts.showMinimize) {
 			this.restore = this.restore.bind(this);
 			this.minimize = this.minimize.bind(this);
-		}
-
-		if (!opts.noMinimize) {
 			this.toggleMinimize = this.toggleMinimize.bind(this);
 		}
 	}
@@ -164,7 +164,7 @@ Widget.prototype.mount = function () {
 	if (this.isMounted) return;
 
 	// if (this.actions) {
-		this.closeBtn && this.closeBtn.addEventListener('click', this.hide);
+		this.closeBtn && this.closeBtn.addEventListener('click', this.destroy);
 		this.minimizeBtn && this.minimizeBtn.addEventListener('click', this.toggleMinimize);
 
 		// this.elm.addEventListener('mouseenter', this.showActions);
