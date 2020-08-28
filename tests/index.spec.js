@@ -654,7 +654,8 @@ describe('widget', () => {
 				expect(wgt.actions.style.display).not.to.equal('none');
 			});
 
-			it.skip('hover doesn\'t toggle actions visibility', () => {
+			// TODO: unmount too. same for toglHdr & toglActs
+			it.skip('hover doesn\'t toggle actions visibility (with no opt)', () => {
 
 			});
 
@@ -879,7 +880,49 @@ describe('widget', () => {
 				expect(wgt.title.innerText).to.equal('New Title');
 			});
 
-			it('doesn\'t fail with', () => {
+			it.skip('doesn\'t fail with', () => {
+
+			});
+		});
+
+		describe('.setBody()', () => {
+			it('changes the widget body', () => {
+				const newBody = document.createElement('div');
+				newBody.innerHTML = `<button>Click</button>`;
+
+				wgt = widget('My Widget', target).mount();
+
+				expect(wgt.body.innerHTML).to.include('BBB');
+				expect(wgt.body.innerHTML).to.not.include('Click');
+				wgt.setBody(newBody);
+				expect(wgt.body.innerHTML).to.not.include('BBB');
+				expect(wgt.body.innerHTML).to.include('Click');
+			});
+
+			it.skip('doesn\'t fail with', () => {
+
+			});
+		});
+
+		describe('.setView()', () => {
+			it('changes the widget title & body', () => {
+				wgt = widget('My Widget', target);
+
+				const newBody = document.createElement('div');
+				newBody.innerHTML = `<button>Click</button>`;
+
+				expect(wgt.title.innerText).to.equal('My Widget');
+				expect(wgt.title.innerText).to.not.equal('New Title');
+				expect(wgt.body.innerHTML).to.include('BBB');
+				expect(wgt.body.innerHTML).to.not.include('Click');
+				wgt.setView('New Title', newBody);
+				expect(wgt.title.innerText).to.not.equal('My Widget');
+				expect(wgt.title.innerText).to.equal('New Title');
+				expect(wgt.body.innerHTML).to.not.include('BBB');
+				expect(wgt.body.innerHTML).to.include('Click');
+			});
+
+			it.skip('doesn\'t fail with', () => {
 
 			});
 		});

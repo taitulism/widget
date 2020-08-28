@@ -270,9 +270,19 @@ Widget.prototype.toggleMinimize = function () {
 	else this.minimize();
 };
 
-Widget.prototype.setTitle = function (titleText) {
-	this.title.innerText = titleText;
+Widget.prototype.setTitle = function (newTitle) {
+	this.title.innerText = newTitle;
 	return this;
+};
+
+Widget.prototype.setBody = function (newBody) {
+	this.body.innerHTML = '';
+	this.body.appendChild(newBody);
+	return this;
+};
+
+Widget.prototype.setView = function (newTitle, newBody) {
+	return this.setTitle(newTitle).setBody(newBody);
 };
 
 Widget.prototype.destroy = function () {
