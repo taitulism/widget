@@ -1,6 +1,7 @@
 const MINIMIZE_SYMBOL = '&#128469;';
-const MAXIMIZE_SYMBOL = '&#128470;';
+const RESTORE_SYMBOL = '&#128470;';
 const CLOSE_SYMBOL = '&#10006;';
+const MAXIMIZE_SYMBOL = '&#9974;';
 
 function resolveArgs (maybeTitle, maybeBody, maybeOpts) {
 	let title = null;
@@ -65,6 +66,7 @@ function resolveOptions (rawOpts) {
 			showActions: true,
 			showClose: true,
 			showMinimize: true,
+			showMaximize: true,
 		};
 	}
 
@@ -75,6 +77,7 @@ function resolveOptions (rawOpts) {
 		showActions: typeof rawOpts.showActions == 'boolean' ? rawOpts.showActions : true,
 		showClose: typeof rawOpts.showClose == 'boolean' ? rawOpts.showClose : true,
 		showMinimize: typeof rawOpts.showMinimize == 'boolean' ? rawOpts.showMinimize : true,
+		showMaximize: typeof rawOpts.showMaximize == 'boolean' ? rawOpts.showMaximize : true,
 		toggleHeader: typeof rawOpts.toggleHeader == 'boolean' ? rawOpts.toggleHeader : false,
 		toggleActions: typeof rawOpts.toggleActions == 'boolean' ? rawOpts.toggleActions : false,
 	};
@@ -94,6 +97,7 @@ function Widget (title, body, opts) {
 	this.toggleActions = opts.toggleActions;
 	this.draggable = null;
 	this.isMinimized = false;
+	this.isMaximized = false;
 	this.isMounted = false;
 }
 
@@ -104,6 +108,7 @@ Widget.prototype.createDOM = function (title, body, opts) {
 	this.actions = null;
 	this.closeBtn = null;
 	this.minimizeBtn = null;
+	this.maximizeBtn = null;
 
 	const widgetClassnames = resolveClassnames(opts.classname);
 
@@ -128,6 +133,11 @@ Widget.prototype.createDOM = function (title, body, opts) {
 		if (opts.showMinimize) {
 			this.minimizeBtn = create('button', ['widget-button', 'widget-minimize'], MINIMIZE_SYMBOL);
 			this.actions.appendChild(this.minimizeBtn);
+		}
+
+		if (opts.showMaximize) {
+			this.maximizeBtn = create('button', ['widget-button', 'widget-maximize'], MAXIMIZE_SYMBOL);
+			this.actions.appendChild(this.maximizeBtn);
 		}
 
 		if (opts.showClose) {
@@ -165,6 +175,10 @@ Widget.prototype.initMethods = function (opts) {
 		this.toggleMinimize = this.toggleMinimize.bind(this);
 	}
 
+	if (opts.showMaximize) {
+		this.toggleMaximize = this.toggleMaximize.bind(this);
+	}
+
 	if (opts.showClose) {
 		this.destroy = this.destroy.bind(this);
 	}
@@ -175,6 +189,7 @@ Widget.prototype.mount = function () {
 
 	this.closeBtn && this.closeBtn.addEventListener('click', this.destroy);
 	this.minimizeBtn && this.minimizeBtn.addEventListener('click', this.toggleMinimize);
+	this.maximizeBtn && this.maximizeBtn.addEventListener('click', this.toggleMaximize);
 
 	if (this.toggleHeader) {
 		this.elm.addEventListener('mouseenter', this.showHeader);
@@ -251,23 +266,42 @@ Widget.prototype.hideActions = function (ev) {
 
 Widget.prototype.restore = function () {
 	this.minimizeBtn.innerHTML = MINIMIZE_SYMBOL;
-	this.bodyContainer.style.display = 'block';
-	this.elm.classList.remove('minimized');
+	this.maximizeBtn.innerHTML = MAXIMIZE_SYMBOL;
+
+	this.elm.classList.remove('minimized', 'maximized');
 	this.isMinimized = false;
+	this.isMaximized = false;
+
 	return this;
 };
 
 Widget.prototype.minimize = function () {
-	this.minimizeBtn.innerHTML = MAXIMIZE_SYMBOL;
-	this.bodyContainer.style.display = 'none';
+	this.minimizeBtn.innerHTML = RESTORE_SYMBOL;
 	this.elm.classList.add('minimized');
+	this.elm.classList.remove('maximized');
 	this.isMinimized = true;
+	this.isMaximized = false;
+
+	return this;
+};
+
+Widget.prototype.maximize = function () {
+	this.maximizeBtn.innerHTML = RESTORE_SYMBOL;
+	this.elm.classList.add('maximized');
+	this.elm.classList.remove('minimized');
+	this.isMaximized = true;
+	this.isMinimized = false;
 	return this;
 };
 
 Widget.prototype.toggleMinimize = function () {
 	if (this.isMinimized) this.restore();
 	else this.minimize();
+};
+
+Widget.prototype.toggleMaximize = function () {
+	if (this.isMaximized) this.restore();
+	else this.maximize();
 };
 
 Widget.prototype.setTitle = function (newTitle) {
@@ -299,6 +333,7 @@ Widget.prototype.destroy = function () {
 	this.title = null;
 	this.closeBtn = null;
 	this.minimizeBtn = null;
+	this.maximizeBtn = null;
 	this.actions = null;
 };
 
