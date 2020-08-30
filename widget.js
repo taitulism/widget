@@ -203,7 +203,8 @@ Widget.prototype.mount = function () {
 	}
 
 	document.body.appendChild(this.elm);
-	this.draggable = draggable(this.elm);
+	this.draggable = draggable(this.elm, {grip: this.title});
+	// this.resizable = resizable(this.elm);
 	this.isMounted = true;
 
 	return this;
@@ -281,7 +282,7 @@ Widget.prototype.minimize = function () {
 	this.elm.classList.remove('maximized');
 	this.isMinimized = true;
 	this.isMaximized = false;
-
+	this.draggable.enable();
 	return this;
 };
 
@@ -291,6 +292,7 @@ Widget.prototype.maximize = function () {
 	this.elm.classList.remove('minimized');
 	this.isMaximized = true;
 	this.isMinimized = false;
+	this.draggable.disable();
 	return this;
 };
 

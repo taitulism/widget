@@ -30,7 +30,6 @@
 	display: flex;
 	align-items: center;
 	padding: 0 4px;
-	user-select: none;
 	background-color: #383838;
 	border-radius: 5px 5px 0 0;
 	/* border-bottom: 1px solid #d3d3d3; */
@@ -50,10 +49,15 @@
 	color: #d3d3d3;
 }
 
+.drag-disabled .widget-title {
+	cursor: default;
+}
+
 .widget-action-buttons {
 	display: flex;
 	align-items: center;
 	height: 100%;
+	user-select: none;
 }
 
 .widget-button {
@@ -62,6 +66,7 @@
 	color: #d3d3d3;
 	cursor: pointer;
 	font-size: 15px;
+	font-weight: bold;
 	line-height: 1;
 	background-color: #0000;
 	outline: 0 none;

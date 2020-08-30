@@ -8,120 +8,13 @@
 		<script src="../../draggable/draggable.js"></script>
 		<script src="../../resizable/resizable.js"></script>
 		<script src="../widget.js"></script>
+		<link rel="stylesheet" type="text/css" href="../src/default-style.css" />
 		<style>
 			body {
 				margin: 0;
 			}
 			#container {
 				padding: 150px;
-			}
-			#target {
-				background-color: pink;
-				height: 200px;
-				width: 200px;
-			}
-
-			.widget {
-				display: flex;
-				flex-direction: column;
-				width: 250px;
-				position: absolute;
-				top: 150px;
-				right: 250px;
-				box-sizing: border-box;
-
-				/* opacity: 0.5; */
-			}
-
-			/* .widget:hover {
-				opacity: 1;
-			} */
-
-			.widget.maximized {
-				width: 100%;
-				height: 100%;
-				padding: 50px;
-				top: 0;
-				left: 0;
-			}
-
-			.widget.minimized .widget-body-container {
-				display: none;
-			}
-
-			.widget-header {
-				height: 32px;
-				display: flex;
-				align-items: center;
-				padding: 0 4px;
-				user-select: none;
-				background-color: #383838;
-				border-radius: 5px 5px 0 0;
-
-				/* border-bottom: 1px solid #d3d3d3; */
-			}
-
-			.widget-title {
-				display: flex;
-				align-items: center;
-				flex-grow: 1;
-				height: 100%;
-				margin-right: 5px;
-				padding-left: 6px;
-				cursor: grab;
-				font-size: 14px;
-				font-family: Arial, Helvetica, sans-serif;
-				font-weight: bold;
-				color: #d3d3d3;
-			}
-
-			.widget-action-buttons {
-				display: flex;
-				align-items: center;
-				height: 100%;
-			}
-
-			.widget-button {
-				width: 18px;
-				max-height: 28px;
-				color: #d3d3d3;
-				cursor: pointer;
-				font-size: 15px;
-				line-height: 1;
-				background-color: #0000;
-				outline: 0 none;
-				border: 0 none;
-				padding: 0;
-			}
-
-			.widget-button:hover {
-				color: #ededed;
-			}
-
-			.widget-minimize,.widget-maximize {
-				padding-bottom: 3px;
-			}
-
-			.widget-body-container {
-				height: 100%;
-				min-height: 52px;
-				width: 100%;
-				border: 2px solid #383838;
-				border-top: 0 none;
-				box-sizing: border-box;
-				border-radius: 0 0 5px 5px;
-				font-family: arial;
-				font-size: 14px;
-				flex-grow: 1;
-			}
-
-			.widget-body-container.no-header {
-				/* border-top: 2px solid #383838; */
-				border: 1px solid #383838;
-				margin-top: -1px; /* 1 because of border */
-				padding-left: 1px; /* 1 because of border */
-				border-radius: 3px;
-				box-sizing: border-box;
 			}
 		</style>
 	</head>
