@@ -124,8 +124,11 @@ Widget.prototype.createDefaultHeader = function (titleText, opts) {
 	this.minimizeBtn = null;
 	this.maximizeBtn = null;
 
+	header.appendChild(this.title);
+
 	if (opts.showActions) {
 		this.actions = create('div', ['widget-action-buttons']);
+
 		if (opts.toggleActions) {
 			this.hideActions();
 		}
@@ -148,7 +151,6 @@ Widget.prototype.createDefaultHeader = function (titleText, opts) {
 			this.actions.appendChild(this.closeBtn);
 		}
 
-		header.appendChild(this.title);
 		header.appendChild(this.actions);
 	}
 	this.header = header;
@@ -182,6 +184,7 @@ Widget.prototype.createDOM = function (title, body, opts) {
 	}
 	else if (title instanceof HTMLElement) {
 		this.header = title;
+		this.header.classList.add('widget-header');
 		this.title = null;
 	}
 

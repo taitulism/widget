@@ -214,7 +214,17 @@ describe('widget', () => {
 				expect(header.innerHTML).to.equal('Custom Header');
 			});
 
+			it('sets a classname on the header', () => {
+				wgt = widget(header, target);
+				expect(header.classList.contains('widget-header')).to.be.true;
+			});
+
 			it('has no title', () => {
+				wgt = widget(header, target);
+				expect(wgt.title).to.be.null;
+			});
+
+			it('has no actions', () => {
 				wgt = widget(header, target);
 				expect(wgt.title).to.be.null;
 			});
@@ -283,6 +293,25 @@ describe('widget', () => {
 
 			it('sets the widget body', () => {
 				wgt = widget(TITLE, target, {id: 'the-widget'});
+				expect(wgt.body.innerHTML).to.include('AAA');
+				expect(wgt.body.innerHTML).to.include('BBB');
+				expect(wgt.body.innerHTML).to.include('CCC');
+			});
+
+			it('sets an `id` attribute on the widget element', () => {
+				wgt = widget(TITLE, target, {id: 'the-widget'});
+				expect(wgt.elm.id).to.equal('the-widget');
+			});
+		});
+
+		describe('(header, body, options)', () => {
+			it('sets the widget header', () => {
+				wgt = widget(header, target);
+				expect(header.innerHTML).to.equal('Custom Header');
+			});
+
+			it('sets the widget body', () => {
+				wgt = widget(header, target, {id: 'the-widget'});
 				expect(wgt.body.innerHTML).to.include('AAA');
 				expect(wgt.body.innerHTML).to.include('BBB');
 				expect(wgt.body.innerHTML).to.include('CCC');
@@ -546,6 +575,18 @@ describe('widget', () => {
 			it('when `false` - hides the header', () => {
 				wgt = widget({showHeader: false}).mount();
 				expect(wgt.header.style.visibility).to.equal('hidden');
+			});
+		});
+
+		describe('showActions', () => {
+			it('when `true` (default) - shows the action buttons', () => {
+				wgt = widget({showActions: true}).mount();
+				expect(wgt.actions).not.to.be.null;
+			});
+
+			it('when `false` - hides the action buttons', () => {
+				wgt = widget({showActions: false}).mount();
+				expect(wgt.actions).to.be.null;
 			});
 		});
 
