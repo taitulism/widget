@@ -73,7 +73,7 @@ function $byClassname (cls) {
 const TITLE = 'My Widget';
 
 describe('widget', () => {
-	let testDOMContainer, container, target, box, body, wgt;
+	let testDOMContainer, container, target, header, box, body, wgt;
 
 	before(() => {
 		body = document.body;
@@ -89,6 +89,10 @@ describe('widget', () => {
 	beforeEach(() => {
 		container = document.createElement('div');
 		container.id = 'container';
+
+		header = document.createElement('div');
+		header.id = 'custom-header';
+		header.innerHTML = 'Custom Header';
 
 		target = document.createElement('div');
 		target.id = 'target';
@@ -118,6 +122,7 @@ describe('widget', () => {
 		container.parentNode.removeChild(container);
 		container = null;
 
+		header = null;
 		box = null;
 
 		if (wgt && wgt.elm) {
@@ -199,6 +204,19 @@ describe('widget', () => {
 				expect(wgt.body.innerHTML).to.include('AAA');
 				expect(wgt.body.innerHTML).to.include('BBB');
 				expect(wgt.body.innerHTML).to.include('CCC');
+			});
+		});
+
+
+		describe('(header, body)', () => {
+			it('sets the widget header', () => {
+				wgt = widget(header, target);
+				expect(header.innerHTML).to.equal('Custom Header');
+			});
+
+			it('has no title', () => {
+				wgt = widget(header, target);
+				expect(wgt.title).to.be.null;
 			});
 		});
 

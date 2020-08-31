@@ -27,8 +27,13 @@ function resolveArgs (maybeTitle, maybeBody, maybeOpts) {
 		if (maybeBody instanceof HTMLElement) {
 			body = maybeBody;
 
-			if (maybeTitle && typeof maybeTitle == 'string') {
-				title = maybeTitle;
+			if (maybeTitle) {
+				if (typeof maybeTitle == 'string') {
+					title = maybeTitle;
+				}
+				else if (maybeTitle instanceof HTMLElement) {
+					title = maybeTitle;
+				}
 			}
 		}
 		else if (typeof maybeBody == 'object') {
@@ -67,6 +72,7 @@ function resolveOptions (rawOpts) {
 			showClose: true,
 			showMinimize: true,
 			showMaximize: true,
+			toggleActions: false,
 		};
 	}
 
@@ -101,28 +107,22 @@ function Widget (title, body, opts) {
 	this.isMounted = false;
 }
 
-Widget.prototype.createDOM = function (title, body, opts) {
-	this.header = null;
-	this.body = null;
-	this.title = null;
+
+Widget.prototype.createWrapperElm = function (opts) {
+	const widgetClassnames = resolveClassnames(opts.classname);
+	const elm = create('div', widgetClassnames);
+	if (opts.id) elm.id = opts.id;
+
+	return elm;
+};
+
+Widget.prototype.createDefaultHeader = function (titleText, opts) {
+	const header = create('header', ['widget-header']);
+	this.title = create('div', ['widget-title'], titleText);
 	this.actions = null;
 	this.closeBtn = null;
 	this.minimizeBtn = null;
 	this.maximizeBtn = null;
-
-	const widgetClassnames = resolveClassnames(opts.classname);
-
-	this.elm = create('div', widgetClassnames);
-	if (opts.id) this.elm.id = opts.id;
-
-	this.bodyContainer = create('section', ['widget-body-container']);
-
-	this.header = create('header', ['widget-header']);
-	if (opts.toggleHeader || opts.showHeader == false) {
-		this.hideHeader();
-	}
-
-	this.title = create('div', ['widget-title'], title);
 
 	if (opts.showActions) {
 		this.actions = create('div', ['widget-action-buttons']);
@@ -148,8 +148,41 @@ Widget.prototype.createDOM = function (title, body, opts) {
 			this.actions.appendChild(this.closeBtn);
 		}
 
-		this.header.appendChild(this.title);
-		this.header.appendChild(this.actions);
+		header.appendChild(this.title);
+		header.appendChild(this.actions);
+	}
+	this.header = header;
+
+	if (opts.toggleHeader || opts.showHeader == false) {
+		this.hideHeader();
+	}
+
+	return header;
+};
+
+Widget.prototype.createButton = function (opts) {
+
+};
+
+Widget.prototype.createActions = function (opts) {
+
+};
+
+Widget.prototype.createDOM = function (title, body, opts) {
+	this.title = null;
+	this.actions = null;
+	this.closeBtn = null;
+	this.minimizeBtn = null;
+	this.maximizeBtn = null;
+	this.elm = this.createWrapperElm(opts);
+	this.bodyContainer = create('section', ['widget-body-container']);
+
+	if (!title || typeof title == 'string') {
+		this.header = this.createDefaultHeader(title, opts);
+	}
+	else if (title instanceof HTMLElement) {
+		this.header = title;
+		this.title = null;
 	}
 
 	this.elm.appendChild(this.header);
@@ -159,6 +192,7 @@ Widget.prototype.createDOM = function (title, body, opts) {
 		this.body = body;
 		this.bodyContainer.appendChild(body);
 	}
+	else this.body = null;
 
 	this.elm.appendChild(this.bodyContainer);
 };

@@ -22,6 +22,7 @@
 					<li>CCC</li>
 				</ul>
 			</div>
+			<div id="custom-header">Widget Header</div>
 			<div id="widget-title"></div>
 		</div>
 	</body>
@@ -30,12 +31,16 @@
 	<script src="../widget.js"></script>
 	<script>
 		const targetElm = document.getElementById('target');
+		const headerElm = document.getElementById('custom-header');
 
+		// const wgt = widget();
 		// const wgt = widget('qwe', targetElm);
+		// const wgt = widget(headerElm, targetElm);
 		const wgt = widget('My Widget', targetElm, {
-			toggleHeader: false,
-			toggleActions: false,
+			// toggleHeader: true,
+			toggleActions: true,
 		});
+
 		wgt.mount();
 	</script>
 </html>
