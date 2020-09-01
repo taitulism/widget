@@ -134,19 +134,19 @@ Widget.prototype.createDefaultHeader = function (titleText, opts) {
 		}
 
 		if (opts.showMinimize) {
-			this.minimizeBtn = create('button', ['widget-button', 'widget-minimize'], MINIMIZE_SYMBOL);
+			this.minimizeBtn = create('button', ['widget-button', 'widget-minimize-button'], MINIMIZE_SYMBOL);
 			this.minimizeBtn.setAttribute('title', 'minimize');
 			this.actions.appendChild(this.minimizeBtn);
 		}
 
 		if (opts.showMaximize) {
-			this.maximizeBtn = create('button', ['widget-button', 'widget-maximize'], MAXIMIZE_SYMBOL);
+			this.maximizeBtn = create('button', ['widget-button', 'widget-maximize-button'], MAXIMIZE_SYMBOL);
 			this.maximizeBtn.setAttribute('title', 'maximize');
 			this.actions.appendChild(this.maximizeBtn);
 		}
 
 		if (opts.showClose) {
-			this.closeBtn = create('button', ['widget-button', 'widget-close'], CLOSE_SYMBOL);
+			this.closeBtn = create('button', ['widget-button', 'widget-close-button'], CLOSE_SYMBOL);
 			this.closeBtn.setAttribute('title', 'close');
 			this.actions.appendChild(this.closeBtn);
 		}

@@ -395,7 +395,7 @@ describe('widget', () => {
 						it('is added to the DOM', () => {
 							expect($byClassname('widget-close')).to.have.lengthOf(0);
 							wgt = widget().mount();
-							expect($byClassname('widget-close')[0]).to.deep.equal(wgt.closeBtn);
+							expect($byClassname('widget-close-button')[0]).to.deep.equal(wgt.closeBtn);
 						});
 					});
 
@@ -410,7 +410,22 @@ describe('widget', () => {
 						it('is added to the DOM', () => {
 							expect($byClassname('widget-minimize')).to.have.lengthOf(0);
 							wgt = widget().mount();
-							expect($byClassname('widget-minimize')[0]).to.deep.equal(wgt.minimizeBtn);
+							expect($byClassname('widget-minimize-button')[0]).to.deep.equal(wgt.minimizeBtn);
+						});
+					});
+
+					describe('Maximize Button', () => {
+						it('created', () => {
+							wgt = widget();
+							expect(wgt.maximizeBtn).to.be.instanceOf(HTMLElement);
+							expect(wgt.maximizeBtn.parentNode).to.deep.equal(wgt.actions);
+							expect(wgt.maximizeBtn.classList.contains('widget-button')).to.be.true;
+						});
+
+						it('is added to the DOM', () => {
+							expect($byClassname('widget-maximize-button')).to.have.lengthOf(0);
+							wgt = widget().mount();
+							expect($byClassname('widget-maximize-button')[0]).to.deep.equal(wgt.maximizeBtn);
 						});
 					});
 				});
@@ -535,39 +550,81 @@ describe('widget', () => {
 		});
 
 		describe('showClose', () => {
-			it('when `true` (default) - creates the `close` button', () => {
+			it('by default - creates the `close` button', () => {
+				wgt = widget().mount();
+
+				expect(wgt.closeBtn).not.to.be.null;
+				expect($byClassname('widget-close-button')).to.have.lengthOf(1);
+			});
+
+			it('when `true` - creates the `close` button', () => {
 				wgt = widget({showClose: true}).mount();
 
 				expect(wgt.closeBtn).not.to.be.null;
-				expect($byClassname('widget-close')).to.have.lengthOf(1);
+				expect($byClassname('widget-close-button')).to.have.lengthOf(1);
 			});
 
 			it('when `false` - doesn\'t create the `close` button', () => {
 				wgt = widget({showClose: false}).mount();
 
 				expect(wgt.closeBtn).to.be.null;
-				expect($byClassname('widget-close')).to.have.lengthOf(0);
+				expect($byClassname('widget-close-button')).to.have.lengthOf(0);
 			});
 		});
 
 		describe('showMinimize', () => {
-			it('when `true` (default) - creates the `minimize` button', () => {
+			it('by default - creates the `minimize` button', () => {
+				wgt = widget().mount();
+
+				expect(wgt.minimizeBtn).not.to.be.null;
+				expect($byClassname('widget-minimize-button')).to.have.lengthOf(1);
+			});
+
+			it('when `true` - creates the `minimize` button', () => {
 				wgt = widget({showMinimize: true}).mount();
 
 				expect(wgt.minimizeBtn).not.to.be.null;
-				expect($byClassname('widget-minimize')).to.have.lengthOf(1);
+				expect($byClassname('widget-minimize-button')).to.have.lengthOf(1);
 			});
 
 			it('when `false` - doesn\'t create the `close` button', () => {
 				wgt = widget({showMinimize: false}).mount();
 
 				expect(wgt.minimizeBtn).to.be.null;
-				expect($byClassname('widget-minimize')).to.have.lengthOf(0);
+				expect($byClassname('widget-minimize-button')).to.have.lengthOf(0);
+			});
+		});
+
+		describe('showMaximize', () => {
+			it('by default - creates the `maximize` button', () => {
+				wgt = widget().mount();
+
+				expect(wgt.maximizeBtn).not.to.be.null;
+				expect($byClassname('widget-maximize-button')).to.have.lengthOf(1);
+			});
+
+			it('when `true` - creates the `maximize` button', () => {
+				wgt = widget({showMaximize: true}).mount();
+
+				expect(wgt.maximizeBtn).not.to.be.null;
+				expect($byClassname('widget-maximize-button')).to.have.lengthOf(1);
+			});
+
+			it('when `false` - doesn\'t create the `close` button', () => {
+				wgt = widget({showMaximize: false}).mount();
+
+				expect(wgt.maximizeBtn).to.be.null;
+				expect($byClassname('widget-maximize-button')).to.have.lengthOf(0);
 			});
 		});
 
 		describe('showHeader', () => {
-			it('when `true` (default) - shows the header', () => {
+			it('by default - shows the header', () => {
+				wgt = widget().mount();
+				expect(wgt.header.style.visibility).not.to.equal('hidden');
+			});
+
+			it('when `true` - shows the header', () => {
 				wgt = widget({showHeader: true}).mount();
 				expect(wgt.header.style.visibility).not.to.equal('hidden');
 			});
@@ -579,7 +636,12 @@ describe('widget', () => {
 		});
 
 		describe('showActions', () => {
-			it('when `true` (default) - shows the action buttons', () => {
+			it('by default - shows the action buttons', () => {
+				wgt = widget().mount();
+				expect(wgt.actions).not.to.be.null;
+			});
+
+			it('when `true` - shows the action buttons', () => {
 				wgt = widget({showActions: true}).mount();
 				expect(wgt.actions).not.to.be.null;
 			});
@@ -591,7 +653,19 @@ describe('widget', () => {
 		});
 
 		describe('toggleHeader', () => {
-			it('when `false` (default) - doesn\'t toggle the header visibility on hover', () => {
+			it('by default - doesn\'t toggle the header visibility on hover', () => {
+				wgt = widget().mount();
+
+				const header = $byClassname('widget-header')[0];
+
+				expect(header.style.visibility).not.to.equal('hidden');
+				simulateMouseEnter(wgt.elm);
+				expect(header.style.visibility).not.to.equal('hidden');
+				simulateMouseLeave(wgt.elm);
+				expect(header.style.visibility).not.to.equal('hidden');
+			});
+
+			it('when `false` - doesn\'t toggle the header visibility on hover', () => {
 				wgt = widget({toggleHeader: false}).mount();
 
 				const header = $byClassname('widget-header')[0];
@@ -625,7 +699,19 @@ describe('widget', () => {
 		});
 
 		describe('toggleActions', () => {
-			it('when `false` (default)` - doesn\'t toggle the actions element visibility on hover', () => {
+			it('by default - doesn\'t toggle the actions element visibility on hover', () => {
+				wgt = widget().mount();
+
+				const actions = $byClassname('widget-action-buttons')[0];
+
+				expect(actions.style.display).not.to.equal('none');
+				simulateMouseEnter(wgt.elm);
+				expect(actions.style.display).not.to.equal('none');
+				simulateMouseLeave(wgt.elm);
+				expect(actions.style.display).not.to.equal('none');
+			});
+
+			it('when `false` - doesn\'t toggle the actions element visibility on hover', () => {
 				wgt = widget({toggleActions: false}).mount();
 
 				const actions = $byClassname('widget-action-buttons')[0];
@@ -735,7 +821,27 @@ describe('widget', () => {
 			});
 
 			describe('with `toggleHeader` option', () => {
-				it('binds listener when `true`', () => {
+				it('by default - doesn\'t bind listener', () => {
+					wgt = widget();
+
+					expect(wgt.header.style.visibility).to.not.equal('hidden');
+					simulateMouseEnter(wgt.elm);
+					expect(wgt.header.style.visibility).to.not.equal('hidden');
+					simulateMouseLeave(wgt.elm);
+					expect(wgt.header.style.visibility).to.not.equal('hidden');
+
+					wgt.mount();
+
+					expect(wgt.header.style.visibility).to.not.equal('hidden');
+					simulateMouseEnter(wgt.elm);
+					expect(wgt.header.style.visibility).not.to.not.equal('hidden');
+					simulateMouseLeave(wgt.elm);
+					expect(wgt.header.style.visibility).to.not.equal('hidden');
+					simulateMouseEnter(wgt.elm);
+					expect(wgt.header.style.visibility).not.to.not.equal('hidden');
+				});
+
+				it('when `true` - binds listener', () => {
 					wgt = widget({toggleHeader: true});
 
 					expect(wgt.header.style.visibility).to.equal('hidden');
@@ -755,8 +861,8 @@ describe('widget', () => {
 					expect(wgt.header.style.visibility).not.to.equal('hidden');
 				});
 
-				it('doesn\'t bind listener when `false` (default)', () => {
-					wgt = widget();
+				it('when `false` - doesn\'t bind listener', () => {
+					wgt = widget({toggleHeader: false});
 
 					expect(wgt.header.style.visibility).to.not.equal('hidden');
 					simulateMouseEnter(wgt.elm);
@@ -777,7 +883,25 @@ describe('widget', () => {
 			});
 
 			describe('with `toggleActions` option', () => {
-				it('binds listener when `true`', () => {
+				it('by default - doesn\'t bind listener', () => {
+					wgt = widget();
+
+					expect(wgt.actions.style.display).to.not.equal('none');
+					simulateMouseEnter(wgt.elm);
+					expect(wgt.actions.style.display).to.not.equal('none');
+					simulateMouseLeave(wgt.elm);
+					expect(wgt.actions.style.display).to.not.equal('none');
+
+					wgt.mount();
+
+					expect(wgt.actions.style.display).to.not.equal('none');
+					simulateMouseEnter(wgt.elm);
+					expect(wgt.actions.style.display).to.not.equal('none');
+					simulateMouseLeave(wgt.elm);
+					expect(wgt.actions.style.display).to.not.equal('none');
+				});
+
+				it('when `true` - binds listener', () => {
 					wgt = widget({toggleActions: true});
 
 					expect(wgt.actions.style.display).to.equal('none');
@@ -797,8 +921,8 @@ describe('widget', () => {
 					expect(wgt.actions.style.display).not.to.equal('none');
 				});
 
-				it('doesn\'t bind listener when `false` (default)', () => {
-					wgt = widget();
+				it('when `false` - doesn\'t bind listener', () => {
+					wgt = widget({toggleActions: false});
 
 					expect(wgt.actions.style.display).to.not.equal('none');
 					simulateMouseEnter(wgt.elm);
