@@ -135,19 +135,19 @@ Widget.prototype.createDefaultHeader = function (titleText, opts) {
 
 		if (opts.showMinimize) {
 			this.minimizeBtn = create('button', ['widget-button', 'widget-minimize-button'], MINIMIZE_SYMBOL);
-			this.minimizeBtn.setAttribute('title', 'minimize');
+			this.minimizeBtn.setAttribute('title', 'Minimize');
 			this.actions.appendChild(this.minimizeBtn);
 		}
 
 		if (opts.showMaximize) {
 			this.maximizeBtn = create('button', ['widget-button', 'widget-maximize-button'], MAXIMIZE_SYMBOL);
-			this.maximizeBtn.setAttribute('title', 'maximize');
+			this.maximizeBtn.setAttribute('title', 'Maximize');
 			this.actions.appendChild(this.maximizeBtn);
 		}
 
 		if (opts.showClose) {
 			this.closeBtn = create('button', ['widget-button', 'widget-close-button'], CLOSE_SYMBOL);
-			this.closeBtn.setAttribute('title', 'close');
+			this.closeBtn.setAttribute('title', 'Close');
 			this.actions.appendChild(this.closeBtn);
 		}
 
@@ -308,6 +308,7 @@ Widget.prototype.hideActions = function (ev) {
 Widget.prototype.minimize = function () {
 	this.minimizeBtn.innerHTML = RESTORE_SYMBOL;
 	this.elm.classList.add('minimized');
+	this.minimizeBtn.classList.add('widget-button-active');
 	this.isMinimized = true;
 	return this;
 };
@@ -315,6 +316,7 @@ Widget.prototype.minimize = function () {
 Widget.prototype.unMinimize = function () {
 	this.minimizeBtn.innerHTML = MINIMIZE_SYMBOL;
 	this.elm.classList.remove('minimized');
+	this.minimizeBtn.classList.remove('widget-button-active');
 	this.isMinimized = false;
 	return this;
 };
@@ -322,6 +324,7 @@ Widget.prototype.unMinimize = function () {
 Widget.prototype.maximize = function () {
 	this.maximizeBtn.innerHTML = RESTORE_SYMBOL;
 	this.elm.classList.add('maximized');
+	this.maximizeBtn.classList.add('widget-button-active');
 	this.isMaximized = true;
 	this.draggable.disable();
 	return this;
@@ -330,6 +333,7 @@ Widget.prototype.maximize = function () {
 Widget.prototype.unMaximize = function () {
 	this.maximizeBtn.innerHTML = MAXIMIZE_SYMBOL;
 	this.elm.classList.remove('maximized');
+	this.maximizeBtn.classList.remove('widget-button-active');
 	this.isMaximized = false;
 	this.draggable.enable();
 	return this;
