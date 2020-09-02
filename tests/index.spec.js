@@ -493,7 +493,7 @@ describe('widget', () => {
 		});
 
 		describe('Click on `Minimize` Button', () => {
-			it('toggles the `minimized` classname', () => {
+			it('toggles `minimized` classname on the widget', () => {
 				wgt = widget().mount();
 
 				expect(wgt.elm.classList.contains('minimized')).to.be.false;
@@ -505,7 +505,7 @@ describe('widget', () => {
 		});
 
 		describe('Click on `Maximize` Button', () => {
-			it('toggles the `maximized` classname', () => {
+			it('toggles `maximized` classname on the widget', () => {
 				wgt = widget().mount();
 
 				expect(wgt.elm.classList.contains('maximized')).to.be.false;
@@ -1124,7 +1124,7 @@ describe('widget', () => {
 		});
 
 		describe('.minimize()', () => {
-			it('adds the `minimized` classname', () => {
+			it('adds the `minimized` classname to the widget', () => {
 				wgt = widget(TITLE, target).mount();
 
 				expect(wgt.elm.classList.contains('minimized')).to.be.false;
@@ -1132,7 +1132,7 @@ describe('widget', () => {
 				expect(wgt.elm.classList.contains('minimized')).to.be.true;
 			});
 
-			it('toggles the `.isMinimized` property', () => {
+			it('sets the widget `.isMinimized` property to `true`', () => {
 				wgt = widget(TITLE, target).mount();
 
 				expect(wgt.isMinimized).to.be.false;
@@ -1141,8 +1141,28 @@ describe('widget', () => {
 			});
 		});
 
+		describe('.unMinimize()', () => {
+			it('removes the `minimized` classname from the widget', () => {
+				wgt = widget(TITLE, target).mount();
+
+				wgt.minimize();
+				expect(wgt.elm.classList.contains('minimized')).to.be.true;
+				wgt.unMinimize();
+				expect(wgt.elm.classList.contains('minimized')).to.be.false;
+			});
+
+			it('sets the widget `.isMinimized` property to `true`', () => {
+				wgt = widget(TITLE, target).mount();
+
+				wgt.minimize();
+				expect(wgt.isMinimized).to.be.true;
+				wgt.unMinimize();
+				expect(wgt.isMinimized).to.be.false;
+			});
+		});
+
 		describe('.maximize()', () => {
-			it('adds the `maximized` classname', () => {
+			it('adds the `maximized` classname to the widget', () => {
 				wgt = widget(TITLE, target).mount();
 
 				expect(wgt.elm.classList.contains('maximized')).to.be.false;
@@ -1150,7 +1170,7 @@ describe('widget', () => {
 				expect(wgt.elm.classList.contains('maximized')).to.be.true;
 			});
 
-			it('toggles the `.isMaximized` property', () => {
+			it('sets the widget `.isMaximized` property to `false`', () => {
 				wgt = widget(TITLE, target).mount();
 
 				expect(wgt.isMaximized).to.be.false;
@@ -1159,32 +1179,49 @@ describe('widget', () => {
 			});
 		});
 
-		describe('.restore()', () => {
-			it('restores the widget size (unMinimize)', () => {
-				wgt = widget(TITLE, target).mount();
-
-				wgt.minimize();
-				expect(wgt.elm.classList.contains('minimized')).to.be.true;
-				wgt.restore();
-				expect(wgt.elm.classList.contains('minimized')).to.be.false;
-			});
-
-			it('restores the widget size (unMaximize)', () => {
+		describe('.unMaximize()', () => {
+			it('removes the `maximized` classname from the widget', () => {
 				wgt = widget(TITLE, target).mount();
 
 				wgt.maximize();
 				expect(wgt.elm.classList.contains('maximized')).to.be.true;
-				wgt.restore();
+				wgt.unMaximize();
 				expect(wgt.elm.classList.contains('maximized')).to.be.false;
 			});
 
-			it('toggles the `.isMinimized` property', () => {
+			it('sets the widget `.isMaximized` property to `false`', () => {
+				wgt = widget(TITLE, target).mount();
+
+				wgt.maximize();
+				expect(wgt.isMaximized).to.be.true;
+				wgt.unMaximize();
+				expect(wgt.isMaximized).to.be.false;
+			});
+		});
+
+		describe('.restoreSize()', () => {
+			it('restores the widget size (unMinimize + unMaximize)', () => {
 				wgt = widget(TITLE, target).mount();
 
 				wgt.minimize();
+				wgt.maximize();
+				expect(wgt.elm.classList.contains('minimized')).to.be.true;
+				expect(wgt.elm.classList.contains('maximized')).to.be.true;
+				wgt.restoreSize();
+				expect(wgt.elm.classList.contains('minimized')).to.be.false;
+				expect(wgt.elm.classList.contains('maximized')).to.be.false;
+			});
+
+			it('sets the widget `.isMinimized` & `.isMaximized` properties to `false`', () => {
+				wgt = widget(TITLE, target).mount();
+
+				wgt.maximize();
+				wgt.minimize();
 				expect(wgt.isMinimized).to.be.true;
-				wgt.restore();
+				expect(wgt.isMaximized).to.be.true;
+				wgt.restoreSize();
 				expect(wgt.isMinimized).to.be.false;
+				expect(wgt.isMaximized).to.be.false;
 			});
 		});
 

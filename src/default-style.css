@@ -82,7 +82,7 @@
 	color: #ededed;
 }
 
-/* , .widget-maximize */
+.widget.maximized .widget-maximize-button,
 .widget-minimize-button {
 	padding-bottom: 3px;
 }

@@ -305,45 +305,50 @@ Widget.prototype.hideActions = function (ev) {
 	return this;
 };
 
-Widget.prototype.restore = function () {
-	this.minimizeBtn.innerHTML = MINIMIZE_SYMBOL;
-	this.maximizeBtn.innerHTML = MAXIMIZE_SYMBOL;
-
-	this.elm.classList.remove('minimized', 'maximized');
-	this.isMinimized = false;
-	this.isMaximized = false;
-
-	return this;
-};
-
 Widget.prototype.minimize = function () {
 	this.minimizeBtn.innerHTML = RESTORE_SYMBOL;
 	this.elm.classList.add('minimized');
-	this.elm.classList.remove('maximized');
 	this.isMinimized = true;
-	this.isMaximized = false;
-	this.draggable.enable();
+	return this;
+};
+
+Widget.prototype.unMinimize = function () {
+	this.minimizeBtn.innerHTML = MINIMIZE_SYMBOL;
+	this.elm.classList.remove('minimized');
+	this.isMinimized = false;
 	return this;
 };
 
 Widget.prototype.maximize = function () {
 	this.maximizeBtn.innerHTML = RESTORE_SYMBOL;
 	this.elm.classList.add('maximized');
-	this.elm.classList.remove('minimized');
 	this.isMaximized = true;
-	this.isMinimized = false;
 	this.draggable.disable();
 	return this;
 };
 
+Widget.prototype.unMaximize = function () {
+	this.maximizeBtn.innerHTML = MAXIMIZE_SYMBOL;
+	this.elm.classList.remove('maximized');
+	this.isMaximized = false;
+	this.draggable.enable();
+	return this;
+};
+
 Widget.prototype.toggleMinimize = function () {
-	if (this.isMinimized) this.restore();
+	if (this.isMinimized) this.unMinimize();
 	else this.minimize();
 };
 
 Widget.prototype.toggleMaximize = function () {
-	if (this.isMaximized) this.restore();
+	if (this.isMaximized) this.unMaximize();
 	else this.maximize();
+};
+
+Widget.prototype.restoreSize = function () {
+	this.unMinimize();
+	this.unMaximize();
+	return this;
 };
 
 Widget.prototype.setTitle = function (newTitle) {
