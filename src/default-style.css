@@ -107,3 +107,16 @@
 	border-radius: 3px;
 	box-sizing: border-box;
 }
+
+.widget .top-left-grip {
+	cursor: nw-resize;
+}
+.widget .top-right-grip {
+	cursor: ne-resize;
+}
+.widget .bottom-right-grip {
+	cursor: se-resize;
+}
+.widget .bottom-left-grip {
+	cursor: sw-resize;
+}
