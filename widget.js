@@ -173,14 +173,6 @@ Widget.prototype.createDefaultHeader = function (titleText, opts) {
 	return header;
 };
 
-Widget.prototype.createButton = function (opts) {
-
-};
-
-Widget.prototype.createActions = function (opts) {
-
-};
-
 Widget.prototype.createDOM = function (title, body, opts) {
 	this.title = null;
 	this.actions = null;
@@ -250,7 +242,6 @@ Widget.prototype.mount = function () {
 	if (this.toggleActions) {
 		this.elm.addEventListener('mouseenter', this.showActions);
 		this.elm.addEventListener('mouseleave', this.hideActions);
-		this.hideActions();
 	}
 
 	document.body.appendChild(this.elm);
