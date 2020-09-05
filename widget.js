@@ -341,6 +341,7 @@ Widget.prototype.maximize = function () {
 	this.maximizeBtn.classList.add('widget-button-active');
 	this.isMaximized = true;
 	this.draggable.disable();
+	this.resizable.disable();
 	return this;
 };
 
@@ -350,6 +351,7 @@ Widget.prototype.unMaximize = function () {
 	this.maximizeBtn.classList.remove('widget-button-active');
 	this.isMaximized = false;
 	this.draggable.enable();
+	this.resizable.enable();
 	return this;
 };
 

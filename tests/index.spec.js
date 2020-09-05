@@ -848,6 +848,14 @@ describe('widget', () => {
 				expect(document.getElementsByClassName('draggable')).to.have.lengthOf(1);
 			});
 
+			it('makes the widget element resizable', () => {
+				wgt = widget();
+
+				expect(document.getElementsByClassName('resizable')).to.have.lengthOf(0);
+				wgt.mount();
+				expect(document.getElementsByClassName('resizable')).to.have.lengthOf(1);
+			});
+
 			describe('with `toggleHeader` option', () => {
 				it('by default - doesn\'t bind listener', () => {
 					wgt = widget();
@@ -1230,6 +1238,22 @@ describe('widget', () => {
 				wgt.maximize();
 				expect(wgt.isMaximized).to.be.true;
 			});
+
+			it('disables draggable', () => {
+				wgt = widget(TITLE, target).mount();
+
+				expect(wgt.draggable.isDraggable).to.be.true;
+				wgt.maximize();
+				expect(wgt.draggable.isDraggable).to.be.false;
+			});
+
+			it('disables resizable', () => {
+				wgt = widget(TITLE, target).mount();
+
+				expect(wgt.resizable.isResizable).to.be.true;
+				wgt.maximize();
+				expect(wgt.resizable.isResizable).to.be.false;
+			});
 		});
 
 		describe('.unMaximize()', () => {
@@ -1258,6 +1282,24 @@ describe('widget', () => {
 				expect(wgt.isMaximized).to.be.true;
 				wgt.unMaximize();
 				expect(wgt.isMaximized).to.be.false;
+			});
+
+			it('re-enables draggable', () => {
+				wgt = widget(TITLE, target).mount();
+
+				wgt.maximize();
+				expect(wgt.draggable.isDraggable).to.be.false;
+				wgt.unMaximize();
+				expect(wgt.draggable.isDraggable).to.be.true;
+			});
+
+			it('re-enables resizable', () => {
+				wgt = widget(TITLE, target).mount();
+
+				wgt.maximize();
+				expect(wgt.resizable.isResizable).to.be.false;
+				wgt.unMaximize();
+				expect(wgt.resizable.isResizable).to.be.true;
 			});
 		});
 
