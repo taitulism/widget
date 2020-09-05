@@ -1384,6 +1384,14 @@ describe('widget', () => {
 			expect(document.getElementsByClassName('draggable')).to.have.lengthOf(0);
 		});
 
+		it('destroys Resizable', () => {
+			wgt = widget().mount();
+
+			expect(document.getElementsByClassName('resizable')).to.have.lengthOf(1);
+			wgt.destroy();
+			expect(document.getElementsByClassName('resizable')).to.have.lengthOf(0);
+		});
+
 		it('releases all element references', () => {
 			wgt = widget('My Widget', target, {
 				close: true,

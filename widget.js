@@ -112,7 +112,7 @@ function Widget (title, body, opts) {
 	this.minWidth = opts.minWidth;
 	this.minHeight = opts.minHeight;
 	this.draggable = null;
-	// this.resizable = null;
+	this.resizable = null;
 	this.isMinimized = false;
 	this.isMaximized = false;
 	this.isMounted = false;
@@ -390,6 +390,8 @@ Widget.prototype.destroy = function () {
 	this.unmount();
 	this.draggable.destroy();
 	this.draggable = null;
+	this.resizable.destroy();
+	this.resizable = null;
 
 	this.elm = null;
 	this.header = null;
