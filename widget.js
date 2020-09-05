@@ -3,6 +3,9 @@ const RESTORE_SYMBOL = '&#128470;';
 const CLOSE_SYMBOL = '&#10006;';
 const MAXIMIZE_SYMBOL = '&#9974;';
 
+const DEFAULT_MIN_WIDTH = 250;
+const DEFAULT_MIN_HEIGHT = 150;
+
 function resolveArgs (maybeTitle, maybeBody, maybeOpts) {
 	let title = null;
 	let body = null;
@@ -72,7 +75,10 @@ function resolveOptions (rawOpts) {
 			showClose: true,
 			showMinimize: true,
 			showMaximize: true,
+			toggleHeader: false,
 			toggleActions: false,
+			minWidth: DEFAULT_MIN_WIDTH,
+			minHeight: DEFAULT_MIN_HEIGHT,
 		};
 	}
 
@@ -86,6 +92,8 @@ function resolveOptions (rawOpts) {
 		showMaximize: typeof rawOpts.showMaximize == 'boolean' ? rawOpts.showMaximize : true,
 		toggleHeader: typeof rawOpts.toggleHeader == 'boolean' ? rawOpts.toggleHeader : false,
 		toggleActions: typeof rawOpts.toggleActions == 'boolean' ? rawOpts.toggleActions : false,
+		minWidth: typeof rawOpts.minWidth == 'number' ? rawOpts.minWidth : DEFAULT_MIN_WIDTH,
+		minHeight: typeof rawOpts.minHeight == 'number' ? rawOpts.minHeight : DEFAULT_MIN_HEIGHT,
 	};
 }
 
@@ -101,7 +109,10 @@ function Widget (title, body, opts) {
 
 	this.toggleHeader = opts.toggleHeader;
 	this.toggleActions = opts.toggleActions;
+	this.minWidth = opts.minWidth;
+	this.minHeight = opts.minHeight;
 	this.draggable = null;
+	// this.resizable = null;
 	this.isMinimized = false;
 	this.isMaximized = false;
 	this.isMounted = false;
@@ -244,7 +255,10 @@ Widget.prototype.mount = function () {
 
 	document.body.appendChild(this.elm);
 	this.draggable = draggable(this.elm, {grip: this.title});
-	this.resizable = resizable(this.elm, {minWidth: 250, minHeight: 150});
+	this.resizable = resizable(this.elm, {
+		minWidth: this.minWidth,
+		minHeight: this.minHeight,
+	});
 	this.isMounted = true;
 
 	return this;

@@ -744,6 +744,34 @@ describe('widget', () => {
 				expect(wgt.title.classList.contains('no-actions')).to.be.true;
 			});
 		});
+
+		describe('minWidth', () => {
+			it('when not used - sets a default minimum widget width of 250px', () => {
+				wgt = widget().mount();
+				const wgtBox = wgt.elm.getBoundingClientRect();
+				expect(wgtBox.width).to.equal(250);
+			});
+
+			it('when used - sets a minimum widget width to the given number of pixels', () => {
+				wgt = widget({minWidth: 300}).mount();
+				const wgtBox = wgt.elm.getBoundingClientRect();
+				expect(wgtBox.width).to.equal(300);
+			});
+		});
+
+		describe('minHeight', () => {
+			it('when not used - sets a default minimum widget height of 150px', () => {
+				wgt = widget().mount();
+				const wgtBox = wgt.elm.getBoundingClientRect();
+				expect(wgtBox.height).to.equal(150);
+			});
+
+			it('when used - sets a minimum widget height to the given number of pixels', () => {
+				wgt = widget({minHeight: 300}).mount();
+				const wgtBox = wgt.elm.getBoundingClientRect();
+				expect(wgtBox.height).to.equal(300);
+			});
+		});
 	});
 
 	describe('API Methods', () => {
