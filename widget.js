@@ -244,7 +244,7 @@ Widget.prototype.mount = function () {
 
 	document.body.appendChild(this.elm);
 	this.draggable = draggable(this.elm, {grip: this.title});
-	// this.resizable = resizable(this.elm);
+	this.resizable = resizable(this.elm, {minWidth: 250, minHeight: 150});
 	this.isMounted = true;
 
 	return this;
