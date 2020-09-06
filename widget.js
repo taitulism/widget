@@ -327,6 +327,14 @@ Widget.prototype.unMinimize = function () {
 };
 
 Widget.prototype.maximize = function () {
+	this.box = this.elm.getBoundingClientRect();
+	const elmStyle = this.elm.style;
+
+	elmStyle.width = '100%';
+	elmStyle.height = '100%';
+	elmStyle.top = '0px';
+	elmStyle.left = '0px';
+
 	this.maximizeBtn.innerHTML = RESTORE_SYMBOL;
 	this.elm.classList.add('maximized');
 	this.maximizeBtn.classList.add('widget-button-active');
@@ -337,6 +345,15 @@ Widget.prototype.maximize = function () {
 };
 
 Widget.prototype.unMaximize = function () {
+	const elmStyle = this.elm.style;
+
+	elmStyle.width = this.box.width + 'px';
+	elmStyle.height = this.box.height + 'px';
+	elmStyle.top = this.box.top + 'px';
+	elmStyle.left = this.box.left + 'px';
+
+	this.box = null;
+
 	this.maximizeBtn.innerHTML = MAXIMIZE_SYMBOL;
 	this.elm.classList.remove('maximized');
 	this.maximizeBtn.classList.remove('widget-button-active');
