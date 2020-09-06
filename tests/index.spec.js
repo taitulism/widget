@@ -1183,6 +1183,18 @@ describe('widget', () => {
 				wgt.minimize();
 				expect(wgt.isMinimized).to.be.true;
 			});
+
+			it('disables header toggle visibility on hover', () => {
+				wgt = widget({toggleHeader: true}).mount();
+
+				expect(wgt.header.style.visibility).to.equal('hidden');
+				wgt.minimize();
+				expect(wgt.header.style.visibility).to.not.equal('hidden');
+				simulateMouseEnter(wgt.elm);
+				expect(wgt.header.style.visibility).to.not.equal('hidden');
+				simulateMouseLeave(wgt.elm);
+				expect(wgt.header.style.visibility).to.not.equal('hidden');
+			});
 		});
 
 		describe('.unMinimize()', () => {
@@ -1251,6 +1263,18 @@ describe('widget', () => {
 				expect(wgt.elm.style.height).to.equal('100%');
 				expect(wgt.elm.style.top).to.equal('0px');
 				expect(wgt.elm.style.left).to.equal('0px');
+			});
+
+			it('disables header toggle visibility on hover', () => {
+				wgt = widget({toggleHeader: true}).mount();
+
+				expect(wgt.header.style.visibility).to.equal('hidden');
+				wgt.maximize();
+				expect(wgt.header.style.visibility).to.not.equal('hidden');
+				simulateMouseEnter(wgt.elm);
+				expect(wgt.header.style.visibility).to.not.equal('hidden');
+				simulateMouseLeave(wgt.elm);
+				expect(wgt.header.style.visibility).to.not.equal('hidden');
 			});
 
 			it('disables draggable', () => {

@@ -284,7 +284,7 @@ Widget.prototype.mouseEnterHandler = function (ev) {
 };
 
 Widget.prototype.mouseLeaveHandler = function () {
-	if (this.toggleHeader) {
+	if (this.toggleHeader && !this.isMinimized && !this.isMaximized) {
 		this.hideHeader();
 	}
 
@@ -292,7 +292,6 @@ Widget.prototype.mouseLeaveHandler = function () {
 		this.hideActions();
 	}
 };
-
 
 Widget.prototype.show = function () {
 	this.elm.style.display = '';
@@ -330,6 +329,11 @@ Widget.prototype.minimize = function () {
 	this.minimizeBtn.innerHTML = RESTORE_SYMBOL;
 	this.elm.classList.add('minimized');
 	this.minimizeBtn.classList.add('widget-button-active');
+
+	if (this.toggleHeader || this.toggleActions) {
+		this.showHeader();
+	}
+
 	this.isMinimized = true;
 	return this;
 };
@@ -354,9 +358,15 @@ Widget.prototype.maximize = function () {
 	this.maximizeBtn.innerHTML = RESTORE_SYMBOL;
 	this.elm.classList.add('maximized');
 	this.maximizeBtn.classList.add('widget-button-active');
-	this.isMaximized = true;
+
+	if (this.toggleHeader || this.toggleActions) {
+		this.showHeader();
+	}
+
 	this.draggable.disable();
 	this.resizable.disable();
+
+	this.isMaximized = true;
 	return this;
 };
 
