@@ -204,15 +204,18 @@ Widget.prototype.createDOM = function (title, body, opts) {
 };
 
 Widget.prototype.initMethods = function (opts) {
-	if (opts.toggleHeader) {
-		this.showHeader = this.showHeader.bind(this);
-		this.hideHeader = this.hideHeader.bind(this);
+	if (opts.toggleHeader || opts.toggleActions) {
+		// this.showHeader = this.showHeader.bind(this);
+		// this.hideHeader = this.hideHeader.bind(this);
+		this.mouseEnterHandler = this.mouseEnterHandler.bind(this);
+		this.mouseLeaveHandler = this.mouseLeaveHandler.bind(this);
+
 	}
 
-	if (opts.toggleActions) {
-		this.showActions = this.showActions.bind(this);
-		this.hideActions = this.hideActions.bind(this);
-	}
+	// if (opts.toggleActions) {
+	// 	this.showActions = this.showActions.bind(this);
+	// 	this.hideActions = this.hideActions.bind(this);
+	// }
 
 	if (opts.showMinimize) {
 		this.toggleMinimize = this.toggleMinimize.bind(this);
@@ -234,22 +237,19 @@ Widget.prototype.mount = function () {
 	this.minimizeBtn && this.minimizeBtn.addEventListener('click', this.toggleMinimize);
 	this.maximizeBtn && this.maximizeBtn.addEventListener('click', this.toggleMaximize);
 
-	if (this.toggleHeader) {
-		this.elm.addEventListener('mouseenter', this.showHeader);
-		this.elm.addEventListener('mouseleave', this.hideHeader);
-	}
-
-	if (this.toggleActions) {
-		this.elm.addEventListener('mouseenter', this.showActions);
-		this.elm.addEventListener('mouseleave', this.hideActions);
+	if (this.toggleHeader || this.toggleActions) {
+		this.elm.addEventListener('mouseenter', this.mouseEnterHandler);
+		this.elm.addEventListener('mouseleave', this.mouseLeaveHandler);
 	}
 
 	document.body.appendChild(this.elm);
+
 	this.draggable = draggable(this.elm, {grip: this.title});
 	this.resizable = resizable(this.elm, {
 		minWidth: this.minWidth,
 		minHeight: this.minHeight,
 	});
+
 	this.isMounted = true;
 
 	return this;
@@ -263,20 +263,36 @@ Widget.prototype.unmount = function () {
 	this.closeBtn && this.closeBtn.removeEventListener('click', this.destroy);
 	this.minimizeBtn && this.minimizeBtn.removeEventListener('click', this.toggleMinimize);
 
-	if (this.toggleHeader) {
-		this.elm.removeEventListener('mouseenter', this.showHeader);
-		this.elm.removeEventListener('mouseleave', this.hideHeader);
-	}
-
-	if (this.toggleActions) {
-		this.elm.removeEventListener('mouseenter', this.showActions);
-		this.elm.removeEventListener('mouseleave', this.hideActions);
+	if (this.toggleHeader || this.toggleActions) {
+		this.elm.removeEventListener('mouseenter', this.mouseEnterHandler);
+		this.elm.removeEventListener('mouseleave', this.mouseLeaveHandler);
 	}
 
 	this.isMounted = false;
 
 	return this;
 };
+
+Widget.prototype.mouseEnterHandler = function (ev) {
+	if (this.toggleHeader) {
+		this.showHeader();
+	}
+
+	if (this.toggleActions) {
+		this.showActions();
+	}
+};
+
+Widget.prototype.mouseLeaveHandler = function () {
+	if (this.toggleHeader) {
+		this.hideHeader();
+	}
+
+	if (this.toggleActions) {
+		this.hideActions();
+	}
+};
+
 
 Widget.prototype.show = function () {
 	this.elm.style.display = '';
