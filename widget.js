@@ -298,17 +298,17 @@ Widget.prototype.hide = function () {
 	return this;
 };
 
-Widget.prototype.showHeader = function () {
+Widget.prototype.showHeader = function (grip) {
 	this.header.style.visibility = '';
 	this.bodyContainer.classList.remove('no-header');
-	this.draggable.setGrip(this.title);
+	this.draggable.setGrip(grip || this.title);
 	return this;
 };
 
-Widget.prototype.hideHeader = function () {
+Widget.prototype.hideHeader = function (grip) {
 	this.header.style.visibility = 'hidden';
 	this.bodyContainer.classList.add('no-header');
-	this.draggable && this.draggable.setGrip(this.bodyContainer);
+	this.draggable && this.draggable.setGrip(grip || this.bodyContainer);
 	return this;
 };
 

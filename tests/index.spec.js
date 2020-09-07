@@ -73,7 +73,7 @@ function $byClassname (cls) {
 const TITLE = 'My Widget';
 
 describe('widget', () => {
-	let testDOMContainer, container, target, header, box, body, wgt;
+	let testDOMContainer, container, target, header, headerSpan, box, body, wgt;
 
 	before(() => {
 		body = document.body;
@@ -91,8 +91,11 @@ describe('widget', () => {
 		container.id = 'container';
 
 		header = document.createElement('div');
+		headerSpan = document.createElement('span');
 		header.id = 'custom-header';
-		header.innerHTML = 'Custom Header';
+		headerSpan.id = 'header-span';
+		headerSpan.innerHTML = 'Custom Header';
+		header.appendChild(headerSpan);
 
 		target = document.createElement('div');
 		target.id = 'target';
@@ -123,6 +126,7 @@ describe('widget', () => {
 		container = null;
 
 		header = null;
+		headerSpan = null;
 		box = null;
 
 		if (wgt && wgt.elm) {
@@ -211,7 +215,7 @@ describe('widget', () => {
 		describe('(header, body)', () => {
 			it('sets the widget header', () => {
 				wgt = widget(header, target);
-				expect(header.innerHTML).to.equal('Custom Header');
+				expect(header.innerHTML).to.contain('Custom Header');
 			});
 
 			it('sets a classname on the header', () => {
@@ -307,7 +311,7 @@ describe('widget', () => {
 		describe('(header, body, options)', () => {
 			it('sets the widget header', () => {
 				wgt = widget(header, target);
-				expect(header.innerHTML).to.equal('Custom Header');
+				expect(header.innerHTML).to.contain('Custom Header');
 			});
 
 			it('sets the widget body', () => {
@@ -1166,6 +1170,18 @@ describe('widget', () => {
 				wgt = widget(TITLE, target).mount();
 				expect(wgt.showHeader()).to.eql(wgt);
 				expect(wgt.hideHeader()).to.eql(wgt);
+			});
+
+			describe('With a `grip` argument', () => {
+				it('sets the drag handle grip to given elm', () => {
+					wgt = widget(TITLE, target).mount();
+
+					expect(wgt.draggable.gripHandle).to.deep.equal(wgt.title);
+					wgt.hideHeader(headerSpan);
+					expect(wgt.draggable.gripHandle).to.deep.equal(headerSpan);
+					wgt.showHeader(wgt.bodyContainer);
+					expect(wgt.draggable.gripHandle).to.deep.equal(wgt.bodyContainer);
+				});
 			});
 		});
 
