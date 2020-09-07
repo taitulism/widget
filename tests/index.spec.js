@@ -1152,6 +1152,16 @@ describe('widget', () => {
 				expect(wgt.header.style.visibility).to.not.equal('hidden');
 			});
 
+			it('toggles the drag handle grip between title & bodyContainer', () => {
+				wgt = widget(TITLE, target).mount();
+
+				expect(wgt.draggable.gripHandle).to.deep.equal(wgt.title);
+				wgt.hideHeader();
+				expect(wgt.draggable.gripHandle).to.deep.equal(wgt.bodyContainer);
+				wgt.showHeader();
+				expect(wgt.draggable.gripHandle).to.deep.equal(wgt.title);
+			});
+
 			it('returns the widget instance', () => {
 				wgt = widget(TITLE, target).mount();
 				expect(wgt.showHeader()).to.eql(wgt);

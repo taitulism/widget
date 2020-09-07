@@ -205,17 +205,9 @@ Widget.prototype.createDOM = function (title, body, opts) {
 
 Widget.prototype.initMethods = function (opts) {
 	if (opts.toggleHeader || opts.toggleActions) {
-		// this.showHeader = this.showHeader.bind(this);
-		// this.hideHeader = this.hideHeader.bind(this);
 		this.mouseEnterHandler = this.mouseEnterHandler.bind(this);
 		this.mouseLeaveHandler = this.mouseLeaveHandler.bind(this);
-
 	}
-
-	// if (opts.toggleActions) {
-	// 	this.showActions = this.showActions.bind(this);
-	// 	this.hideActions = this.hideActions.bind(this);
-	// }
 
 	if (opts.showMinimize) {
 		this.toggleMinimize = this.toggleMinimize.bind(this);
@@ -244,7 +236,10 @@ Widget.prototype.mount = function () {
 
 	document.body.appendChild(this.elm);
 
-	this.draggable = draggable(this.elm, {grip: this.title});
+	this.draggable = draggable(this.elm, {
+		grip: this.title
+	});
+
 	this.resizable = resizable(this.elm, {
 		minWidth: this.minWidth,
 		minHeight: this.minHeight,
@@ -306,12 +301,14 @@ Widget.prototype.hide = function () {
 Widget.prototype.showHeader = function () {
 	this.header.style.visibility = '';
 	this.bodyContainer.classList.remove('no-header');
+	this.draggable.setGrip(this.title);
 	return this;
 };
 
 Widget.prototype.hideHeader = function () {
 	this.header.style.visibility = 'hidden';
 	this.bodyContainer.classList.add('no-header');
+	this.draggable && this.draggable.setGrip(this.bodyContainer);
 	return this;
 };
 
