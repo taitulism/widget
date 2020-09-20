@@ -1,3 +1,6 @@
+import draggable from 'draggable-elm';
+import resizable from 'resizable-elm';
+
 const MINIMIZE_SYMBOL = '&#128469;';
 const RESTORE_SYMBOL = '&#128470;';
 const CLOSE_SYMBOL = '&#10006;';
@@ -97,7 +100,7 @@ function resolveOptions (rawOpts) {
 	};
 }
 
-function widget (...args) {
+export default function widget (...args) {
 	const [title, body, rawOpts] = resolveArgs(...args);
 	const opts = resolveOptions(rawOpts);
 	return new Widget(title, body, opts);
@@ -119,7 +122,7 @@ function Widget (title, body, opts) {
 }
 
 
-Widget.prototype.createWrapperElm = function (opts) {
+Widget.prototype.createWrapperElm = function createWrapperElm (opts) {
 	const widgetClassnames = resolveClassnames(opts.classname);
 	const elm = create('div', widgetClassnames);
 	if (opts.id) elm.id = opts.id;
@@ -127,7 +130,7 @@ Widget.prototype.createWrapperElm = function (opts) {
 	return elm;
 };
 
-Widget.prototype.createDefaultHeader = function (titleText, opts) {
+Widget.prototype.createDefaultHeader = function createDefaultHeader (titleText, opts) {
 	const header = create('header', ['widget-header']);
 	this.title = create('div', ['widget-title'], titleText);
 	this.actions = null;
@@ -173,7 +176,7 @@ Widget.prototype.createDefaultHeader = function (titleText, opts) {
 	return header;
 };
 
-Widget.prototype.createDOM = function (title, body, opts) {
+Widget.prototype.createDOM = function createDOM (title, body, opts) {
 	this.title = null;
 	this.actions = null;
 	this.closeBtn = null;
@@ -203,7 +206,7 @@ Widget.prototype.createDOM = function (title, body, opts) {
 	this.elm.appendChild(this.bodyContainer);
 };
 
-Widget.prototype.initMethods = function (opts) {
+Widget.prototype.initMethods = function initMethods (opts) {
 	if (opts.toggleHeader || opts.toggleActions) {
 		this.mouseEnterHandler = this.mouseEnterHandler.bind(this);
 		this.mouseLeaveHandler = this.mouseLeaveHandler.bind(this);
@@ -222,7 +225,7 @@ Widget.prototype.initMethods = function (opts) {
 	}
 };
 
-Widget.prototype.mount = function () {
+Widget.prototype.mount = function mount () {
 	if (this.isMounted) return;
 
 	this.closeBtn && this.closeBtn.addEventListener('click', this.destroy);
@@ -250,7 +253,7 @@ Widget.prototype.mount = function () {
 	return this;
 };
 
-Widget.prototype.unmount = function () {
+Widget.prototype.unmount = function unmount () {
 	if (!this.isMounted) return this;
 
 	document.body.removeChild(this.elm);
@@ -268,7 +271,7 @@ Widget.prototype.unmount = function () {
 	return this;
 };
 
-Widget.prototype.mouseEnterHandler = function (ev) {
+Widget.prototype.mouseEnterHandler = function mouseEnterHandler (ev) {
 	if (this.toggleHeader) {
 		this.showHeader();
 	}
@@ -278,7 +281,7 @@ Widget.prototype.mouseEnterHandler = function (ev) {
 	}
 };
 
-Widget.prototype.mouseLeaveHandler = function () {
+Widget.prototype.mouseLeaveHandler = function mouseLeaveHandler () {
 	if (this.toggleHeader && !this.isMinimized && !this.isMaximized) {
 		this.hideHeader();
 	}
@@ -288,41 +291,41 @@ Widget.prototype.mouseLeaveHandler = function () {
 	}
 };
 
-Widget.prototype.show = function () {
+Widget.prototype.show = function show () {
 	this.elm.style.display = '';
 	return this;
 };
 
-Widget.prototype.hide = function () {
+Widget.prototype.hide = function hide () {
 	this.elm.style.display = 'none';
 	return this;
 };
 
-Widget.prototype.showHeader = function (grip) {
+Widget.prototype.showHeader = function showHeader (grip) {
 	this.header.style.visibility = '';
 	this.bodyContainer.classList.remove('no-header');
 	this.draggable.setGrip(grip || this.title);
 	return this;
 };
 
-Widget.prototype.hideHeader = function (grip) {
+Widget.prototype.hideHeader = function hideHeader (grip) {
 	this.header.style.visibility = 'hidden';
 	this.bodyContainer.classList.add('no-header');
 	this.draggable && this.draggable.setGrip(grip || this.bodyContainer);
 	return this;
 };
 
-Widget.prototype.showActions = function (ev) {
+Widget.prototype.showActions = function showActions (ev) {
 	this.actions.style.display = '';
 	return this;
 };
 
-Widget.prototype.hideActions = function (ev) {
+Widget.prototype.hideActions = function hideActions (ev) {
 	this.actions.style.display = 'none';
 	return this;
 };
 
-Widget.prototype.minimize = function () {
+Widget.prototype.minimize = function minimize () {
 	this.minimizeBtn.innerHTML = RESTORE_SYMBOL;
 	this.elm.classList.add('minimized');
 	this.minimizeBtn.classList.add('widget-button-active');
@@ -335,7 +338,7 @@ Widget.prototype.minimize = function () {
 	return this;
 };
 
-Widget.prototype.unMinimize = function () {
+Widget.prototype.unMinimize = function unMinimize () {
 	this.minimizeBtn.innerHTML = MINIMIZE_SYMBOL;
 	this.elm.classList.remove('minimized');
 	this.minimizeBtn.classList.remove('widget-button-active');
@@ -343,7 +346,7 @@ Widget.prototype.unMinimize = function () {
 	return this;
 };
 
-Widget.prototype.maximize = function () {
+Widget.prototype.maximize = function maximize () {
 	this.box = this.elm.getBoundingClientRect();
 	const elmStyle = this.elm.style;
 
@@ -367,7 +370,7 @@ Widget.prototype.maximize = function () {
 	return this;
 };
 
-Widget.prototype.unMaximize = function () {
+Widget.prototype.unMaximize = function unMaximize () {
 	const elmStyle = this.elm.style;
 
 	elmStyle.width = this.box.width + 'px';
@@ -386,38 +389,38 @@ Widget.prototype.unMaximize = function () {
 	return this;
 };
 
-Widget.prototype.toggleMinimize = function () {
+Widget.prototype.toggleMinimize = function toggleMinimize () {
 	if (this.isMinimized) this.unMinimize();
 	else this.minimize();
 };
 
-Widget.prototype.toggleMaximize = function () {
+Widget.prototype.toggleMaximize = function toggleMaximize () {
 	if (this.isMaximized) this.unMaximize();
 	else this.maximize();
 };
 
-Widget.prototype.restoreSize = function () {
+Widget.prototype.restoreSize = function restoreSize () {
 	this.unMinimize();
 	this.unMaximize();
 	return this;
 };
 
-Widget.prototype.setTitle = function (newTitle) {
+Widget.prototype.setTitle = function setTitle (newTitle) {
 	this.title.innerText = newTitle;
 	return this;
 };
 
-Widget.prototype.setBody = function (newBody) {
+Widget.prototype.setBody = function setBody (newBody) {
 	this.body.innerHTML = '';
 	this.body.appendChild(newBody);
 	return this;
 };
 
-Widget.prototype.setView = function (newTitle, newBody) {
+Widget.prototype.setView = function setView (newTitle, newBody) {
 	return this.setTitle(newTitle).setBody(newBody);
 };
 
-Widget.prototype.destroy = function () {
+Widget.prototype.destroy = function destroy () {
 	if (!this.isMounted) return;
 
 	this.unmount();

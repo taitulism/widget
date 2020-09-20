@@ -1,7 +1,5 @@
 /* global widget */
 
-// const widget = require('../widget');
-
 const createEvent = (type, props = {}) => {
 	const event = new window.Event(type, {bubbles: true});
 	Object.assign(event, props);
