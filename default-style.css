@@ -1,18 +1,11 @@
 .widget {
 	display: flex;
 	flex-direction: column;
-	/* width: 250px; */ /* default min width */
-	/* height: 150px; */ /* default min height */
 	position: absolute;
 	top: 150px;
 	left: 250px;
 	box-sizing: border-box;
-	/* opacity: 0.5; */
 }
-
-/* .widget:hover {
-	opacity: 1;
-} */
 
 .widget.maximized {
 	padding: 50px;
