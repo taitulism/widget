@@ -11,7 +11,7 @@ export default [{
 			'resizable-elm': 'resizable'
 		}
 	},
-},{
+}, {
 	input: 'widget.js',
 	plugins: [nodeResolve()],
 	output: {

@@ -1,4 +1,4 @@
-/* global widget */
+/* global widget expect */
 
 const createEvent = (type, props = {}) => {
 	const event = new window.Event(type, {bubbles: true});
@@ -26,44 +26,6 @@ function simulateMouseLeave (elm, x, y) {
 	elm.dispatchEvent(event);
 }
 
-function simulateMouseDown (elm, x, y) {
-	const event = createEvent('mousedown', {
-		clientX: x || 0,
-		clientY: y || 0,
-		offsetX: x || 0,
-		offsetY: y || 0,
-	});
-	elm.dispatchEvent(event);
-}
-
-function simulateMouseMove (elm, x, y) {
-	const event = createEvent('mousemove', {
-		clientX: x || 0,
-		clientY: y || 0,
-		offsetX: x || 0,
-		offsetY: y || 0,
-	});
-
-	elm.dispatchEvent(event);
-}
-
-function simulateMouseUp (elm, x, y) {
-	const event = createEvent('mouseup', {
-		clientX: x || 0,
-		clientY: y || 0,
-		offsetX: x || 0,
-		offsetY: y || 0,
-	});
-
-	elm.dispatchEvent(event);
-}
-
-function simulateDragNDrop (elm, moveX, moveY) {
-	simulateMouseDown(elm, 0, 0);
-	simulateMouseMove(elm, moveX, moveY);
-	simulateMouseUp(elm, moveX, moveY);
-}
-
 function $byClassname (cls) {
 	return document.getElementsByClassName(cls);
 }
@@ -71,11 +33,9 @@ function $byClassname (cls) {
 const TITLE = 'My Widget';
 
 describe('widget', () => {
-	let testDOMContainer, container, target, header, headerSpan, box, body, wgt;
+	let testDOMContainer, container, target, header, headerSpan, wgt;
 
 	before(() => {
-		body = document.body;
-
 		testDOMContainer = document.getElementById('test-dom-container');
 		if (!testDOMContainer) {
 			testDOMContainer = document.createElement('div');
@@ -108,8 +68,6 @@ describe('widget', () => {
 		container.appendChild(target);
 		testDOMContainer.appendChild(container);
 
-		box = target.getBoundingClientRect();
-
 		Array.from(document.getElementsByClassName('widget')).forEach((wgt) => {
 			wgt.parentNode.removeChild(wgt);
 		});
@@ -125,19 +83,13 @@ describe('widget', () => {
 
 		header = null;
 		headerSpan = null;
-		box = null;
 
 		if (wgt && wgt.elm) {
 			wgt.destroy();
 		}
-
-		// Array.from(document.getElementsByClassName('widget')).forEach((wgt) => {
-		// 	wgt.parentNode.removeChild(wgt);
-		// });
 	});
 
 	after(() => {
-		body = null;
 		testDOMContainer = null;
 	});
 
@@ -658,7 +610,7 @@ describe('widget', () => {
 			it('by default - doesn\'t toggle the header visibility on hover', () => {
 				wgt = widget().mount();
 
-				const header = $byClassname('widget-header')[0];
+				const [header] = $byClassname('widget-header');
 
 				expect(header.style.visibility).to.not.equal('hidden');
 				simulateMouseEnter(wgt.elm);
@@ -670,7 +622,7 @@ describe('widget', () => {
 			it('when `false` - doesn\'t toggle the header visibility on hover', () => {
 				wgt = widget({toggleHeader: false}).mount();
 
-				const header = $byClassname('widget-header')[0];
+				const [header] = $byClassname('widget-header');
 
 				expect(header.style.visibility).to.not.equal('hidden');
 				simulateMouseEnter(wgt.elm);
@@ -704,7 +656,7 @@ describe('widget', () => {
 			it('by default - doesn\'t toggle the actions element visibility on hover', () => {
 				wgt = widget().mount();
 
-				const actions = $byClassname('widget-action-buttons')[0];
+				const [actions] = $byClassname('widget-action-buttons');
 
 				expect(actions.style.display).to.not.equal('none');
 				simulateMouseEnter(wgt.elm);
@@ -716,7 +668,7 @@ describe('widget', () => {
 			it('when `false` - doesn\'t toggle the actions element visibility on hover', () => {
 				wgt = widget({toggleActions: false}).mount();
 
-				const actions = $byClassname('widget-action-buttons')[0];
+				const [actions] = $byClassname('widget-action-buttons');
 
 				expect(actions.style.display).to.not.equal('none');
 				simulateMouseEnter(wgt.elm);
@@ -1428,15 +1380,13 @@ describe('widget', () => {
 				expect(wgt.title.innerText).to.equal('New Title');
 			});
 
-			it.skip('doesn\'t fail with', () => {
-
-			});
+			it.skip('doesn\'t fail with');
 		});
 
 		describe('.setBody()', () => {
 			it('changes the widget body', () => {
 				const newBody = document.createElement('div');
-				newBody.innerHTML = `<button>Click</button>`;
+				newBody.innerHTML = '<button>Click</button>';
 
 				wgt = widget('My Widget', target).mount();
 
@@ -1447,9 +1397,7 @@ describe('widget', () => {
 				expect(wgt.body.innerHTML).to.include('Click');
 			});
 
-			it.skip('doesn\'t fail with', () => {
-
-			});
+			it.skip('doesn\'t fail with');
 		});
 
 		describe('.setView()', () => {
@@ -1457,7 +1405,7 @@ describe('widget', () => {
 				wgt = widget('My Widget', target);
 
 				const newBody = document.createElement('div');
-				newBody.innerHTML = `<button>Click</button>`;
+				newBody.innerHTML = '<button>Click</button>';
 
 				expect(wgt.title.innerText).to.equal('My Widget');
 				expect(wgt.title.innerText).to.not.equal('New Title');
@@ -1470,9 +1418,7 @@ describe('widget', () => {
 				expect(wgt.body.innerHTML).to.include('Click');
 			});
 
-			it.skip('doesn\'t fail with', () => {
-
-			});
+			it.skip('doesn\'t fail with');
 		});
 	});
 

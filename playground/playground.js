@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const targetElm = document.getElementById('target');
 const headerElm = document.getElementById('custom-header');
 

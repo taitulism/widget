@@ -9,6 +9,7 @@ const MAXIMIZE_SYMBOL = '&#9974;';
 const DEFAULT_MIN_WIDTH = 250;
 const DEFAULT_MIN_HEIGHT = 150;
 
+/* eslint-disable-next-line complexity */
 function resolveArgs (maybeTitle, maybeBody, maybeOpts) {
 	let title = null;
 	let body = null;
@@ -169,7 +170,7 @@ Widget.prototype.createDefaultHeader = function createDefaultHeader (titleText, 
 	}
 	this.header = header;
 
-	if (opts.toggleHeader || opts.showHeader == false) {
+	if (opts.toggleHeader || !opts.showHeader) {
 		this.hideHeader();
 	}
 
@@ -271,7 +272,7 @@ Widget.prototype.unmount = function unmount () {
 	return this;
 };
 
-Widget.prototype.mouseEnterHandler = function mouseEnterHandler (ev) {
+Widget.prototype.mouseEnterHandler = function mouseEnterHandler () {
 	if (this.toggleHeader) {
 		this.showHeader();
 	}
@@ -315,12 +316,12 @@ Widget.prototype.hideHeader = function hideHeader (grip) {
 	return this;
 };
 
-Widget.prototype.showActions = function showActions (ev) {
+Widget.prototype.showActions = function showActions () {
 	this.actions.style.display = '';
 	return this;
 };
 
-Widget.prototype.hideActions = function hideActions (ev) {
+Widget.prototype.hideActions = function hideActions () {
 	this.actions.style.display = 'none';
 	return this;
 };
@@ -456,7 +457,7 @@ function resolveClassnames (optsClassnames) {
 	if (!optsClassnames) return ['widget'];
 
 	if (typeof optsClassnames == 'string') {
-		optsClassnames = optsClassnames.split(/\s+/);
+		optsClassnames = optsClassnames.split(/\s+/u);
 	}
 
 	if (Array.isArray(optsClassnames)) {
