@@ -1,6 +1,6 @@
 {
-   "name": "widget",
-   "description": "Doing stuff.",
+   "name": "widget-elm",
+   "description": "Make elements window-like: a floating titled container, draggable and resizable.",
    "version": "0.0.0",
    "license": "MIT",
    "private": true,
