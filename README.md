@@ -15,6 +15,20 @@ const myElm = document.getElementById('target');
 widget('My Title', myElm, {options});
 ```
 
+When the first parameter is a string, your widget will get a default header (like in the image above) and the string will be used as the title text. The default header comes with 3 action buttons for closing, maximizing and minimizing the widget.
+
+When the first parameter is an `HTMLElement`, it will be used as the widget's whole header. Action buttons are not included.
+
+```js
+widget(myHeaderElm, myBodyElm, {options});
+```
+
+&nbsp;
+
+>### **IMPORTANT NOTE:** Widget is based on classnames & css. Meaning, some of the API methods only manipulate the widget classnames and results can only be seen by using a matching css. You can use [`./default-style.css`](./default-style.css) as a starting point.
+
+&nbsp;
+
 ## Options
 
 * **`minWidth`** - Number. Resize minimum width.
@@ -31,10 +45,6 @@ widget('My Title', myElm, {options});
 
 
 ## API
-
->### **IMPORTANT NOTE:** Widget is based on classnames + css. Meaning some of the API methods only manipulate the widget classnames and results can only be seen by using a matching css. You can use `./default-style.css` as a starting point.
-
-&nbsp;
 
 Calling the `widget()` function returns a `Widget` instance: 
 ```js
@@ -90,3 +100,9 @@ Kills the `Widget` instance for good, unbinds events, releases element reference
 
 >### Position:
 >On initialization, the target element will be placed inside the `<body>` element and will be given an inline style of `position: absolute`.
+
+
+## Events
+A widget instance holds two instances of `draggable-elm` & `resizable-elm`. You can listen to their different events. Check out their docs to learn more.
+* [draggable-elm](https://www.npmjs.com/package/draggable-elm)
+* [resizable-elm](https://www.npmjs.com/package/resizable-elm)
