@@ -5,6 +5,8 @@ widget
 ======
 Make elements window-like: a floating titled container, draggable and resizable.
 
+![widget-elm example](widget-example.png)
+
 ```js
 const widget = require('widget-elm');
 
@@ -29,6 +31,11 @@ widget('My Title', myElm, {options});
 
 
 ## API
+
+>### **IMPORTANT NOTE:** Widget is based on classnames + css. Meaning some of the API methods only manipulate the widget classnames and results can only be seen by using a matching css. You can use `./default-style.css` as a starting point.
+
+&nbsp;
+
 Calling the `widget()` function returns a `Widget` instance: 
 ```js
 const w = widget(elm);
@@ -36,65 +43,48 @@ const w = widget(elm);
 It has the following methods:
 
 ### **.mount()**
-
+Appends the widget to the `<body>` and binds event listeners.
 
 ### **.unmount()**
-
+Removes the widget from the DOM and unbinds event listeners.
 
 ### **.show() / .hide()**
-
-
-### **.showActions() / .hideActions()**
-
+Toggle widget visibility.
 
 ### **.showHeader() / .hideHeader()**
+Toggle widget header visibility.
 
+### **.showActions() / .hideActions()**
+Toggle widget action buttons visibility.
 
 ### **.minimize()**
-
+Minimizes the widget by hiding its body, only the header is visible.
 
 ### **.unMinimize()**
-
+Reverts the `.minimize()` by showing the body. Does not maximize.
 
 ### **.maximize()**
-
+Maximizes the widget (fullscreen). Disables drag & resize.
 
 ### **.unMaximize()**
-
+Reverts the `.maximize()` to previous widget size. Does not minimize.
 
 ### **.restoreSize()**
+Reverts both `.minimize()` & `.maximize()`.
 
+### **.setTitle(String)**
+Sets a new widget title.
 
-### **.setTitle()**
+### **.setBody(HTMLElement)**
+Sets a new widget body.
 
-
-### **.setBody()**
-
-
-### **.setView()**
-
+### **.setView(title, body)**
+Sets a new widget title & body.
 
 ### **.destroy()**
 Kills the `Widget` instance for good, unbinds events, releases element references.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-## Classnames
-For styling, the main element will be given the following classes:
-* `'draggable'` - from initialization until destruction.
-* `'grabbed'` - when grabbing the element. On mouse down, before moving.
-* `'dragging'` - when moving the element until mouse up.
 
 &nbsp;
 
