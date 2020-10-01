@@ -997,39 +997,14 @@ describe('widget', () => {
 				expect(wgt.elm.style.display).to.not.equal('none');
 			});
 
-			it('unminimizes the widget', () => {
-				wgt = widget(TITLE, target).mount();
-
-				expect(wgt.isMinimized).to.be.false;
-				expect(wgt.elm.classList.contains('minimized')).to.be.false;
-				wgt.minimizeBtn.click();
-				expect(wgt.isMinimized).to.be.true;
-				expect(wgt.elm.classList.contains('minimized')).to.be.true;
-				wgt.unmount();
-				wgt.minimizeBtn.click();
-				expect(wgt.isMinimized).to.be.true;
-				expect(wgt.elm.classList.contains('minimized')).to.be.true;
-			});
-
-			it('unmaximizes the widget', () => {
-				wgt = widget(TITLE, target).mount();
-
-				expect(wgt.isMaximized).to.be.false;
-				expect(wgt.elm.classList.contains('maximized')).to.be.false;
-				wgt.maximizeBtn.click();
-				expect(wgt.isMaximized).to.be.true;
-				expect(wgt.elm.classList.contains('maximized')).to.be.true;
-				wgt.unmount();
-				wgt.maximizeBtn.click();
-				expect(wgt.isMaximized).to.be.true;
-				expect(wgt.elm.classList.contains('maximized')).to.be.true;
-			});
-
 			it('unbinds listener: click on `minimize`', () => {
 				wgt = widget(TITLE, target).mount();
 
+				expect(wgt.isMinimized).to.be.false;
 				wgt.minimizeBtn.click();
 				expect(wgt.isMinimized).to.be.true;
+				wgt.minimizeBtn.click();
+				expect(wgt.isMinimized).to.be.false;
 				wgt.unmount();
 				wgt.minimizeBtn.click();
 				expect(wgt.isMinimized).to.be.false;
@@ -1038,8 +1013,11 @@ describe('widget', () => {
 			it('unbinds listener: click on `maximize`', () => {
 				wgt = widget(TITLE, target).mount();
 
+				expect(wgt.isMaximized).to.be.false;
 				wgt.maximizeBtn.click();
 				expect(wgt.isMaximized).to.be.true;
+				wgt.maximizeBtn.click();
+				expect(wgt.isMaximized).to.be.false;
 				wgt.unmount();
 				wgt.maximizeBtn.click();
 				expect(wgt.isMaximized).to.be.false;

@@ -263,8 +263,6 @@ Widget.prototype.unmount = function unmount () {
 };
 
 Widget.prototype.unmountHeader = function unmountHeader (includeHover = false) {
-	// this.minimizeBtn && this.unMinimize();
-	// this.maximizeBtn && this.unMaximize();
 	this.closeBtn && this.closeBtn.removeEventListener('click', this.destroy);
 	this.minimizeBtn && this.minimizeBtn.removeEventListener('click', this.toggleMinimize);
 	this.maximizeBtn && this.maximizeBtn.removeEventListener('click', this.toggleMaximize);
