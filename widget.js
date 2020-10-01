@@ -256,20 +256,23 @@ Widget.prototype.mount = function mount () {
 
 Widget.prototype.unmount = function unmount () {
 	if (!this.isMounted) return this;
-
+	this.unmountHeader(true);
 	document.body.removeChild(this.elm);
+	this.isMounted = false;
+	return this;
+};
 
+Widget.prototype.unmountHeader = function unmountHeader (includeHover = false) {
+	// this.minimizeBtn && this.unMinimize();
+	// this.maximizeBtn && this.unMaximize();
 	this.closeBtn && this.closeBtn.removeEventListener('click', this.destroy);
 	this.minimizeBtn && this.minimizeBtn.removeEventListener('click', this.toggleMinimize);
+	this.maximizeBtn && this.maximizeBtn.removeEventListener('click', this.toggleMaximize);
 
-	if (this.toggleHeader || this.toggleActions) {
+	if (includeHover && (this.toggleHeader || this.toggleActions)) {
 		this.elm.removeEventListener('mouseenter', this.mouseEnterHandler);
 		this.elm.removeEventListener('mouseleave', this.mouseLeaveHandler);
 	}
-
-	this.isMounted = false;
-
-	return this;
 };
 
 Widget.prototype.mouseEnterHandler = function mouseEnterHandler () {
@@ -408,6 +411,16 @@ Widget.prototype.restoreSize = function restoreSize () {
 
 Widget.prototype.setTitle = function setTitle (newTitle) {
 	this.title.innerText = newTitle;
+	return this;
+};
+
+Widget.prototype.setHeader  = function setHeader  (newHeader) {
+	this.unmountHeader();
+	this.title = null;
+	this.header.replaceWith(newHeader);
+	this.header = newHeader;
+	this.draggable.setGrip(newHeader);
+	newHeader.classList.add('widget-header');
 	return this;
 };
 

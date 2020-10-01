@@ -997,24 +997,52 @@ describe('widget', () => {
 				expect(wgt.elm.style.display).to.not.equal('none');
 			});
 
+			it('unminimizes the widget', () => {
+				wgt = widget(TITLE, target).mount();
+
+				expect(wgt.isMinimized).to.be.false;
+				expect(wgt.elm.classList.contains('minimized')).to.be.false;
+				wgt.minimizeBtn.click();
+				expect(wgt.isMinimized).to.be.true;
+				expect(wgt.elm.classList.contains('minimized')).to.be.true;
+				wgt.unmount();
+				wgt.minimizeBtn.click();
+				expect(wgt.isMinimized).to.be.true;
+				expect(wgt.elm.classList.contains('minimized')).to.be.true;
+			});
+
+			it('unmaximizes the widget', () => {
+				wgt = widget(TITLE, target).mount();
+
+				expect(wgt.isMaximized).to.be.false;
+				expect(wgt.elm.classList.contains('maximized')).to.be.false;
+				wgt.maximizeBtn.click();
+				expect(wgt.isMaximized).to.be.true;
+				expect(wgt.elm.classList.contains('maximized')).to.be.true;
+				wgt.unmount();
+				wgt.maximizeBtn.click();
+				expect(wgt.isMaximized).to.be.true;
+				expect(wgt.elm.classList.contains('maximized')).to.be.true;
+			});
+
 			it('unbinds listener: click on `minimize`', () => {
 				wgt = widget(TITLE, target).mount();
 
 				wgt.minimizeBtn.click();
-				expect(wgt.elm.classList.contains('minimized')).to.be.true;
+				expect(wgt.isMinimized).to.be.true;
 				wgt.unmount();
 				wgt.minimizeBtn.click();
-				expect(wgt.elm.classList.contains('minimized')).to.be.true;
+				expect(wgt.isMinimized).to.be.false;
 			});
 
 			it('unbinds listener: click on `maximize`', () => {
 				wgt = widget(TITLE, target).mount();
 
 				wgt.maximizeBtn.click();
-				expect(wgt.elm.classList.contains('maximized')).to.be.true;
+				expect(wgt.isMaximized).to.be.true;
 				wgt.unmount();
 				wgt.maximizeBtn.click();
-				expect(wgt.elm.classList.contains('maximized')).to.be.false;
+				expect(wgt.isMaximized).to.be.false;
 			});
 
 			it('unbinds listener: hover toggles header visibility (when `toggleHeader` option is used)', () => {
@@ -1055,6 +1083,10 @@ describe('widget', () => {
 				expect(wgt.actions.style.display).to.not.equal('none');
 				simulateMouseLeave(wgt.elm);
 				expect(wgt.actions.style.display).to.not.equal('none');
+			});
+
+			it('puts the element back in it original parent (if exists)', () => {
+				expect(true).to.be.false;
 			});
 		});
 
@@ -1379,8 +1411,17 @@ describe('widget', () => {
 				wgt.setTitle('New Title');
 				expect(wgt.title.innerText).to.equal('New Title');
 			});
+		});
 
-			it.skip('doesn\'t fail with');
+		describe('.setHeader()', () => {
+			it('changes the widget header', () => {
+				wgt = widget('My Widget', target).mount();
+				expect(wgt.title.innerText).to.equal('My Widget');
+				wgt.setHeader(header);
+				expect(wgt.title).to.be.null;
+				expect(wgt.header.innerHTML).to.contain('Custom Header');
+				expect(wgt.header.classList.contains('widget-header')).to.be.true;
+			});
 		});
 
 		describe('.setBody()', () => {
@@ -1396,8 +1437,6 @@ describe('widget', () => {
 				expect(wgt.body.innerHTML).to.not.include('BBB');
 				expect(wgt.body.innerHTML).to.include('Click');
 			});
-
-			it.skip('doesn\'t fail with');
 		});
 
 		describe('.setView()', () => {
@@ -1417,8 +1456,6 @@ describe('widget', () => {
 				expect(wgt.body.innerHTML).to.not.include('BBB');
 				expect(wgt.body.innerHTML).to.include('Click');
 			});
-
-			it.skip('doesn\'t fail with');
 		});
 	});
 
