@@ -576,16 +576,19 @@ describe('widget', () => {
 			it('by default - shows the header', () => {
 				wgt = widget().mount();
 				expect(wgt.header.style.visibility).to.not.equal('hidden');
+				expect(wgt.isHeaderShown).to.be.true;
 			});
 
 			it('when `true` - shows the header', () => {
 				wgt = widget({showHeader: true}).mount();
 				expect(wgt.header.style.visibility).to.not.equal('hidden');
+				expect(wgt.isHeaderShown).to.be.true;
 			});
 
 			it('when `false` - hides the header', () => {
 				wgt = widget({showHeader: false}).mount();
 				expect(wgt.header.style.visibility).to.equal('hidden');
+				expect(wgt.isHeaderShown).to.be.false;
 			});
 		});
 
@@ -1120,6 +1123,16 @@ describe('widget', () => {
 				expect(wgt.draggable.gripHandle).to.deep.equal(wgt.bodyContainer);
 				wgt.showHeader();
 				expect(wgt.draggable.gripHandle).to.deep.equal(wgt.title);
+			});
+
+			it('toggles the `.isHeaderShown` boolean prop', () => {
+				wgt = widget(TITLE, target).mount();
+
+				expect(wgt.isHeaderShown).to.be.true;
+				wgt.hideHeader();
+				expect(wgt.isHeaderShown).to.be.false;
+				wgt.showHeader();
+				expect(wgt.isHeaderShown).to.be.true;
 			});
 
 			it('returns the widget instance', () => {

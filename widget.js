@@ -111,6 +111,7 @@ function Widget (title, body, opts) {
 	this.initMethods(opts);
 	this.createDOM(title, body, opts);
 
+	this.isHeaderShown = opts.showHeader;
 	this.toggleHeader = opts.toggleHeader;
 	this.toggleActions = opts.toggleActions;
 	this.minWidth = opts.minWidth;
@@ -240,10 +241,12 @@ Widget.prototype.mount = function mount () {
 
 	document.body.appendChild(this.elm);
 
-	this.draggable = draggable(this.elm, {
-		grip: this.title
-	});
+	const grip = this.isHeaderShown
+		? this.title || this.header
+		: this.bodyContainer
+	;
 
+	this.draggable = draggable(this.elm, {grip});
 	this.resizable = resizable(this.elm, {
 		minWidth: this.minWidth,
 		minHeight: this.minHeight,
@@ -304,6 +307,7 @@ Widget.prototype.hide = function hide () {
 };
 
 Widget.prototype.showHeader = function showHeader (grip) {
+	this.isHeaderShown = true;
 	this.header.style.visibility = '';
 	this.bodyContainer.classList.remove('no-header');
 	this.draggable.setGrip(grip || this.title || this.header);
@@ -311,6 +315,7 @@ Widget.prototype.showHeader = function showHeader (grip) {
 };
 
 Widget.prototype.hideHeader = function hideHeader (grip) {
+	this.isHeaderShown = false;
 	this.header.style.visibility = 'hidden';
 	this.bodyContainer.classList.add('no-header');
 	this.draggable && this.draggable.setGrip(grip || this.bodyContainer);
