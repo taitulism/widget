@@ -306,7 +306,7 @@ Widget.prototype.hide = function hide () {
 Widget.prototype.showHeader = function showHeader (grip) {
 	this.header.style.visibility = '';
 	this.bodyContainer.classList.remove('no-header');
-	this.draggable.setGrip(grip || this.title);
+	this.draggable.setGrip(grip || this.title || this.header);
 	return this;
 };
 

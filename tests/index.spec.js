@@ -700,13 +700,13 @@ describe('widget', () => {
 		});
 
 		describe('minWidth', () => {
-			it('when not used - sets a default minimum widget width of 250px', () => {
+			it('by default - sets a minimum widget width to 250px', () => {
 				wgt = widget().mount();
 				const wgtBox = wgt.elm.getBoundingClientRect();
 				expect(wgtBox.width).to.equal(250);
 			});
 
-			it('when used - sets a minimum widget width to the given number of pixels', () => {
+			it('when number - sets a minimum widget width to the given number of pixels', () => {
 				wgt = widget({minWidth: 300}).mount();
 				const wgtBox = wgt.elm.getBoundingClientRect();
 				expect(wgtBox.width).to.equal(300);
@@ -714,13 +714,13 @@ describe('widget', () => {
 		});
 
 		describe('minHeight', () => {
-			it('when not used - sets a default minimum widget height of 150px', () => {
+			it('by default - sets a minimum widget height to 250px', () => {
 				wgt = widget().mount();
 				const wgtBox = wgt.elm.getBoundingClientRect();
 				expect(wgtBox.height).to.equal(150);
 			});
 
-			it('when used - sets a minimum widget height to the given number of pixels', () => {
+			it('when number - sets a minimum widget height to the given number of pixels', () => {
 				wgt = widget({minHeight: 300}).mount();
 				const wgtBox = wgt.elm.getBoundingClientRect();
 				expect(wgtBox.height).to.equal(300);
@@ -1061,10 +1061,6 @@ describe('widget', () => {
 				expect(wgt.actions.style.display).to.not.equal('none');
 				simulateMouseLeave(wgt.elm);
 				expect(wgt.actions.style.display).to.not.equal('none');
-			});
-
-			it('puts the element back in it original parent (if exists)', () => {
-				expect(true).to.be.false;
 			});
 		});
 
