@@ -20,7 +20,7 @@
       "postversion": "git push && git push --tags"
    },
    "devDependencies": {
-      "@rollup/plugin-node-resolve": "^9.0.0",
+      "@rollup/plugin-node-resolve": "9.0.0",
       "chai": "4.2.0",
       "eslint": "7.9.0",
       "karma": "5.1.1",
@@ -33,7 +33,7 @@
       "rollup": "2.27.1"
    },
    "dependencies": {
-      "draggable-elm": "0.0.1",
-      "resizable-elm": "0.0.3"
+      "draggable-elm": "0.0.2",
+      "resizable-elm": "0.0.5"
    }
 }
