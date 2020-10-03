@@ -75,7 +75,7 @@ describe('widget', () => {
 
 	afterEach(() => {
 		target.innerHTML = '';
-		target.parentNode.removeChild(target);
+		target.parentNode && target.parentNode.removeChild(target);
 		target = null;
 
 		container.parentNode.removeChild(container);
@@ -1065,6 +1065,11 @@ describe('widget', () => {
 				simulateMouseLeave(wgt.elm);
 				expect(wgt.actions.style.display).to.not.equal('none');
 			});
+
+			it('returns the widget instance', () => {
+				wgt = widget().mount();
+				expect(wgt.unmount()).to.eql(wgt);
+			});
 		});
 
 		describe('.show() / .hide()', () => {
@@ -1190,6 +1195,11 @@ describe('widget', () => {
 				simulateMouseLeave(wgt.elm);
 				expect(wgt.header.style.visibility).to.not.equal('hidden');
 			});
+
+			it('returns the widget instance', () => {
+				wgt = widget().mount();
+				expect(wgt.minimize()).to.eql(wgt);
+			});
 		});
 
 		describe('.unMinimize()', () => {
@@ -1218,6 +1228,11 @@ describe('widget', () => {
 				expect(wgt.isMinimized).to.be.true;
 				wgt.unMinimize();
 				expect(wgt.isMinimized).to.be.false;
+			});
+
+			it('returns the widget instance', () => {
+				wgt = widget().mount().minimize();
+				expect(wgt.unMinimize()).to.eql(wgt);
 			});
 		});
 
@@ -1287,6 +1302,11 @@ describe('widget', () => {
 				wgt.maximize();
 				expect(wgt.resizable.isResizable).to.be.false;
 			});
+
+			it('returns the widget instance', () => {
+				wgt = widget().mount();
+				expect(wgt.maximize()).to.eql(wgt);
+			});
 		});
 
 		describe('.unMaximize()', () => {
@@ -1351,6 +1371,16 @@ describe('widget', () => {
 				wgt.unMaximize();
 				expect(wgt.resizable.isResizable).to.be.true;
 			});
+
+			it('returns the widget instance', () => {
+				wgt = widget().mount().maximize();
+				expect(wgt.unMaximize()).to.eql(wgt);
+				wgt.destroy();
+
+				// test early return
+				wgt = widget().mount();
+				expect(wgt.unMaximize()).to.eql(wgt);
+			});
 		});
 
 		describe('.restoreSize()', () => {
@@ -1389,6 +1419,11 @@ describe('widget', () => {
 				expect(wgt.isMinimized).to.be.false;
 				expect(wgt.isMaximized).to.be.false;
 			});
+
+			it('returns the widget instance', () => {
+				wgt = widget().mount();
+				expect(wgt.restoreSize()).to.eql(wgt);
+			});
 		});
 
 		describe('.setTitle()', () => {
@@ -1397,6 +1432,11 @@ describe('widget', () => {
 				expect(wgt.title.innerText).to.equal('My Widget');
 				wgt.setTitle('New Title');
 				expect(wgt.title.innerText).to.equal('New Title');
+			});
+
+			it('returns the widget instance', () => {
+				wgt = widget().mount();
+				expect(wgt.setTitle('New Title')).to.eql(wgt);
 			});
 		});
 
@@ -1408,6 +1448,11 @@ describe('widget', () => {
 				expect(wgt.title).to.be.null;
 				expect(wgt.header.innerHTML).to.contain('Custom Header');
 				expect(wgt.header.classList.contains('widget-header')).to.be.true;
+			});
+
+			it('returns the widget instance', () => {
+				wgt = widget().mount();
+				expect(wgt.setHeader(header)).to.eql(wgt);
 			});
 		});
 
@@ -1423,6 +1468,12 @@ describe('widget', () => {
 				wgt.setBody(newBody);
 				expect(wgt.body.innerHTML).to.not.include('BBB');
 				expect(wgt.body.innerHTML).to.include('Click');
+			});
+
+			it('returns the widget instance', () => {
+				const newBody = document.createElement('div');
+				wgt = widget().mount();
+				expect(wgt.setBody(newBody)).to.eql(wgt);
 			});
 		});
 
@@ -1443,60 +1494,66 @@ describe('widget', () => {
 				expect(wgt.body.innerHTML).to.not.include('BBB');
 				expect(wgt.body.innerHTML).to.include('Click');
 			});
-		});
-	});
 
-	describe('.destroy()', () => {
-		it('calls .unmount()', () => {
-			wgt = widget().mount();
-
-			let called = false;
-			const origUnmount = wgt.unmount;
-			wgt.unmount = () => {
-				called = true;
-				origUnmount.call(wgt);
-			};
-
-			wgt.destroy();
-			expect(called).to.be.true;
+			it('returns the widget instance', () => {
+				const newBody = document.createElement('div');
+				wgt = widget().mount();
+				expect(wgt.setView('New Title', newBody)).to.eql(wgt);
+			});
 		});
 
-		it('doesn\'t fail when called before `.mount()`', () => {
-			wgt = widget();
-			const safeCall = () => wgt.destroy();
-			expect(safeCall).to.not.throw();
-		});
+		describe('.destroy()', () => {
+			it('calls .unmount()', () => {
+				wgt = widget().mount();
 
-		it('destroys Draggable', () => {
-			wgt = widget().mount();
+				let called = false;
+				const origUnmount = wgt.unmount;
+				wgt.unmount = () => {
+					called = true;
+					origUnmount.call(wgt);
+				};
 
-			expect(document.getElementsByClassName('draggable')).to.have.lengthOf(1);
-			wgt.destroy();
-			expect(document.getElementsByClassName('draggable')).to.have.lengthOf(0);
-		});
+				wgt.destroy();
+				expect(called).to.be.true;
+			});
 
-		it('destroys Resizable', () => {
-			wgt = widget().mount();
+			it('doesn\'t fail when called before `.mount()`', () => {
+				wgt = widget();
+				const safeCall = () => wgt.destroy();
+				expect(safeCall).to.not.throw();
+			});
 
-			expect(document.getElementsByClassName('resizable')).to.have.lengthOf(1);
-			wgt.destroy();
-			expect(document.getElementsByClassName('resizable')).to.have.lengthOf(0);
-		});
+			it('destroys Draggable', () => {
+				wgt = widget().mount();
 
-		it('releases all element references', () => {
-			wgt = widget('My Widget', target, {
-				close: true,
-				minimize: true,
-			}).mount();
+				expect(document.getElementsByClassName('draggable')).to.have.lengthOf(1);
+				wgt.destroy();
+				expect(document.getElementsByClassName('draggable')).to.have.lengthOf(0);
+			});
 
-			wgt.destroy();
-			expect(wgt.elm).to.be.null;
-			expect(wgt.header).to.be.null;
-			expect(wgt.bodyContainer).to.be.null;
-			expect(wgt.closeBtn).to.be.null;
-			expect(wgt.minimizeBtn).to.be.null;
-			expect(wgt.title).to.be.null;
-			expect(wgt.actions).to.be.null;
+			it('destroys Resizable', () => {
+				wgt = widget().mount();
+
+				expect(document.getElementsByClassName('resizable')).to.have.lengthOf(1);
+				wgt.destroy();
+				expect(document.getElementsByClassName('resizable')).to.have.lengthOf(0);
+			});
+
+			it('releases all element references', () => {
+				wgt = widget('My Widget', target, {
+					close: true,
+					minimize: true,
+				}).mount();
+
+				wgt.destroy();
+				expect(wgt.elm).to.be.null;
+				expect(wgt.header).to.be.null;
+				expect(wgt.bodyContainer).to.be.null;
+				expect(wgt.closeBtn).to.be.null;
+				expect(wgt.minimizeBtn).to.be.null;
+				expect(wgt.title).to.be.null;
+				expect(wgt.actions).to.be.null;
+			});
 		});
 	});
 });

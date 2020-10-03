@@ -333,6 +333,8 @@ Widget.prototype.hideActions = function hideActions () {
 };
 
 Widget.prototype.minimize = function minimize () {
+	if (this.isMinimized) return this;
+
 	this.minimizeBtn.innerHTML = RESTORE_SYMBOL;
 	this.elm.classList.add('minimized');
 	this.minimizeBtn.classList.add('widget-button-active');
@@ -346,6 +348,8 @@ Widget.prototype.minimize = function minimize () {
 };
 
 Widget.prototype.unMinimize = function unMinimize () {
+	if (!this.isMinimized) return this;
+
 	this.minimizeBtn.innerHTML = MINIMIZE_SYMBOL;
 	this.elm.classList.remove('minimized');
 	this.minimizeBtn.classList.remove('widget-button-active');
@@ -354,6 +358,8 @@ Widget.prototype.unMinimize = function unMinimize () {
 };
 
 Widget.prototype.maximize = function maximize () {
+	if (this.isMaximized) return this;
+
 	this.box = this.elm.getBoundingClientRect();
 	const elmStyle = this.elm.style;
 
@@ -378,6 +384,8 @@ Widget.prototype.maximize = function maximize () {
 };
 
 Widget.prototype.unMaximize = function unMaximize () {
+	if (!this.isMaximized) return this;
+
 	const elmStyle = this.elm.style;
 
 	elmStyle.width = this.box.width + 'px';
@@ -428,8 +436,9 @@ Widget.prototype.setHeader  = function setHeader  (newHeader) {
 };
 
 Widget.prototype.setBody = function setBody (newBody) {
-	this.body.innerHTML = '';
-	this.body.appendChild(newBody);
+	this.bodyContainer.innerHTML = '';
+	this.bodyContainer.appendChild(newBody);
+	this.body = newBody;
 	return this;
 };
 
