@@ -6,8 +6,8 @@ const RESTORE_SYMBOL = '&#128470;';
 const CLOSE_SYMBOL = '&#10006;';
 const MAXIMIZE_SYMBOL = '&#9974;';
 
-const DEFAULT_MIN_WIDTH = 250;
-const DEFAULT_MIN_HEIGHT = 150;
+const DEFAULT_MIN_WIDTH = 180;
+const DEFAULT_MIN_HEIGHT = 110;
 
 /* eslint-disable-next-line complexity */
 function resolveArgs (maybeTitle, maybeBody, maybeOpts) {
@@ -128,12 +128,13 @@ Widget.prototype.createWrapperElm = function createWrapperElm (opts) {
 	const widgetClassnames = resolveClassnames(opts.classname);
 	const elm = create('div', widgetClassnames);
 	if (opts.id) elm.id = opts.id;
+	elm.style.position = 'absolute';
 
 	return elm;
 };
 
 Widget.prototype.createDefaultHeader = function createDefaultHeader (titleText, opts) {
-	const header = create('header', ['widget-header']);
+	const header = create('header', ['widget-default-header']);
 	this.title = create('div', ['widget-title'], titleText);
 	this.actions = null;
 	this.closeBtn = null;
@@ -192,10 +193,10 @@ Widget.prototype.createDOM = function createDOM (title, body, opts) {
 	}
 	else if (title instanceof HTMLElement) {
 		this.header = title;
-		this.header.classList.add('widget-header');
 		this.title = null;
 	}
 
+	this.header.classList.add('widget-header');
 	this.elm.appendChild(this.header);
 
 	if (body) {
@@ -338,6 +339,7 @@ Widget.prototype.minimize = function minimize () {
 	this.minimizeBtn.innerHTML = RESTORE_SYMBOL;
 	this.elm.classList.add('minimized');
 	this.minimizeBtn.classList.add('widget-button-active');
+	this.bodyContainer.style.display = 'none';
 
 	if (this.toggleHeader || this.toggleActions) {
 		this.showHeader();
@@ -353,6 +355,7 @@ Widget.prototype.unMinimize = function unMinimize () {
 	this.minimizeBtn.innerHTML = MINIMIZE_SYMBOL;
 	this.elm.classList.remove('minimized');
 	this.minimizeBtn.classList.remove('widget-button-active');
+	this.bodyContainer.style.display = '';
 	this.isMinimized = false;
 	return this;
 };
