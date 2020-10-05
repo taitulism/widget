@@ -1,35 +1,61 @@
-.widget {
+.winjet {
+	--theme-bg-color: #383838;
+	--theme-text-color: #d3d3d3;
+	--border-width: 2px; /* an even number is preffered */
+	--border-radius: 4px;
 	display: flex;
 	flex-direction: column;
-	position: absolute;
-	top: 150px;
-	left: 250px;
 	box-sizing: border-box;
+	font-size: 13px;
+	font-family: Arial, Helvetica, sans-serif;
 }
 
-.widget.maximized {
+.winjet.maximized {
 	padding: 50px;
 }
 
-.widget.minimized .widget-body-container {
-	display: none;
+.winjet-body-container {
+	flex-grow: 1;
+	border: var(--border-width) solid var(--theme-bg-color);
+	border-top: 0 none;
+	border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
 
-.widget-header {
+.winjet-body-container.no-header {
+	border: 1px solid var(--theme-bg-color);
+	border-radius: var(--border-radius);
+	margin-top: calc(var(--border-width) / 2 * -1); /* -1 to compensate half of the border (2px) */
+	padding-left: calc(var(--border-width) / 2);    /* 1 to compensate half of the border (2px) */
+}
+
+/* Corners Resize Mouse Cursors */
+.winjet .top-left-grip { cursor: nw-resize; }
+.winjet .top-right-grip { cursor: ne-resize; }
+.winjet .bottom-right-grip { cursor: se-resize; }
+.winjet .bottom-left-grip { cursor: sw-resize; }
+
+/*
+.winjet .drag-grip-handle { cursor: grab; }
+.grabbed .drag-grip-handle,
+.dragging .drag-grip-handle { cursor: grabbing; }
+*/
+
+/* Default Header */
+/*	You can remove everything below this point if you only use custom headers */
+.winjet-default-header {
 	height: 32px;
 	display: flex;
 	align-items: center;
 	padding: 0 4px;
-	background-color: #383838;
-	border-radius: 4px 4px 0 0;
-	/* border-bottom: 1px solid #d3d3d3; */
+	background-color: var(--theme-bg-color);
+	border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
-.widget.minimized .widget-header {
-	border-radius: 4px;
+.winjet.minimized .winjet-default-header {
+	border-radius: var(--border-radius);
 }
 
-.widget-title {
+.winjet-title {
 	display: flex;
 	align-items: center;
 	flex-grow: 1;
@@ -37,76 +63,45 @@
 	margin-right: 5px;
 	padding-left: 6px;
 	cursor: grab;
-	font-size: 14px;
-	font-family: Arial, Helvetica, sans-serif;
 	font-weight: bold;
-	color: #d3d3d3;
+	color: var(--theme-text-color);
 }
 
-.drag-disabled .widget-title {
+.grabbed .winjet-title,
+.dragging .winjet-title {
+	cursor: grabbing;
+}
+
+.drag-disabled .winjet-title {
 	cursor: default;
 }
 
-.widget-action-buttons {
+.winjet-action-buttons {
 	display: flex;
 	align-items: center;
 	height: 100%;
 	user-select: none;
 }
 
-.widget-button {
-	width: 18px;
-	max-height: 28px;
-	color: #d3d3d3;
+.winjet-button {
+	width: 20px;
+	height: 28px;
+	color: var(--theme-text-color);
 	cursor: pointer;
 	font-size: 15px;
 	font-weight: bold;
 	line-height: 1;
-	background-color: #0000;
+	background-color: var(--theme-bg-color);
 	outline: 0 none;
 	border: 0 none;
 	padding: 0;
 }
 
-.widget-button:hover {
+.winjet-button:hover {
 	color: #ededed;
 }
 
-.widget-maximize-button.widget-button-active,
-.widget-minimize-button {
+.winjet-maximize-button.winjet-button-active,
+.winjet-minimize-button {
 	padding-bottom: 3px;
-}
-
-.widget-body-container {
-	height: 100%;
-	min-height: 52px;
-	width: 100%;
-	border: 2px solid #383838;
-	border-top: 0 none;
-	box-sizing: border-box;
-	border-radius: 0 0 4px 4px;
-	font-family: arial;
-	font-size: 14px;
-	flex-grow: 1;
-}
-
-.widget-body-container.no-header {
-	border: 1px solid #383838;
-	margin-top: -1px; /* 1 because of border */
-	padding-left: 1px; /* 1 because of border */
-	border-radius: 3px;
-	box-sizing: border-box;
-}
-
-.widget .top-left-grip {
-	cursor: nw-resize;
-}
-.widget .top-right-grip {
-	cursor: ne-resize;
-}
-.widget .bottom-right-grip {
-	cursor: se-resize;
-}
-.widget .bottom-left-grip {
-	cursor: sw-resize;
 }

@@ -68,7 +68,7 @@ describe('widget', () => {
 		container.appendChild(target);
 		testDOMContainer.appendChild(container);
 
-		Array.from(document.getElementsByClassName('widget')).forEach((wgt) => {
+		Array.from(document.getElementsByClassName('winjet')).forEach((wgt) => {
 			wgt.parentNode.removeChild(wgt);
 		});
 	});
@@ -105,7 +105,7 @@ describe('widget', () => {
 		describe('()', () => {
 			it('creates a widget', () => {
 				wgt = widget();
-				expect(wgt.elm.classList.contains('widget')).to.be.true;
+				expect(wgt.elm.classList.contains('winjet')).to.be.true;
 			});
 
 			it('has no title', () => {
@@ -170,7 +170,7 @@ describe('widget', () => {
 
 			it('sets a classname on the header', () => {
 				wgt = widget(header, target);
-				expect(header.classList.contains('widget-header')).to.be.true;
+				expect(header.classList.contains('winjet-header')).to.be.true;
 			});
 
 			it('has no title', () => {
@@ -287,9 +287,9 @@ describe('widget', () => {
 			});
 
 			it('is added to the DOM', () => {
-				expect($byClassname('widget')).to.have.lengthOf(0);
+				expect($byClassname('winjet')).to.have.lengthOf(0);
 				wgt = widget().mount();
-				expect($byClassname('widget')[0]).to.deep.equal(wgt.elm);
+				expect($byClassname('winjet')[0]).to.deep.equal(wgt.elm);
 			});
 
 			describe('Header', () => {
@@ -300,9 +300,9 @@ describe('widget', () => {
 				});
 
 				it('is added to the DOM', () => {
-					expect($byClassname('widget-header')).to.have.lengthOf(0);
+					expect($byClassname('winjet-header')).to.have.lengthOf(0);
 					wgt = widget().mount();
-					expect($byClassname('widget-header')[0]).to.deep.equal(wgt.header);
+					expect($byClassname('winjet-header')[0]).to.deep.equal(wgt.header);
 				});
 
 				describe('Title', () => {
@@ -313,9 +313,9 @@ describe('widget', () => {
 					});
 
 					it('is added to the DOM', () => {
-						expect($byClassname('widget-title')).to.have.lengthOf(0);
+						expect($byClassname('winjet-title')).to.have.lengthOf(0);
 						wgt = widget().mount();
-						expect($byClassname('widget-title')[0]).to.deep.equal(wgt.title);
+						expect($byClassname('winjet-title')[0]).to.deep.equal(wgt.title);
 					});
 				});
 
@@ -327,15 +327,15 @@ describe('widget', () => {
 					});
 
 					it('is added to the DOM', () => {
-						expect($byClassname('widget-action-buttons')).to.have.lengthOf(0);
+						expect($byClassname('winjet-action-buttons')).to.have.lengthOf(0);
 						wgt = widget().mount();
-						expect($byClassname('widget-action-buttons')[0]).to.deep.equal(wgt.actions);
+						expect($byClassname('winjet-action-buttons')[0]).to.deep.equal(wgt.actions);
 					});
 
 					it('has buttons', () => {
 						wgt = widget();
 						expect(wgt.actions.children).to.not.have.lengthOf(0);
-						expect(wgt.actions.getElementsByClassName('widget-button')).to.not.have.lengthOf(0);
+						expect(wgt.actions.getElementsByClassName('winjet-button')).to.not.have.lengthOf(0);
 					});
 
 					describe('Close Button', () => {
@@ -343,13 +343,13 @@ describe('widget', () => {
 							wgt = widget();
 							expect(wgt.closeBtn).to.be.instanceOf(HTMLElement);
 							expect(wgt.closeBtn.parentNode).to.deep.equal(wgt.actions);
-							expect(wgt.closeBtn.classList.contains('widget-button')).to.be.true;
+							expect(wgt.closeBtn.classList.contains('winjet-button')).to.be.true;
 						});
 
 						it('is added to the DOM', () => {
-							expect($byClassname('widget-close')).to.have.lengthOf(0);
+							expect($byClassname('winjet-close')).to.have.lengthOf(0);
 							wgt = widget().mount();
-							expect($byClassname('widget-close-button')[0]).to.deep.equal(wgt.closeBtn);
+							expect($byClassname('winjet-close-button')[0]).to.deep.equal(wgt.closeBtn);
 						});
 					});
 
@@ -358,13 +358,13 @@ describe('widget', () => {
 							wgt = widget();
 							expect(wgt.minimizeBtn).to.be.instanceOf(HTMLElement);
 							expect(wgt.minimizeBtn.parentNode).to.deep.equal(wgt.actions);
-							expect(wgt.minimizeBtn.classList.contains('widget-button')).to.be.true;
+							expect(wgt.minimizeBtn.classList.contains('winjet-button')).to.be.true;
 						});
 
 						it('is added to the DOM', () => {
-							expect($byClassname('widget-minimize')).to.have.lengthOf(0);
+							expect($byClassname('winjet-minimize')).to.have.lengthOf(0);
 							wgt = widget().mount();
-							expect($byClassname('widget-minimize-button')[0]).to.deep.equal(wgt.minimizeBtn);
+							expect($byClassname('winjet-minimize-button')[0]).to.deep.equal(wgt.minimizeBtn);
 						});
 					});
 
@@ -373,13 +373,13 @@ describe('widget', () => {
 							wgt = widget();
 							expect(wgt.maximizeBtn).to.be.instanceOf(HTMLElement);
 							expect(wgt.maximizeBtn.parentNode).to.deep.equal(wgt.actions);
-							expect(wgt.maximizeBtn.classList.contains('widget-button')).to.be.true;
+							expect(wgt.maximizeBtn.classList.contains('winjet-button')).to.be.true;
 						});
 
 						it('is added to the DOM', () => {
-							expect($byClassname('widget-maximize-button')).to.have.lengthOf(0);
+							expect($byClassname('winjet-maximize-button')).to.have.lengthOf(0);
 							wgt = widget().mount();
-							expect($byClassname('widget-maximize-button')[0]).to.deep.equal(wgt.maximizeBtn);
+							expect($byClassname('winjet-maximize-button')[0]).to.deep.equal(wgt.maximizeBtn);
 						});
 					});
 				});
@@ -393,9 +393,9 @@ describe('widget', () => {
 				});
 
 				it('is added to the DOM', () => {
-					expect($byClassname('widget-body-container')).to.have.lengthOf(0);
+					expect($byClassname('winjet-body-container')).to.have.lengthOf(0);
 					wgt = widget().mount();
-					expect($byClassname('widget-body-container')[0]).to.deep.equal(wgt.bodyContainer);
+					expect($byClassname('winjet-body-container')[0]).to.deep.equal(wgt.bodyContainer);
 				});
 
 				it('is empty by default', () => {
@@ -418,9 +418,9 @@ describe('widget', () => {
 					});
 
 					it('is added to the DOM', () => {
-						expect($byClassname('widget-body')).to.have.lengthOf(0);
+						expect($byClassname('winjet-body')).to.have.lengthOf(0);
 						wgt = widget(target).mount();
-						expect($byClassname('widget-body')[0]).to.deep.equal(wgt.body);
+						expect($byClassname('winjet-body')[0]).to.deep.equal(wgt.body);
 					});
 				});
 			});
@@ -482,13 +482,13 @@ describe('widget', () => {
 		describe('classname', () => {
 			it('sets a `classname` attribute on the widget element', () => {
 				wgt = widget({classname: 'a-widget'});
-				expect(wgt.elm.classList.contains('widget')).to.be.true;
+				expect(wgt.elm.classList.contains('winjet')).to.be.true;
 				expect(wgt.elm.classList.contains('a-widget')).to.be.true;
 			});
 
 			it('sets multiple classnames string', () => {
 				wgt = widget({classname: 'a-widget theme-bg with-border'});
-				expect(wgt.elm.classList.contains('widget')).to.be.true;
+				expect(wgt.elm.classList.contains('winjet')).to.be.true;
 				expect(wgt.elm.classList.contains('a-widget')).to.be.true;
 				expect(wgt.elm.classList.contains('theme-bg')).to.be.true;
 				expect(wgt.elm.classList.contains('with-border')).to.be.true;
@@ -496,7 +496,7 @@ describe('widget', () => {
 
 			it('sets an array of classnames', () => {
 				wgt = widget({classname: ['a-widget', 'theme-bg', 'with-border']});
-				expect(wgt.elm.classList.contains('widget')).to.be.true;
+				expect(wgt.elm.classList.contains('winjet')).to.be.true;
 				expect(wgt.elm.classList.contains('a-widget')).to.be.true;
 				expect(wgt.elm.classList.contains('theme-bg')).to.be.true;
 				expect(wgt.elm.classList.contains('with-border')).to.be.true;
@@ -508,21 +508,21 @@ describe('widget', () => {
 				wgt = widget().mount();
 
 				expect(wgt.closeBtn).to.not.be.null;
-				expect($byClassname('widget-close-button')).to.have.lengthOf(1);
+				expect($byClassname('winjet-close-button')).to.have.lengthOf(1);
 			});
 
 			it('when `true` - creates the `close` button', () => {
 				wgt = widget({showClose: true}).mount();
 
 				expect(wgt.closeBtn).to.not.be.null;
-				expect($byClassname('widget-close-button')).to.have.lengthOf(1);
+				expect($byClassname('winjet-close-button')).to.have.lengthOf(1);
 			});
 
 			it('when `false` - doesn\'t create the `close` button', () => {
 				wgt = widget({showClose: false}).mount();
 
 				expect(wgt.closeBtn).to.be.null;
-				expect($byClassname('widget-close-button')).to.have.lengthOf(0);
+				expect($byClassname('winjet-close-button')).to.have.lengthOf(0);
 			});
 		});
 
@@ -531,21 +531,21 @@ describe('widget', () => {
 				wgt = widget().mount();
 
 				expect(wgt.minimizeBtn).to.not.be.null;
-				expect($byClassname('widget-minimize-button')).to.have.lengthOf(1);
+				expect($byClassname('winjet-minimize-button')).to.have.lengthOf(1);
 			});
 
 			it('when `true` - creates the `minimize` button', () => {
 				wgt = widget({showMinimize: true}).mount();
 
 				expect(wgt.minimizeBtn).to.not.be.null;
-				expect($byClassname('widget-minimize-button')).to.have.lengthOf(1);
+				expect($byClassname('winjet-minimize-button')).to.have.lengthOf(1);
 			});
 
 			it('when `false` - doesn\'t create the `close` button', () => {
 				wgt = widget({showMinimize: false}).mount();
 
 				expect(wgt.minimizeBtn).to.be.null;
-				expect($byClassname('widget-minimize-button')).to.have.lengthOf(0);
+				expect($byClassname('winjet-minimize-button')).to.have.lengthOf(0);
 			});
 		});
 
@@ -554,21 +554,21 @@ describe('widget', () => {
 				wgt = widget().mount();
 
 				expect(wgt.maximizeBtn).to.not.be.null;
-				expect($byClassname('widget-maximize-button')).to.have.lengthOf(1);
+				expect($byClassname('winjet-maximize-button')).to.have.lengthOf(1);
 			});
 
 			it('when `true` - creates the `maximize` button', () => {
 				wgt = widget({showMaximize: true}).mount();
 
 				expect(wgt.maximizeBtn).to.not.be.null;
-				expect($byClassname('widget-maximize-button')).to.have.lengthOf(1);
+				expect($byClassname('winjet-maximize-button')).to.have.lengthOf(1);
 			});
 
 			it('when `false` - doesn\'t create the `close` button', () => {
 				wgt = widget({showMaximize: false}).mount();
 
 				expect(wgt.maximizeBtn).to.be.null;
-				expect($byClassname('widget-maximize-button')).to.have.lengthOf(0);
+				expect($byClassname('winjet-maximize-button')).to.have.lengthOf(0);
 			});
 		});
 
@@ -613,7 +613,7 @@ describe('widget', () => {
 			it('by default - doesn\'t toggle the header visibility on hover', () => {
 				wgt = widget().mount();
 
-				const [header] = $byClassname('widget-header');
+				const [header] = $byClassname('winjet-header');
 
 				expect(header.style.visibility).to.not.equal('hidden');
 				simulateMouseEnter(wgt.elm);
@@ -625,7 +625,7 @@ describe('widget', () => {
 			it('when `false` - doesn\'t toggle the header visibility on hover', () => {
 				wgt = widget({toggleHeader: false}).mount();
 
-				const [header] = $byClassname('widget-header');
+				const [header] = $byClassname('winjet-header');
 
 				expect(header.style.visibility).to.not.equal('hidden');
 				simulateMouseEnter(wgt.elm);
@@ -659,7 +659,7 @@ describe('widget', () => {
 			it('by default - doesn\'t toggle the actions element visibility on hover', () => {
 				wgt = widget().mount();
 
-				const [actions] = $byClassname('widget-action-buttons');
+				const [actions] = $byClassname('winjet-action-buttons');
 
 				expect(actions.style.display).to.not.equal('none');
 				simulateMouseEnter(wgt.elm);
@@ -671,7 +671,7 @@ describe('widget', () => {
 			it('when `false` - doesn\'t toggle the actions element visibility on hover', () => {
 				wgt = widget({toggleActions: false}).mount();
 
-				const [actions] = $byClassname('widget-action-buttons');
+				const [actions] = $byClassname('winjet-action-buttons');
 
 				expect(actions.style.display).to.not.equal('none');
 				simulateMouseEnter(wgt.elm);
@@ -703,10 +703,10 @@ describe('widget', () => {
 		});
 
 		describe('minWidth', () => {
-			it('by default - sets a minimum widget width to 250px', () => {
+			it('by default - sets a minimum widget width to 180px', () => {
 				wgt = widget().mount();
 				const wgtBox = wgt.elm.getBoundingClientRect();
-				expect(wgtBox.width).to.equal(250);
+				expect(wgtBox.width).to.equal(180);
 			});
 
 			it('when number - sets a minimum widget width to the given number of pixels', () => {
@@ -717,10 +717,10 @@ describe('widget', () => {
 		});
 
 		describe('minHeight', () => {
-			it('by default - sets a minimum widget height to 250px', () => {
+			it('by default - sets a minimum widget height to 110px', () => {
 				wgt = widget().mount();
 				const wgtBox = wgt.elm.getBoundingClientRect();
-				expect(wgtBox.height).to.equal(150);
+				expect(wgtBox.height).to.equal(110);
 			});
 
 			it('when number - sets a minimum widget height to the given number of pixels', () => {
@@ -736,9 +736,9 @@ describe('widget', () => {
 			it('appends a new widget element to the <body>', () => {
 				wgt = widget();
 
-				expect(document.getElementsByClassName('widget')).to.have.lengthOf(0);
+				expect(document.getElementsByClassName('winjet')).to.have.lengthOf(0);
 				wgt.mount();
-				expect(document.getElementsByClassName('widget')).to.have.lengthOf(1);
+				expect(document.getElementsByClassName('winjet')).to.have.lengthOf(1);
 			});
 
 			it('header and its children are shown by default', () => {
@@ -944,11 +944,11 @@ describe('widget', () => {
 			it('removes the widget element from the <body>', () => {
 				wgt = widget();
 
-				expect(document.getElementsByClassName('widget')).to.have.lengthOf(0);
+				expect(document.getElementsByClassName('winjet')).to.have.lengthOf(0);
 				wgt.mount();
-				expect(document.getElementsByClassName('widget')).to.have.lengthOf(1);
+				expect(document.getElementsByClassName('winjet')).to.have.lengthOf(1);
 				wgt.unmount();
-				expect(document.getElementsByClassName('widget')).to.have.lengthOf(0);
+				expect(document.getElementsByClassName('winjet')).to.have.lengthOf(0);
 			});
 
 			it('unbinds listener: toggle header on hover', () => {
@@ -1171,9 +1171,9 @@ describe('widget', () => {
 			it('adds `widget-button-active` classname on the button', () => {
 				wgt = widget(TITLE, target).mount();
 
-				expect(wgt.minimizeBtn.classList.contains('widget-button-active')).to.be.false;
+				expect(wgt.minimizeBtn.classList.contains('winjet-button-active')).to.be.false;
 				wgt.minimize();
-				expect(wgt.minimizeBtn.classList.contains('widget-button-active')).to.be.true;
+				expect(wgt.minimizeBtn.classList.contains('winjet-button-active')).to.be.true;
 			});
 
 			it('sets the widget `.isMinimized` property to `true`', () => {
@@ -1216,9 +1216,9 @@ describe('widget', () => {
 				wgt = widget(TITLE, target).mount();
 
 				wgt.minimize();
-				expect(wgt.minimizeBtn.classList.contains('widget-button-active')).to.be.true;
+				expect(wgt.minimizeBtn.classList.contains('winjet-button-active')).to.be.true;
 				wgt.unMinimize();
-				expect(wgt.minimizeBtn.classList.contains('widget-button-active')).to.be.false;
+				expect(wgt.minimizeBtn.classList.contains('winjet-button-active')).to.be.false;
 			});
 
 			it('sets the widget `.isMinimized` property to `true`', () => {
@@ -1248,9 +1248,9 @@ describe('widget', () => {
 			it('adds `widget-button-active` classname on the button', () => {
 				wgt = widget(TITLE, target).mount();
 
-				expect(wgt.maximizeBtn.classList.contains('widget-button-active')).to.be.false;
+				expect(wgt.maximizeBtn.classList.contains('winjet-button-active')).to.be.false;
 				wgt.maximize();
-				expect(wgt.maximizeBtn.classList.contains('widget-button-active')).to.be.true;
+				expect(wgt.maximizeBtn.classList.contains('winjet-button-active')).to.be.true;
 			});
 
 			it('sets the widget `.isMaximized` property to `true`', () => {
@@ -1323,9 +1323,9 @@ describe('widget', () => {
 				wgt = widget(TITLE, target).mount();
 
 				wgt.maximize();
-				expect(wgt.maximizeBtn.classList.contains('widget-button-active')).to.be.true;
+				expect(wgt.maximizeBtn.classList.contains('winjet-button-active')).to.be.true;
 				wgt.unMaximize();
-				expect(wgt.maximizeBtn.classList.contains('widget-button-active')).to.be.false;
+				expect(wgt.maximizeBtn.classList.contains('winjet-button-active')).to.be.false;
 			});
 
 			it('sets the widget `.isMaximized` property to `false`', () => {
@@ -1401,11 +1401,11 @@ describe('widget', () => {
 
 				wgt.minimize();
 				wgt.maximize();
-				expect(wgt.minimizeBtn.classList.contains('widget-button-active')).to.be.true;
-				expect(wgt.maximizeBtn.classList.contains('widget-button-active')).to.be.true;
+				expect(wgt.minimizeBtn.classList.contains('winjet-button-active')).to.be.true;
+				expect(wgt.maximizeBtn.classList.contains('winjet-button-active')).to.be.true;
 				wgt.restoreSize();
-				expect(wgt.minimizeBtn.classList.contains('widget-button-active')).to.be.false;
-				expect(wgt.maximizeBtn.classList.contains('widget-button-active')).to.be.false;
+				expect(wgt.minimizeBtn.classList.contains('winjet-button-active')).to.be.false;
+				expect(wgt.maximizeBtn.classList.contains('winjet-button-active')).to.be.false;
 			});
 
 			it('sets the widget `.isMinimized` & `.isMaximized` properties to `false`', () => {
@@ -1447,7 +1447,7 @@ describe('widget', () => {
 				wgt.setHeader(header);
 				expect(wgt.title).to.be.null;
 				expect(wgt.header.innerHTML).to.contain('Custom Header');
-				expect(wgt.header.classList.contains('widget-header')).to.be.true;
+				expect(wgt.header.classList.contains('winjet-header')).to.be.true;
 			});
 
 			it('returns the widget instance', () => {

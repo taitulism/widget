@@ -123,7 +123,6 @@ function Widget (title, body, opts) {
 	this.isMounted = false;
 }
 
-
 Widget.prototype.createWrapperElm = function createWrapperElm (opts) {
 	const widgetClassnames = resolveClassnames(opts.classname);
 	const elm = create('div', widgetClassnames);
@@ -134,8 +133,8 @@ Widget.prototype.createWrapperElm = function createWrapperElm (opts) {
 };
 
 Widget.prototype.createDefaultHeader = function createDefaultHeader (titleText, opts) {
-	const header = create('header', ['widget-default-header']);
-	this.title = create('div', ['widget-title'], titleText);
+	const header = create('header', ['winjet-default-header']);
+	this.title = create('div', ['winjet-title'], titleText);
 	this.actions = null;
 	this.closeBtn = null;
 	this.minimizeBtn = null;
@@ -144,26 +143,26 @@ Widget.prototype.createDefaultHeader = function createDefaultHeader (titleText, 
 	header.appendChild(this.title);
 
 	if (opts.showActions) {
-		this.actions = create('div', ['widget-action-buttons']);
+		this.actions = create('div', ['winjet-action-buttons']);
 
 		if (opts.toggleActions) {
 			this.hideActions();
 		}
 
 		if (opts.showMinimize) {
-			this.minimizeBtn = create('button', ['widget-button', 'widget-minimize-button'], MINIMIZE_SYMBOL);
+			this.minimizeBtn = create('button', ['winjet-button', 'winjet-minimize-button'], MINIMIZE_SYMBOL);
 			this.minimizeBtn.setAttribute('title', 'Minimize');
 			this.actions.appendChild(this.minimizeBtn);
 		}
 
 		if (opts.showMaximize) {
-			this.maximizeBtn = create('button', ['widget-button', 'widget-maximize-button'], MAXIMIZE_SYMBOL);
+			this.maximizeBtn = create('button', ['winjet-button', 'winjet-maximize-button'], MAXIMIZE_SYMBOL);
 			this.maximizeBtn.setAttribute('title', 'Maximize');
 			this.actions.appendChild(this.maximizeBtn);
 		}
 
 		if (opts.showClose) {
-			this.closeBtn = create('button', ['widget-button', 'widget-close-button'], CLOSE_SYMBOL);
+			this.closeBtn = create('button', ['winjet-button', 'winjet-close-button'], CLOSE_SYMBOL);
 			this.closeBtn.setAttribute('title', 'Close');
 			this.actions.appendChild(this.closeBtn);
 		}
@@ -186,7 +185,7 @@ Widget.prototype.createDOM = function createDOM (title, body, opts) {
 	this.minimizeBtn = null;
 	this.maximizeBtn = null;
 	this.elm = this.createWrapperElm(opts);
-	this.bodyContainer = create('section', ['widget-body-container']);
+	this.bodyContainer = create('section', ['winjet-body-container']);
 
 	if (!title || typeof title == 'string') {
 		this.header = this.createDefaultHeader(title, opts);
@@ -196,11 +195,11 @@ Widget.prototype.createDOM = function createDOM (title, body, opts) {
 		this.title = null;
 	}
 
-	this.header.classList.add('widget-header');
+	this.header.classList.add('winjet-header');
 	this.elm.appendChild(this.header);
 
 	if (body) {
-		body.classList.add('widget-body');
+		body.classList.add('winjet-body');
 		this.body = body;
 		this.bodyContainer.appendChild(body);
 	}
@@ -338,7 +337,7 @@ Widget.prototype.minimize = function minimize () {
 
 	this.minimizeBtn.innerHTML = RESTORE_SYMBOL;
 	this.elm.classList.add('minimized');
-	this.minimizeBtn.classList.add('widget-button-active');
+	this.minimizeBtn.classList.add('winjet-button-active');
 	this.bodyContainer.style.display = 'none';
 
 	if (this.toggleHeader || this.toggleActions) {
@@ -354,7 +353,7 @@ Widget.prototype.unMinimize = function unMinimize () {
 
 	this.minimizeBtn.innerHTML = MINIMIZE_SYMBOL;
 	this.elm.classList.remove('minimized');
-	this.minimizeBtn.classList.remove('widget-button-active');
+	this.minimizeBtn.classList.remove('winjet-button-active');
 	this.bodyContainer.style.display = '';
 	this.isMinimized = false;
 	return this;
@@ -373,7 +372,7 @@ Widget.prototype.maximize = function maximize () {
 
 	this.maximizeBtn.innerHTML = RESTORE_SYMBOL;
 	this.elm.classList.add('maximized');
-	this.maximizeBtn.classList.add('widget-button-active');
+	this.maximizeBtn.classList.add('winjet-button-active');
 
 	if (this.toggleHeader || this.toggleActions) {
 		this.showHeader();
@@ -400,7 +399,7 @@ Widget.prototype.unMaximize = function unMaximize () {
 
 	this.maximizeBtn.innerHTML = MAXIMIZE_SYMBOL;
 	this.elm.classList.remove('maximized');
-	this.maximizeBtn.classList.remove('widget-button-active');
+	this.maximizeBtn.classList.remove('winjet-button-active');
 	this.isMaximized = false;
 	this.draggable.enable();
 	this.resizable.enable();
@@ -434,7 +433,7 @@ Widget.prototype.setHeader  = function setHeader  (newHeader) {
 	this.header.replaceWith(newHeader);
 	this.header = newHeader;
 	this.draggable.setGrip(newHeader);
-	newHeader.classList.add('widget-header');
+	newHeader.classList.add('winjet-header');
 	return this;
 };
 
@@ -482,16 +481,16 @@ function create (node, classnames, content) {
 }
 
 function resolveClassnames (optsClassnames) {
-	if (!optsClassnames) return ['widget'];
+	if (!optsClassnames) return ['winjet'];
 
 	if (typeof optsClassnames == 'string') {
 		optsClassnames = optsClassnames.split(/\s+/u);
 	}
 
 	if (Array.isArray(optsClassnames)) {
-		optsClassnames.push('widget');
+		optsClassnames.push('winjet');
 		return optsClassnames;
 	}
 
-	return ['widget'];
+	return ['winjet'];
 }
