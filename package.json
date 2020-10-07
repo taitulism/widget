@@ -4,10 +4,14 @@
    "version": "0.0.0",
    "license": "MIT",
    "private": true,
-   "main": "./index.js",
+   "browser": "./dist/widget.browser.js",
+   "module": "./dist/widget.esm.js",
    "author": "Taitu Lizenbaum <taitu.dev@gmail.com>",
    "homepage": "https://github.com/taitulism/widget#readme",
    "repository": "github:taitulism/widget",
+   "files": [
+      "dist"
+   ],
    "scripts": {
       "dev": "rollup --config rollup.dev.config.js --watch",
       "build": "rollup --config rollup.prod.config.js",
@@ -15,7 +19,8 @@
       "karma": "npm run test -- --no-single-run --auto-watch",
       "lint": "eslint ./widget.js ./tests",
       "check": "npm run lint && npm test",
-      "play": "node ./playground/play.js",
+	  "play": "node ./playground/play.js",
+	  "prepare": "npm run build",
       "preversion": "npm run check",
       "postversion": "git push && git push --tags"
    },
