@@ -1,5 +1,5 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Build Status](https://travis-ci.org/taitulism/widget.svg?branch=master)](https://travis-ci.org/taitulism/widget)
+[![Build Status](https://travis-ci.org/taitulism/widget.svg?branch=develop)](https://travis-ci.org/taitulism/widget)
 
 widget
 ======
