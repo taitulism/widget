@@ -1,64 +1,21 @@
-import {TITLE, simulateMouseEnter, simulateMouseLeave} from './utils';
+import {TITLE, createHeader, createTarget, simulateMouseEnter, simulateMouseLeave} from './utils';
 
 export default () => {
-	let testDOMContainer, container, target, header, headerSpan, wgt;
+	let testDOMContainer, target, wgt;
 
 	before(() => {
 		testDOMContainer = document.getElementById('test-dom-container');
-		if (!testDOMContainer) {
-			testDOMContainer = document.createElement('div');
-			testDOMContainer.id = 'test-dom-container';
-			document.body.appendChild(testDOMContainer);
-		}
 	});
 
 	beforeEach(() => {
-		container = document.createElement('div');
-		container.id = 'container';
-
-		header = document.createElement('div');
-		headerSpan = document.createElement('span');
-		header.id = 'custom-header';
-		headerSpan.id = 'header-span';
-		headerSpan.innerHTML = 'Custom Header';
-		header.appendChild(headerSpan);
-
-		target = document.createElement('div');
-		target.id = 'target';
-		target.innerHTML = `
-			<ul>
-				<li>AAA</li>
-				<li>BBB</li>
-				<li>CCC</li>
-			</ul>
-		`;
-
-		container.appendChild(target);
-		testDOMContainer.appendChild(container);
-
-		Array.from(document.getElementsByClassName('winjet')).forEach((wgt) => {
-			wgt.parentNode.removeChild(wgt);
-		});
+		target = createTarget();
+		testDOMContainer.appendChild(target);
 	});
 
 	afterEach(() => {
-		target.innerHTML = '';
+		wgt && wgt.elm && wgt.destroy();
 		target.parentNode && target.parentNode.removeChild(target);
 		target = null;
-
-		container.parentNode.removeChild(container);
-		container = null;
-
-		header = null;
-		headerSpan = null;
-
-		if (wgt && wgt.elm) {
-			wgt.destroy();
-		}
-	});
-
-	after(() => {
-		testDOMContainer = null;
 	});
 
 	describe('.mount()', () => {
@@ -449,7 +406,7 @@ export default () => {
 			expect(wgt.header.style.visibility).to.not.equal('hidden');
 		});
 
-		it('toggles the drag handle grip between title & bodyContainer', () => {
+		it('toggles the drag grip handle between title & bodyContainer', () => {
 			wgt = widget(TITLE, target).mount();
 
 			expect(wgt.draggable.gripHandle).to.deep.equal(wgt.title);
@@ -476,12 +433,13 @@ export default () => {
 		});
 
 		describe('With a `grip` argument', () => {
-			it('sets the drag handle grip to given elm', () => {
+			it('sets the drag grip handle to given elm', () => {
+				const grip = document.createElement('div');
 				wgt = widget(TITLE, target).mount();
 
 				expect(wgt.draggable.gripHandle).to.deep.equal(wgt.title);
-				wgt.hideHeader(headerSpan);
-				expect(wgt.draggable.gripHandle).to.deep.equal(headerSpan);
+				wgt.hideHeader(grip);
+				expect(wgt.draggable.gripHandle).to.deep.equal(grip);
 				wgt.showHeader(wgt.bodyContainer);
 				expect(wgt.draggable.gripHandle).to.deep.equal(wgt.bodyContainer);
 			});
@@ -771,8 +729,11 @@ export default () => {
 
 	describe('.setHeader()', () => {
 		it('changes the widget header', () => {
+			const header = createHeader();
+
 			wgt = widget('My Widget', target).mount();
 			expect(wgt.title.innerText).to.equal('My Widget');
+
 			wgt.setHeader(header);
 			expect(wgt.title).to.be.null;
 			expect(wgt.header.innerHTML).to.contain('Custom Header');
@@ -780,6 +741,7 @@ export default () => {
 		});
 
 		it('returns the widget instance', () => {
+			const header = createHeader();
 			wgt = widget().mount();
 			expect(wgt.setHeader(header)).to.eql(wgt);
 		});

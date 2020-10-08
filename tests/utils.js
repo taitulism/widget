@@ -29,3 +29,28 @@ export function simulateMouseLeave (elm, x, y) {
 export function $byClassname (cls) {
 	return document.getElementsByClassName(cls);
 }
+
+export function createTarget () {
+	const target = document.createElement('div');
+	target.id = 'target';
+	target.innerHTML = `
+		<ul>
+			<li>AAA</li>
+			<li>BBB</li>
+			<li>CCC</li>
+		</ul>
+	`;
+
+	return target;
+}
+
+export function createHeader () {
+	const header = document.createElement('div');
+	const headerSpan = document.createElement('span');
+	header.id = 'custom-header';
+	headerSpan.id = 'header-span';
+	headerSpan.innerHTML = 'Custom Header';
+	header.appendChild(headerSpan);
+
+	return header;
+}

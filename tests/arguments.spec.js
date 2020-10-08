@@ -1,64 +1,21 @@
-import {TITLE} from './utils';
+import {TITLE, createTarget, createHeader} from './utils';
 
 export default () => {
-	let testDOMContainer, container, target, header, headerSpan, wgt;
+	let testDOMContainer, target, wgt;
 
 	before(() => {
 		testDOMContainer = document.getElementById('test-dom-container');
-		if (!testDOMContainer) {
-			testDOMContainer = document.createElement('div');
-			testDOMContainer.id = 'test-dom-container';
-			document.body.appendChild(testDOMContainer);
-		}
 	});
 
 	beforeEach(() => {
-		container = document.createElement('div');
-		container.id = 'container';
-
-		header = document.createElement('div');
-		headerSpan = document.createElement('span');
-		header.id = 'custom-header';
-		headerSpan.id = 'header-span';
-		headerSpan.innerHTML = 'Custom Header';
-		header.appendChild(headerSpan);
-
-		target = document.createElement('div');
-		target.id = 'target';
-		target.innerHTML = `
-			<ul>
-				<li>AAA</li>
-				<li>BBB</li>
-				<li>CCC</li>
-			</ul>
-		`;
-
-		container.appendChild(target);
-		testDOMContainer.appendChild(container);
-
-		Array.from(document.getElementsByClassName('winjet')).forEach((wgt) => {
-			wgt.parentNode.removeChild(wgt);
-		});
+		target = createTarget();
+		testDOMContainer.appendChild(target);
 	});
 
 	afterEach(() => {
-		target.innerHTML = '';
+		wgt && wgt.elm && wgt.destroy();
 		target.parentNode && target.parentNode.removeChild(target);
 		target = null;
-
-		container.parentNode.removeChild(container);
-		container = null;
-
-		header = null;
-		headerSpan = null;
-
-		if (wgt && wgt.elm) {
-			wgt.destroy();
-		}
-	});
-
-	after(() => {
-		testDOMContainer = null;
 	});
 
 	describe('()', () => {
@@ -123,21 +80,25 @@ export default () => {
 
 	describe('(header, body)', () => {
 		it('sets the widget header', () => {
+			const header = createHeader();
 			wgt = widget(header, target);
 			expect(header.innerHTML).to.contain('Custom Header');
 		});
 
 		it('sets a classname on the header', () => {
+			const header = createHeader();
 			wgt = widget(header, target);
 			expect(header.classList.contains('winjet-header')).to.be.true;
 		});
 
 		it('has no title', () => {
+			const header = createHeader();
 			wgt = widget(header, target);
 			expect(wgt.title).to.be.null;
 		});
 
 		it('has no actions', () => {
+			const header = createHeader();
 			wgt = widget(header, target);
 			expect(wgt.title).to.be.null;
 		});
@@ -219,11 +180,13 @@ export default () => {
 
 	describe('(header, body, options)', () => {
 		it('sets the widget header', () => {
+			const header = createHeader();
 			wgt = widget(header, target);
 			expect(header.innerHTML).to.contain('Custom Header');
 		});
 
 		it('sets the widget body', () => {
+			const header = createHeader();
 			wgt = widget(header, target, {id: 'the-widget'});
 			expect(wgt.body.innerHTML).to.include('AAA');
 			expect(wgt.body.innerHTML).to.include('BBB');
