@@ -17,7 +17,7 @@
       "build": "rollup --config rollup.prod.config.js",
       "test": "karma start karma.conf.js",
       "karma": "npm run test -- --no-single-run --auto-watch",
-      "lint": "eslint ./widget.js ./tests",
+      "lint": "eslint ./index.js ./src ./tests",
       "check": "npm run lint && npm test",
 	  "play": "node ./playground/play.js",
 	  "prepare": "npm run build",

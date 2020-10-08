@@ -1,10 +1,4 @@
-import argsSpec from './arguments.spec';
-import structureSpec from './structure.spec';
-import actionsSpec from './actions.spec';
-import optionsSpec from './options.spec';
-import apiSpec from './api.spec';
-
-describe('widget', () => {
+export default () => {
 	let testDOMContainer, container, target, header, headerSpan, wgt;
 
 	before(() => {
@@ -65,17 +59,45 @@ describe('widget', () => {
 		testDOMContainer = null;
 	});
 
-	it('is a function', () => expect(widget).to.be.a('function'));
+	describe('Click on `Close` Button', () => {
+		it('destroys the widget', () => {
+			wgt = widget();
 
-	it('returns a Widget instance', () => {
-		wgt = widget();
-		const ctor = Object.getPrototypeOf(wgt).constructor;
-		expect(ctor.name).to.equal('Widget');
+			let called = false;
+			const origDestroy = wgt.destroy;
+			wgt.destroy = () => {
+				called = true;
+				origDestroy.call(wgt);
+			};
+
+			wgt.mount();
+			expect(called).to.be.false;
+			wgt.closeBtn.click();
+			expect(called).to.be.true;
+		});
 	});
 
-	describe('Arguments', argsSpec);
-	describe('Widget Element Structure', structureSpec);
-	describe('Actions', actionsSpec);
-	describe('Options', optionsSpec);
-	describe('API Methods', apiSpec);
-});
+	describe('Click on `Minimize` Button', () => {
+		it('toggles `minimized` classname on the widget', () => {
+			wgt = widget().mount();
+
+			expect(wgt.elm.classList.contains('minimized')).to.be.false;
+			wgt.minimizeBtn.click();
+			expect(wgt.elm.classList.contains('minimized')).to.be.true;
+			wgt.minimizeBtn.click();
+			expect(wgt.elm.classList.contains('minimized')).to.be.false;
+		});
+	});
+
+	describe('Click on `Maximize` Button', () => {
+		it('toggles `maximized` classname on the widget', () => {
+			wgt = widget().mount();
+
+			expect(wgt.elm.classList.contains('maximized')).to.be.false;
+			wgt.maximizeBtn.click();
+			expect(wgt.elm.classList.contains('maximized')).to.be.true;
+			wgt.maximizeBtn.click();
+			expect(wgt.elm.classList.contains('maximized')).to.be.false;
+		});
+	});
+};

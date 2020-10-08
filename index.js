@@ -1,3 +1,9 @@
-const TPL = require('./src/TPL');
+import Widget from './src/widget';
+import resolveArgs from './src/resolve-arguments';
+import resolveOptions from './src/resolve-options';
 
-module.exports = TPL;
+export default function widget (...args) {
+	const [title, body, rawOpts] = resolveArgs(...args);
+	const opts = resolveOptions(rawOpts);
+	return new Widget(title, body, opts);
+}

@@ -1,113 +1,15 @@
 import draggable from 'draggable-elm';
 import resizable from 'resizable-elm';
 
+import create from './create-element';
+import resolveClassnames from './resolve-classnames';
+
 const MINIMIZE_SYMBOL = '&#128469;';
 const RESTORE_SYMBOL = '&#128470;';
 const CLOSE_SYMBOL = '&#10006;';
 const MAXIMIZE_SYMBOL = '&#9974;';
 
-const DEFAULT_MIN_WIDTH = 180;
-const DEFAULT_MIN_HEIGHT = 110;
-
-/* eslint-disable-next-line complexity */
-function resolveArgs (maybeTitle, maybeBody, maybeOpts) {
-	let title = null;
-	let body = null;
-	let opts = null;
-
-	if (!maybeTitle && !maybeBody && !maybeOpts) {
-		return [title, body, opts];
-	}
-
-	if (maybeOpts && typeof maybeOpts == 'object') {
-		opts = maybeOpts;
-
-		if (maybeBody instanceof HTMLElement) {
-			body = maybeBody;
-		}
-
-		if (maybeTitle && typeof maybeTitle == 'string') {
-			title = maybeTitle;
-		}
-	}
-	else if (maybeBody) {
-		if (maybeBody instanceof HTMLElement) {
-			body = maybeBody;
-
-			if (maybeTitle) {
-				if (typeof maybeTitle == 'string') {
-					title = maybeTitle;
-				}
-				else if (maybeTitle instanceof HTMLElement) {
-					title = maybeTitle;
-				}
-			}
-		}
-		else if (typeof maybeBody == 'object') {
-			opts = maybeBody;
-
-			if (typeof maybeTitle == 'string') {
-				title = maybeTitle;
-			}
-			else if (maybeTitle instanceof HTMLElement) {
-				body = maybeTitle;
-			}
-		}
-	}
-	else if (maybeTitle) {
-		if (typeof maybeTitle == 'string') {
-			title = maybeTitle;
-		}
-		else if (maybeTitle instanceof HTMLElement) {
-			body = maybeTitle;
-		}
-		else if (maybeTitle && typeof maybeTitle == 'object') {
-			opts = maybeTitle;
-		}
-	}
-
-	return [title, body, opts];
-}
-
-function resolveOptions (rawOpts) {
-	if (!rawOpts) {
-		return {
-			id: null,
-			classname: null,
-			showHeader: true,
-			showActions: true,
-			showClose: true,
-			showMinimize: true,
-			showMaximize: true,
-			toggleHeader: false,
-			toggleActions: false,
-			minWidth: DEFAULT_MIN_WIDTH,
-			minHeight: DEFAULT_MIN_HEIGHT,
-		};
-	}
-
-	return {
-		id: rawOpts.id && typeof rawOpts.id == 'string' ? rawOpts.id : null,
-		classname: typeof rawOpts.classname == 'string' || Array.isArray(rawOpts.classname) ? rawOpts.classname : null,
-		showHeader: typeof rawOpts.showHeader == 'boolean' ? rawOpts.showHeader : true,
-		showActions: typeof rawOpts.showActions == 'boolean' ? rawOpts.showActions : true,
-		showClose: typeof rawOpts.showClose == 'boolean' ? rawOpts.showClose : true,
-		showMinimize: typeof rawOpts.showMinimize == 'boolean' ? rawOpts.showMinimize : true,
-		showMaximize: typeof rawOpts.showMaximize == 'boolean' ? rawOpts.showMaximize : true,
-		toggleHeader: typeof rawOpts.toggleHeader == 'boolean' ? rawOpts.toggleHeader : false,
-		toggleActions: typeof rawOpts.toggleActions == 'boolean' ? rawOpts.toggleActions : false,
-		minWidth: typeof rawOpts.minWidth == 'number' ? rawOpts.minWidth : DEFAULT_MIN_WIDTH,
-		minHeight: typeof rawOpts.minHeight == 'number' ? rawOpts.minHeight : DEFAULT_MIN_HEIGHT,
-	};
-}
-
-export default function widget (...args) {
-	const [title, body, rawOpts] = resolveArgs(...args);
-	const opts = resolveOptions(rawOpts);
-	return new Widget(title, body, opts);
-}
-
-function Widget (title, body, opts) {
+export default function Widget (title, body, opts) {
 	this.initMethods(opts);
 	this.createDOM(title, body, opts);
 
@@ -467,30 +369,3 @@ Widget.prototype.destroy = function destroy () {
 	this.maximizeBtn = null;
 	this.actions = null;
 };
-
-
-function create (node, classnames, content) {
-	const elm = document.createElement(node);
-	elm.classList.add(...classnames);
-
-	if (content) {
-		elm.innerHTML = content;
-	}
-
-	return elm;
-}
-
-function resolveClassnames (optsClassnames) {
-	if (!optsClassnames) return ['winjet'];
-
-	if (typeof optsClassnames == 'string') {
-		optsClassnames = optsClassnames.split(/\s+/u);
-	}
-
-	if (Array.isArray(optsClassnames)) {
-		optsClassnames.push('winjet');
-		return optsClassnames;
-	}
-
-	return ['winjet'];
-}

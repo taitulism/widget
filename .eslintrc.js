@@ -13,6 +13,10 @@ module.exports = {
 	overrides: [
 		{
 			files: 'tests/**',
+			globals: {
+				widget: 'readonly',
+				expect: 'readonly',
+			},
 			env: {
 				mocha: true
 			},
@@ -235,6 +239,7 @@ module.exports = {
 			'error', {
 				ignoreCase: true,
 				ignoreMemberSort: true,
+				ignoreDeclarationSort: true,
 				memberSyntaxSortOrder: [
 					'single',
 					'multiple',

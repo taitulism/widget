@@ -19,19 +19,18 @@ module.exports = function (config) {
 		frameworks: ['mocha', 'chai'],
 		reporters: ['mocha'],
 		files: [
+			{ pattern: 'index.js', watched: false },
 			{ pattern: 'tests/index.spec.js', watched: false },
-			{ pattern: 'widget.js', watched: false },
 		],
 		preprocessors: {
+			'index.js': ['rollup'],
 			'tests/index.spec.js': ['rollup'],
-			'widget.js': ['rollup'],
 		},
 		rollupPreprocessor: {
 			plugins: [nodeResolve()],
 			output: {
 				format: 'iife',
 				name: 'widget',
-				sourcemap: 'inline',
 				globals: {
 					'draggable-elm': 'draggable',
 					'resizable-elm': 'resizable'
