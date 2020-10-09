@@ -4,7 +4,7 @@ export default [{
 	input: 'index.js',
 	plugins: [nodeResolve()],
 	output: {
-		file: 'widget-dev-bundle.js',
+		file: 'dev-bundles/widget.js',
 		format: 'iife',
 		name: 'widget',
 		globals: {
@@ -15,8 +15,7 @@ export default [{
 }, {
 	input: 'tests/index.spec.js',
 	output: {
-		file: 'widget-spec-bundle.js',
+		file: 'dev-bundles/widget-spec.js',
 		format: 'iife',
-		name: 'resizable',
 	},
 }];

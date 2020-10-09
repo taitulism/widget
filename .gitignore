@@ -1,3 +1,3 @@
 node_modules
-widget-dev-bundle.js
-widget-spec-bundle.js
+dist
+dev-bundles

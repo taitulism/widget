@@ -5,7 +5,7 @@
 		<title>Widget Tests</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="stylesheet" href="https://unpkg.com/mocha/mocha.css" />
-		<script src="../widget-dev-bundle.js"></script>
+		<script src="../dev-bundles/widget.js"></script>
 
 		<link rel="stylesheet" type="text/css" href="../src/default-style.css" />
 		<style>
@@ -31,7 +31,7 @@
 			});
 			mocha.checkLeaks();
 		</script>
-		<script src="../widget-spec-bundle.js"></script>
+		<script src="../dev-bundles/widget-spec.js"></script>
 		<script class="mocha-exec">
 			const {expect} = chai;
 

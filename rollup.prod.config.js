@@ -2,7 +2,7 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 // import { terser } from 'rollup-plugin-terser';
 
 export default [{
-	input: 'widget.js',
+	input: 'index.js',
 	plugins: [nodeResolve()],
 	output: {
 		file: 'dist/widget.esm.js',
@@ -13,7 +13,7 @@ export default [{
 		}
 	},
 }, {
-	input: 'widget.js',
+	input: 'index.js',
 	plugins: [nodeResolve()],
 	output: {
 		file: 'dist/widget.browser.js',
@@ -24,16 +24,20 @@ export default [{
 			'resizable-elm': 'resizable'
 		}
 	},
-// }, {
-// 	input: 'widget.js',
-// 	plugins: [nodeResolve(), terser()],
-// 	output: {
-// 		file: 'dist/widget.browser.min.js',
-// 		format: 'iife',
-// 		name: 'widget',
-// 		globals: {
-// 			'draggable-elm': 'draggable',
-// 			'resizable-elm': 'resizable'
-// 		}
-// 	},
 }];
+
+/*
+minify:
+-------
+	import {terser} from 'rollup-plugin-terser';
+
+	...
+
+	input: 'index.js',
+	plugins: [terser()],
+	output: {
+		file: 'dist/widget.browser.min.js',
+		format: 'iife',
+		name: 'widget',
+	},
+*/
