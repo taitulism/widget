@@ -20,7 +20,7 @@
       "lint": "eslint ./index.js ./src ./tests",
       "check": "npm run lint && npm test",
 	  "play": "node ./playground/play.js",
-	  "prepare": "npm run build",
+	  "prepublishOnly": "npm run build",
       "preversion": "npm run check",
       "postversion": "git push && git push --tags"
    },
