@@ -20,11 +20,11 @@ module.exports = function (config) {
 		reporters: ['mocha'],
 		files: [
 			{ pattern: 'index.js', watched: false },
-			{ pattern: 'tests/index.spec.js', watched: false },
+			{ pattern: 'tests/specs/index.spec.js', watched: false },
 		],
 		preprocessors: {
 			'index.js': ['rollup'],
-			'tests/index.spec.js': ['rollup'],
+			'tests/specs/index.spec.js': ['rollup'],
 		},
 		rollupPreprocessor: {
 			plugins: [nodeResolve()],

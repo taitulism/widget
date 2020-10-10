@@ -1,4 +1,4 @@
-import {createTarget, $byClassname, simulateMouseEnter, simulateMouseLeave} from './utils';
+import {createTarget, $byClassname, simulateMouseEnter, simulateMouseLeave} from '../utils';
 
 export default () => {
 	let testDOMContainer, target, wgt;

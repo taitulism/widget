@@ -13,7 +13,7 @@ export default [{
 		}
 	},
 }, {
-	input: 'tests/index.spec.js',
+	input: 'tests/specs/index.spec.js',
 	output: {
 		file: 'dev-bundles/widget-spec.js',
 		format: 'iife',

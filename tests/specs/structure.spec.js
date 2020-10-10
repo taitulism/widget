@@ -1,4 +1,4 @@
-import {createTarget, $byClassname} from './utils';
+import {createTarget, $byClassname} from '../utils';
 
 export default () => {
 	let testDOMContainer, target, wgt;

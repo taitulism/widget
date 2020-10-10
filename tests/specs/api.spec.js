@@ -1,4 +1,10 @@
-import {TITLE, createHeader, createTarget, simulateMouseEnter, simulateMouseLeave} from './utils';
+import {
+	TITLE,
+	createHeader,
+	createTarget,
+	simulateMouseEnter,
+	simulateMouseLeave
+} from '../utils';
 
 export default () => {
 	let testDOMContainer, target, wgt;

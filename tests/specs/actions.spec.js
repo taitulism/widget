@@ -1,4 +1,4 @@
-import { createTarget } from './utils';
+import { createTarget } from '../utils';
 
 export default () => {
 	let testDOMContainer, target, wgt;
