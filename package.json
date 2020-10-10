@@ -19,8 +19,8 @@
       "karma": "npm run test -- --no-single-run --auto-watch",
       "lint": "eslint ./index.js ./src ./tests",
       "check": "npm run lint && npm test",
-	  "play": "node ./playground/play.js",
-	  "prepublishOnly": "npm run build",
+      "play": "node ./playground/play.js",
+      "prepublishOnly": "npm run build",
       "preversion": "npm run check",
       "postversion": "git push && git push --tags"
    },
@@ -38,7 +38,7 @@
       "rollup": "2.27.1"
    },
    "dependencies": {
-      "draggable-elm": "0.0.2",
+      "draggable-elm": "0.0.3",
       "resizable-elm": "0.0.5"
    }
 }

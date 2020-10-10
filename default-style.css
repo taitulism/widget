@@ -28,17 +28,16 @@
 	padding-left: calc(var(--border-width) / 2);    /* 1 to compensate half of the border (2px) */
 }
 
-/* Corners Resize Mouse Cursors */
+/* Resize corners mouse cursors */
 .winjet .top-left-grip { cursor: nw-resize; }
 .winjet .top-right-grip { cursor: ne-resize; }
 .winjet .bottom-right-grip { cursor: se-resize; }
 .winjet .bottom-left-grip { cursor: sw-resize; }
 
-/*
+/* Drag grip handle Mouse Cursors */
 .winjet .drag-grip-handle { cursor: grab; }
-.grabbed .drag-grip-handle,
-.dragging .drag-grip-handle { cursor: grabbing; }
-*/
+.winjet.grabbed .drag-grip-handle { cursor: grabbing; }
+.winjet.drag-disabled .drag-grip-handle { cursor: default; }
 
 /* Default Header */
 /*	You can remove everything below this point if you only use custom headers */
@@ -62,18 +61,8 @@
 	height: 100%;
 	margin-right: 5px;
 	padding-left: 6px;
-	cursor: grab;
 	font-weight: bold;
 	color: var(--theme-text-color);
-}
-
-.grabbed .winjet-title,
-.dragging .winjet-title {
-	cursor: grabbing;
-}
-
-.drag-disabled .winjet-title {
-	cursor: default;
 }
 
 .winjet-action-buttons {
