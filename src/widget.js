@@ -8,6 +8,10 @@ const MINIMIZE_SYMBOL = '&#128469;';
 const MAXIMIZE_SYMBOL = '&#128470;';
 const CLOSE_SYMBOL = '&#10006;';
 
+const MOUSE_CLICK = 'click';
+const MOUSE_ENTER = 'mouseenter';
+const MOUSE_LEAVE = 'mouseleave';
+
 export default function Widget (title, body, opts) {
 	this.initMethods(opts);
 	this.createDOM(title, body, opts);
@@ -131,13 +135,13 @@ Widget.prototype.initMethods = function initMethods (opts) {
 Widget.prototype.mount = function mount () {
 	if (this.isMounted) return;
 
-	this.closeBtn && this.closeBtn.addEventListener('click', this.destroy);
-	this.minimizeBtn && this.minimizeBtn.addEventListener('click', this.toggleMinimize);
-	this.maximizeBtn && this.maximizeBtn.addEventListener('click', this.toggleMaximize);
+	this.closeBtn && this.closeBtn.addEventListener(MOUSE_CLICK, this.destroy);
+	this.minimizeBtn && this.minimizeBtn.addEventListener(MOUSE_CLICK, this.toggleMinimize);
+	this.maximizeBtn && this.maximizeBtn.addEventListener(MOUSE_CLICK, this.toggleMaximize);
 
 	if (this.toggleHeader || this.toggleActions) {
-		this.elm.addEventListener('mouseenter', this.mouseEnterHandler);
-		this.elm.addEventListener('mouseleave', this.mouseLeaveHandler);
+		this.elm.addEventListener(MOUSE_ENTER, this.mouseEnterHandler);
+		this.elm.addEventListener(MOUSE_LEAVE, this.mouseLeaveHandler);
 	}
 
 	document.body.appendChild(this.elm);
@@ -167,13 +171,13 @@ Widget.prototype.unmount = function unmount () {
 };
 
 Widget.prototype.unmountHeader = function unmountHeader (includeHover = false) {
-	this.closeBtn && this.closeBtn.removeEventListener('click', this.destroy);
-	this.minimizeBtn && this.minimizeBtn.removeEventListener('click', this.toggleMinimize);
-	this.maximizeBtn && this.maximizeBtn.removeEventListener('click', this.toggleMaximize);
+	this.closeBtn && this.closeBtn.removeEventListener(MOUSE_CLICK, this.destroy);
+	this.minimizeBtn && this.minimizeBtn.removeEventListener(MOUSE_CLICK, this.toggleMinimize);
+	this.maximizeBtn && this.maximizeBtn.removeEventListener(MOUSE_CLICK, this.toggleMaximize);
 
 	if (includeHover && (this.toggleHeader || this.toggleActions)) {
-		this.elm.removeEventListener('mouseenter', this.mouseEnterHandler);
-		this.elm.removeEventListener('mouseleave', this.mouseLeaveHandler);
+		this.elm.removeEventListener(MOUSE_ENTER, this.mouseEnterHandler);
+		this.elm.removeEventListener(MOUSE_LEAVE, this.mouseLeaveHandler);
 	}
 };
 
