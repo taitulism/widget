@@ -5,9 +5,8 @@ import create from './create-element';
 import resolveClassnames from './resolve-classnames';
 
 const MINIMIZE_SYMBOL = '&#128469;';
-const RESTORE_SYMBOL = '&#128470;';
+const MAXIMIZE_SYMBOL = '&#128470;';
 const CLOSE_SYMBOL = '&#10006;';
-const MAXIMIZE_SYMBOL = '&#9974;';
 
 export default function Widget (title, body, opts) {
 	this.initMethods(opts);
@@ -237,7 +236,6 @@ Widget.prototype.hideActions = function hideActions () {
 Widget.prototype.minimize = function minimize () {
 	if (this.isMinimized) return this;
 
-	this.minimizeBtn.innerHTML = RESTORE_SYMBOL;
 	this.elm.classList.add('minimized');
 	this.minimizeBtn.classList.add('winjet-button-active');
 	this.bodyContainer.style.display = 'none';
@@ -272,7 +270,6 @@ Widget.prototype.maximize = function maximize () {
 	elmStyle.top = '0px';
 	elmStyle.left = '0px';
 
-	this.maximizeBtn.innerHTML = RESTORE_SYMBOL;
 	this.elm.classList.add('maximized');
 	this.maximizeBtn.classList.add('winjet-button-active');
 

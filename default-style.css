@@ -67,12 +67,11 @@
 }
 
 .winjet-button {
-	width: 20px;
-	height: 28px;
+	width: 24px;
+	height: 24px;
 	color: var(--theme-text-color);
 	cursor: pointer;
 	font-size: 15px;
-	font-weight: bold;
 	line-height: 1;
 	background-color: var(--theme-bg-color);
 	outline: 0 none;
@@ -81,10 +80,16 @@
 }
 
 .winjet-button:hover {
-	color: #ededed;
+	color: #fff;
+    background-color: #847575;
 }
 
-.winjet-maximize-button.winjet-button-active,
-.winjet-minimize-button {
+.winjet-button-active {
+	background-color: #5a5a5a;
+    color: #efefef;
+}
+
+.winjet-minimize-button,
+.winjet-maximize-button {
 	padding-bottom: 3px;
 }
