@@ -28,15 +28,9 @@
 	padding-left: calc(var(--border-width) / 2);    /* 1 to compensate half of the border (2px) */
 }
 
-/* Resize corners mouse cursors */
-.winjet .top-left-grip { cursor: nw-resize; }
-.winjet .top-right-grip { cursor: ne-resize; }
-.winjet .bottom-right-grip { cursor: se-resize; }
-.winjet .bottom-left-grip { cursor: sw-resize; }
-
-/* Drag grip handle Mouse Cursors */
+/* Drag grip handle cursors */
 .winjet .drag-grip-handle { cursor: grab; }
-.winjet.grabbed .drag-grip-handle { cursor: grabbing; }
+.winjet .drag-grip-handle:active { cursor: grabbing; }
 .winjet.drag-disabled .drag-grip-handle { cursor: default; }
 
 /* Default Header */
@@ -50,7 +44,7 @@
 	border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
-.winjet.minimized .winjet-default-header {
+.minimized .winjet-default-header {
 	border-radius: var(--border-radius);
 }
 
