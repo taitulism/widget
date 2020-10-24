@@ -33,6 +33,10 @@ widget(myHeaderElm, myBodyElm, {options});
 
 * **`minWidth`** - Number. Resize minimum width in pixels. (default = `0`)
 * **`minHeight`** - Number. Resize minimum height in pixels. (default = `0`)
+* **`top`** - Number. Initial top position in pixels.
+* **`bottom`** - Number. Initial bottom position in pixels.
+* **`left`** - Number. Initial left position in pixels.
+* **`right`** - Number. Initial right position in pixels.
 * **`id`** - String. The widget `id` attribute. No default.
 * **`classname`** - String. The widget `class` attribute. No default.
 * **`showActions`** - Boolean. Show action buttons (maximize, minimize, close). (default = `true`)
