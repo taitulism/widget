@@ -1,7 +1,7 @@
 /* eslint-disable complexity, no-nested-ternary */
 
 const DEFAULT_MIN_WIDTH = 180;
-const DEFAULT_MIN_HEIGHT = 110;
+const DEFAULT_MIN_HEIGHT = 120;
 const DEFAULT_POSITION = 120;
 
 const NUMBER = 'number';
