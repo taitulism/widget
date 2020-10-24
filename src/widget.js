@@ -29,6 +29,7 @@ export default class Widget {
 
 		initMethods(this, opts);
 		createDOM(this, title, body, opts);
+		initSubModules(this, opts);
 	}
 
 	mount () {
@@ -44,17 +45,6 @@ export default class Widget {
 		}
 
 		document.body.appendChild(this.elm);
-
-		const grip = this.isHeaderShown
-			? this.title || this.header
-			: this.bodyContainer
-		;
-
-		this.draggable = draggable(this.elm, {grip});
-		this.resizable = resizable(this.elm, {
-			minWidth: this.minWidth,
-			minHeight: this.minHeight,
-		});
 
 		this.isMounted = true;
 
@@ -366,6 +356,19 @@ function initMethods (wgt, opts) {
 	if (opts.showClose) {
 		wgt.destroy = wgt.destroy.bind(wgt);
 	}
+}
+
+function initSubModules (wgt) {
+	const grip = wgt.isHeaderShown
+		? wgt.title || wgt.header
+		: wgt.bodyContainer
+	;
+
+	wgt.draggable = draggable(wgt.elm, {grip, top: 120, right: 120});
+	wgt.resizable = resizable(wgt.elm, {
+		minWidth: wgt.minWidth,
+		minHeight: wgt.minHeight,
+	});
 }
 
 function unmountHeader (wgt, includeHover = false) {
