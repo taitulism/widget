@@ -49,6 +49,34 @@ export default () => {
 		});
 	});
 
+	describe('top', () => {
+		it('sets the widget initial top position', () => {
+			wgt = widget(target, {top: 30}).mount();
+			expect(wgt.elm.style.top).to.equal('30px');
+		});
+	});
+
+	describe('bottom', () => {
+		it('sets the widget initial bottom position', () => {
+			wgt = widget(target, {bottom: 30}).mount();
+			expect(wgt.elm.style.bottom).to.equal('30px');
+		});
+	});
+
+	describe('left', () => {
+		it('sets the widget initial left position', () => {
+			wgt = widget(target, {left: 30}).mount();
+			expect(wgt.elm.style.left).to.equal('30px');
+		});
+	});
+
+	describe('right', () => {
+		it('sets the widget initial right position', () => {
+			wgt = widget(target, {right: 30}).mount();
+			expect(wgt.elm.style.right).to.equal('30px');
+		});
+	});
+
 	describe('showClose', () => {
 		it('by default - creates the `close` button', () => {
 			wgt = widget().mount();

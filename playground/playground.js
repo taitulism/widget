@@ -11,7 +11,8 @@ const wgt = widget('My Widget', targetElm, {
 	// toggleActions: true,
 	// showHeader: false,
 	// showActions: false,
-	// minWidth: 300
+	// minWidth: 300,
+	top: 300,
 });
 
 wgt.mount();

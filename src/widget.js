@@ -268,13 +268,20 @@ function initMethods (wgt, opts) {
 	}
 }
 
-function initSubModules (wgt) {
+function initSubModules (wgt, opts) {
 	const grip = wgt.isHeaderShown
 		? wgt.title || wgt.header
 		: wgt.bodyContainer
 	;
 
-	wgt.draggable = draggable(wgt.elm, {grip, top: 120, right: 120});
+	wgt.draggable = draggable(wgt.elm, {
+		grip,
+		top: opts.top,
+		bottom: opts.bottom,
+		left: opts.left,
+		right: opts.right,
+	});
+
 	wgt.resizable = resizable(wgt.elm, {
 		minWidth: wgt.minWidth,
 		minHeight: wgt.minHeight,
