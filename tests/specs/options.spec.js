@@ -291,10 +291,10 @@ export default () => {
 	});
 
 	describe('minHeight', () => {
-		it('by default - sets a minimum widget height to 110px', () => {
+		it('by default - sets a minimum widget height to 120px', () => {
 			wgt = widget().mount();
 			const wgtBox = wgt.elm.getBoundingClientRect();
-			expect(wgtBox.height).to.equal(110);
+			expect(wgtBox.height).to.equal(120);
 		});
 
 		it('when number - sets a minimum widget height to the given number of pixels', () => {

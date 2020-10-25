@@ -1,14 +1,14 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Build Status](https://travis-ci.org/taitulism/widget.svg?branch=develop)](https://travis-ci.org/taitulism/widget)
 
-widget
+winjet
 ======
 Make elements window-like: a floating titled container, draggable and resizable.
 
-![widget-elm example](widget-example.png)
+![winjet example](widget-example.png)
 
 ```js
-const widget = require('widget-elm');
+const widget = require('winjet');
 
 const myElm = document.getElementById('target');
 
