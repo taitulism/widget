@@ -34,8 +34,7 @@ export default function resolveOptions (rawOpts) {
 	if (!rawOpts) return defaultOpts;
 
 	const { id, classname, showHeader, showActions, showClose, showMinimize, showMaximize,
-		toggleHeader, toggleActions, minWidth, minHeight, top, bottom, left, right,
-	} = rawOpts;
+		toggleHeader, toggleActions, minWidth, minHeight, top, bottom, left, right, } = rawOpts;
 
 	return {
 		id: id && isString(id) ? id : null,
