@@ -1,7 +1,7 @@
 {
 	"name": "winjet",
 	"description": "Make elements window-like: a floating titled container, draggable and resizable.",
-	"version": "0.0.0",
+	"version": "0.0.1",
 	"license": "MIT",
 	"browser": "./dist/widget.browser.js",
 	"module": "./dist/widget.esm.js",
